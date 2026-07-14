@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="vercel-ready-2026-07-14"/>
+<meta name="masofish-build" content="vercel-openmeteo-2026-07-14"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
@@ -160,185 +160,161 @@
 </button>
 </div>
 </header>
-<main class="px-margin-mobile pt-6 space-y-8">
-<!-- Location Header -->
-<section class="flex justify-between items-end">
-<div class="space-y-1">
-<div class="flex items-center gap-1 text-on-surface-variant">
-<span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
-<span class="font-label-md text-label-md uppercase tracking-wider">Cape Hatteras, NC</span>
-</div>
-<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Tides &amp; Conditions</h2>
-</div>
-<div class="text-right">
-<p class="font-label-md text-label-md text-on-surface-variant">LIVE UPDATE</p>
-<p class="font-headline-sm text-headline-sm text-secondary">08:45 AM</p>
-</div>
-</section>
-<!-- Interactive Tide Chart -->
-<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 shadow-sm overflow-hidden">
-<div class="flex justify-between items-center mb-6">
-<div>
-<span class="font-label-md text-label-md text-on-surface-variant block">CURRENT TIDE</span>
-<span class="font-data-display text-data-display text-primary">+2.4ft</span>
-<span class="material-symbols-outlined text-secondary ml-1" data-icon="trending_up">trending_up</span>
-</div>
-<div class="text-right">
-<span class="font-label-md text-label-md text-on-surface-variant block">NEXT HIGH</span>
-<span class="font-headline-sm text-headline-sm text-primary">11:15 AM</span>
-</div>
-</div>
-<!-- Tide SVG Graph -->
-<div class="relative h-40 w-full">
-<svg class="w-full h-full preserve-3d" viewbox="0 0 400 100">
-<!-- Grid Lines -->
-<line stroke="#e0e3e5" stroke-dasharray="4" stroke-width="1" x1="0" x2="400" y1="50" y2="50"></line>
-<!-- Tide Curve -->
-<path class="tide-path" d="M0,80 C50,80 100,20 150,20 C200,20 250,80 300,80 C350,80 400,20 450,20" fill="none" stroke="url(#tideGradient)" stroke-width="4"></path>
-<defs>
-<lineargradient id="tideGradient" x1="0%" x2="100%" y1="0%" y2="0%">
-<stop offset="0%" style="stop-color:#001e40;stop-opacity:1"></stop>
-<stop offset="50%" style="stop-color:#006a65;stop-opacity:1"></stop>
-<stop offset="100%" style="stop-color:#001e40;stop-opacity:1"></stop>
-</lineargradient>
-</defs>
-<!-- Current Position Marker -->
-<circle class="animate-pulse" cx="120" cy="35" fill="#006a65" r="6"></circle>
-<line stroke="#006a65" stroke-dasharray="2" stroke-width="1" x1="120" x2="120" y1="0" y2="100"></line>
-</svg>
-<div class="absolute bottom-0 left-0 right-0 flex justify-between px-1">
-<span class="font-label-md text-label-md text-on-surface-variant">6 AM</span>
-<span class="font-label-md text-label-md text-on-surface-variant font-bold text-secondary">NOW</span>
-<span class="font-label-md text-label-md text-on-surface-variant">12 PM</span>
-<span class="font-label-md text-label-md text-on-surface-variant">6 PM</span>
-</div>
-</div>
-</section>
-<!-- Marine Metrics Grid -->
-<section class="grid grid-cols-2 gap-4">
-<!-- Wind -->
-<div class="bg-primary-container p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-primary/10">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-on-primary-container" data-icon="air">air</span>
-<span class="font-label-md text-label-md text-on-primary-container opacity-80 uppercase">Wind</span>
-</div>
-<div>
-<div class="font-headline-md text-headline-md text-white">12 <span class="text-sm font-normal opacity-70">kts</span></div>
-<div class="flex items-center gap-1">
-<span class="material-symbols-outlined text-secondary-container text-[14px]" style="transform: rotate(45deg);">navigation</span>
-<span class="font-label-md text-label-md text-white/80">NE Gusts 18</span>
-</div>
-</div>
-</div>
-<!-- Swell -->
-<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-secondary" data-icon="waves">waves</span>
-<span class="font-label-md text-label-md text-on-surface-variant uppercase">Swell</span>
-</div>
-<div>
-<div class="font-headline-md text-headline-md text-primary">3.5 <span class="text-sm font-normal text-on-surface-variant">ft</span></div>
-<div class="font-label-md text-label-md text-on-surface-variant">Every 8s • SE</div>
-</div>
-</div>
-<!-- Water Temp -->
-<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-error" data-icon="thermostat">thermostat</span>
-<span class="font-label-md text-label-md text-on-surface-variant uppercase">Water</span>
-</div>
-<div>
-<div class="font-headline-md text-headline-md text-primary">68.4° <span class="text-sm font-normal text-on-surface-variant">F</span></div>
-<div class="font-label-md text-label-md text-on-surface-variant">Stable</div>
-</div>
-</div>
-<!-- Visibility -->
-<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-primary" data-icon="visibility">visibility</span>
-<span class="font-label-md text-label-md text-on-surface-variant uppercase">Visibility</span>
-</div>
-<div>
-<div class="font-headline-md text-headline-md text-primary">8.0 <span class="text-sm font-normal text-on-surface-variant">mi</span></div>
-<div class="font-label-md text-label-md text-on-surface-variant">Clear Horizon</div>
-</div>
-</div>
-</section>
-<!-- Forecast List -->
-<section class="space-y-4 pb-8">
-<h3 class="font-headline-sm text-headline-sm text-primary">7-Day Marine Outlook</h3>
-<div class="bg-surface-container-lowest rounded-xl border border-outline-variant divide-y divide-outline-variant/30">
-<!-- Day Item -->
-<div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
-<div class="w-16">
-<span class="font-label-md text-label-md text-on-surface-variant block">TODAY</span>
-<span class="font-body-md font-bold text-primary">24 OCT</span>
-</div>
-<div class="flex items-center gap-3 flex-1 px-4">
-<span class="material-symbols-outlined text-secondary text-[28px]" data-icon="wb_sunny" data-weight="fill" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
-<div>
-<p class="font-body-sm font-semibold text-primary">Light Chop</p>
-<p class="font-label-md text-label-md text-on-surface-variant">5-10 kts Variable</p>
-</div>
-</div>
-<div class="text-right">
-<span class="font-body-md font-bold text-primary">72°</span>
-<span class="font-body-sm text-on-surface-variant block">64°</span>
-</div>
-</div>
-<!-- Day Item -->
-<div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
-<div class="w-16">
-<span class="font-label-md text-label-md text-on-surface-variant block">FRI</span>
-<span class="font-body-md font-bold text-primary">25 OCT</span>
-</div>
-<div class="flex items-center gap-3 flex-1 px-4">
-<span class="material-symbols-outlined text-secondary text-[28px]" data-icon="partly_cloudy_day" data-weight="fill" style="font-variation-settings: 'FILL' 1;">partly_cloudy_day</span>
-<div>
-<p class="font-body-sm font-semibold text-primary">Moderate Sea</p>
-<p class="font-label-md text-label-md text-on-surface-variant">12-15 kts NE</p>
-</div>
-</div>
-<div class="text-right">
-<span class="font-body-md font-bold text-primary">69°</span>
-<span class="font-body-sm text-on-surface-variant block">60°</span>
-</div>
-</div>
-<!-- Day Item -->
-<div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors">
-<div class="w-16">
-<span class="font-label-md text-label-md text-on-surface-variant block">SAT</span>
-<span class="font-body-md font-bold text-primary">26 OCT</span>
-</div>
-<div class="flex items-center gap-3 flex-1 px-4">
-<span class="material-symbols-outlined text-on-tertiary-container text-[28px]" data-icon="rainy" data-weight="fill" style="font-variation-settings: 'FILL' 1;">rainy</span>
-<div>
-<p class="font-body-sm font-semibold text-primary">Storm Warning</p>
-<p class="font-label-md text-label-md text-error">25+ kts Gusts</p>
-</div>
-</div>
-<div class="text-right">
-<span class="font-body-md font-bold text-primary">65°</span>
-<span class="font-body-sm text-on-surface-variant block">58°</span>
-</div>
-</div>
-<!-- View More Button -->
-<button class="w-full py-4 font-label-md text-label-md text-secondary uppercase tracking-widest hover:bg-surface-variant transition-colors rounded-b-xl">
-                    Full Weekly Forecast
-                </button>
-</div>
-</section>
-<!-- Safety Alert -->
-<section class="bg-error-container p-4 rounded-xl border border-error/20 flex gap-4 items-center">
-<div class="bg-error text-white p-2 rounded-full">
-<span class="material-symbols-outlined" data-icon="warning">warning</span>
-</div>
-<div>
-<h4 class="font-label-md text-label-md font-bold text-on-error-container uppercase">Small Craft Advisory</h4>
-<p class="font-body-sm text-on-error-container/80">Effective Saturday morning due to incoming NE swell and high winds.</p>
-</div>
-</section>
+<main class="px-margin-mobile pt-6 space-y-6 max-w-3xl mx-auto">
+  <section class="flex justify-between items-end gap-4">
+    <div class="space-y-1">
+      <div class="flex items-center gap-1 text-on-surface-variant">
+        <span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
+        <span id="weather-location" class="font-label-md text-label-md uppercase tracking-wider">Cebu City, Philippines</span>
+      </div>
+      <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Weather &amp; Conditions</h2>
+      <p id="weather-status" class="font-body-sm text-on-surface-variant">Loading the latest Open-Meteo forecast…</p>
+    </div>
+    <div class="text-right shrink-0">
+      <p class="font-label-md text-label-md text-on-surface-variant">LOCAL TIME</p>
+      <p id="weather-local-time" class="font-headline-sm text-headline-sm text-secondary">--:--</p>
+      <button id="refresh-weather" class="mt-2 inline-flex items-center gap-1 text-secondary font-label-md text-label-md hover:underline" type="button">
+        <span class="material-symbols-outlined text-[16px]">refresh</span> REFRESH
+      </button>
+    </div>
+  </section>
+
+  <section id="weather-error" class="hidden bg-error-container p-4 rounded-xl border border-error/20 text-on-error-container">
+    <div class="flex gap-3 items-start">
+      <span class="material-symbols-outlined">cloud_off</span>
+      <div>
+        <h3 class="font-label-md font-bold uppercase">Unable to load forecast</h3>
+        <p id="weather-error-message" class="font-body-sm mt-1">Please check your internet connection and try again.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-primary-container text-on-primary-container rounded-xl border border-primary/10 p-5 shadow-sm overflow-hidden relative">
+    <div class="absolute -right-8 -top-10 opacity-10">
+      <span id="current-weather-bg-icon" class="material-symbols-outlined" style="font-size: 170px;">partly_cloudy_day</span>
+    </div>
+    <div class="relative flex justify-between items-start gap-5">
+      <div>
+        <span class="font-label-md text-label-md uppercase opacity-80">Current forecast hour</span>
+        <div class="flex items-center gap-3 mt-1">
+          <span id="current-weather-icon" class="material-symbols-outlined text-secondary-container text-[46px]" style="font-variation-settings: 'FILL' 1;">partly_cloudy_day</span>
+          <span id="current-temperature" class="font-data-display text-data-display text-white">--°C</span>
+        </div>
+        <p id="current-condition" class="font-body-md text-white/90 mt-1">Loading conditions…</p>
+      </div>
+      <div class="text-right">
+        <span class="font-label-md text-label-md uppercase opacity-80">Rain chance</span>
+        <p id="current-rain" class="font-data-display text-data-display text-secondary-container">--%</p>
+        <p id="current-hour-label" class="font-body-sm text-white/80">Forecast time: --</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 shadow-sm overflow-hidden">
+    <div class="flex justify-between items-start gap-4 mb-4">
+      <div>
+        <span class="font-label-md text-label-md text-on-surface-variant block">NEXT 24 HOURS</span>
+        <h3 class="font-headline-sm text-headline-sm text-primary">Temperature trend</h3>
+      </div>
+      <div class="text-right">
+        <span id="trend-range" class="font-label-md text-label-md text-secondary">--</span>
+        <p class="font-body-sm text-on-surface-variant">Hourly forecast</p>
+      </div>
+    </div>
+    <div class="relative h-40 w-full">
+      <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100" aria-label="Temperature trend chart">
+        <line stroke="#e0e3e5" stroke-dasharray="4" stroke-width="1" x1="0" x2="400" y1="50" y2="50"></line>
+        <path id="temperature-area" d="M8,92 L392,92 L392,100 L8,100 Z" fill="#76f3ea" opacity="0.18"></path>
+        <path id="temperature-path" d="M8,50 L392,50" fill="none" stroke="#006a65" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"></path>
+      </svg>
+      <div id="trend-time-labels" class="absolute bottom-0 left-0 right-0 flex justify-between px-1 font-label-md text-label-md text-on-surface-variant">
+        <span>--</span><span>--</span><span>--</span><span>--</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-2 gap-4">
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
+      <div class="flex justify-between items-start">
+        <span class="material-symbols-outlined text-secondary" data-icon="air">air</span>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase">Wind speed</span>
+      </div>
+      <div>
+        <div id="current-wind" class="font-headline-md text-headline-md text-primary">-- <span class="text-sm font-normal text-on-surface-variant">km/h</span></div>
+        <div id="current-wind-knots" class="font-label-md text-label-md text-on-surface-variant">-- knots</div>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
+      <div class="flex justify-between items-start">
+        <span id="wind-direction-icon" class="material-symbols-outlined text-secondary" data-icon="navigation">navigation</span>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase">Wind direction</span>
+      </div>
+      <div>
+        <div id="current-wind-direction" class="font-headline-md text-headline-md text-primary">--</div>
+        <div id="current-wind-degrees" class="font-label-md text-label-md text-on-surface-variant">--°</div>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
+      <div class="flex justify-between items-start">
+        <span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase">Pressure</span>
+      </div>
+      <div>
+        <div id="current-pressure" class="font-headline-md text-headline-md text-primary">-- <span class="text-sm font-normal text-on-surface-variant">hPa</span></div>
+        <div class="font-label-md text-label-md text-on-surface-variant">Mean sea level</div>
+      </div>
+    </div>
+
+    <div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col justify-between min-h-[120px] border border-outline-variant">
+      <div class="flex justify-between items-start">
+        <span class="material-symbols-outlined text-primary" data-icon="rainy">rainy</span>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase">Precipitation</span>
+      </div>
+      <div>
+        <div id="current-precipitation" class="font-headline-md text-headline-md text-primary">--%</div>
+        <div class="font-label-md text-label-md text-on-surface-variant">Probability</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="weather-caution" class="bg-secondary-container/40 p-4 rounded-xl border border-secondary/20 flex gap-4 items-center">
+    <div id="weather-caution-icon-wrap" class="bg-secondary text-white p-2 rounded-full">
+      <span id="weather-caution-icon" class="material-symbols-outlined" data-icon="info">info</span>
+    </div>
+    <div>
+      <h4 id="weather-caution-title" class="font-label-md text-label-md font-bold text-on-secondary-container uppercase">Checking conditions</h4>
+      <p id="weather-caution-message" class="font-body-sm text-on-secondary-container/90">Reviewing the next six forecast hours…</p>
+    </div>
+  </section>
+
+  <section class="space-y-4 pb-2">
+    <div class="flex justify-between items-end">
+      <div>
+        <h3 class="font-headline-sm text-headline-sm text-primary">7-Day Weather Outlook</h3>
+        <p class="font-body-sm text-on-surface-variant">Daily summaries calculated from hourly Open-Meteo data.</p>
+      </div>
+    </div>
+    <div id="forecast-list" class="bg-surface-container-lowest rounded-xl border border-outline-variant divide-y divide-outline-variant/30">
+      <div class="p-5 text-center text-on-surface-variant">Loading forecast…</div>
+    </div>
+  </section>
+
+  <section class="bg-tertiary-fixed/40 p-4 rounded-xl border border-on-tertiary-fixed-variant/15 flex gap-4 items-start">
+    <span class="material-symbols-outlined text-on-tertiary-fixed-variant">water</span>
+    <div>
+      <h4 class="font-label-md text-label-md font-bold text-on-tertiary-fixed-variant uppercase">Tide data status</h4>
+      <p class="font-body-sm text-on-tertiary-fixed-variant/90 mt-1">The supplied Open-Meteo Forecast API provides atmospheric weather data but does not include ocean tide height or tide times. MASOFISH will display verified tide information after a separate tide-data source is connected.</p>
+    </div>
+  </section>
+
+  <section class="pb-8 text-center">
+    <p class="font-label-md text-label-md text-on-surface-variant">Weather data: Open-Meteo Forecast API • Coordinates: 10.3167, 123.891</p>
+    <p class="font-body-sm text-on-surface-variant mt-1">This forecast is informational and is not an official marine advisory.</p>
+  </section>
 </main>
+
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface-container-lowest border-t border-outline-variant shadow-lg rounded-t-xl">
 <a class="flex flex-col items-center justify-center text-on-surface-variant px-2 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-100" href="index.html">
@@ -362,15 +338,160 @@
 <span class="font-label-md text-label-md mt-1">Recipes</span>
 </a>
 </nav>
+<script src="weather-api.js"></script>
 <script>
-        // Simple interactive interaction for metrics
-        document.querySelectorAll('.bg-surface-container-lowest, .bg-primary-container').forEach(card => {
-            card.addEventListener('touchstart', () => {
-                card.style.transform = 'scale(0.98)';
-            });
-            card.addEventListener('touchend', () => {
-                card.style.transform = 'scale(1)';
-            });
-        });
-    </script>
+(function () {
+  const weather = window.MASOFISH_WEATHER;
+  const byId = id => document.getElementById(id);
+
+  function setText(id, value) {
+    const element = byId(id);
+    if (element) element.textContent = value;
+  }
+
+  function showError(message) {
+    byId('weather-error')?.classList.remove('hidden');
+    setText('weather-error-message', message);
+    setText('weather-status', 'Forecast unavailable');
+  }
+
+  function hideError() {
+    byId('weather-error')?.classList.add('hidden');
+  }
+
+  function renderCaution(summary) {
+    const section = byId('weather-caution');
+    const wrap = byId('weather-caution-icon-wrap');
+    const icon = byId('weather-caution-icon');
+
+    section.className = 'p-4 rounded-xl border flex gap-4 items-center';
+    wrap.className = 'text-white p-2 rounded-full';
+
+    if (summary.level === 'danger') {
+      section.classList.add('bg-error-container', 'border-error/20');
+      wrap.classList.add('bg-error');
+      icon.textContent = 'warning';
+      byId('weather-caution-title').className = 'font-label-md text-label-md font-bold text-on-error-container uppercase';
+      byId('weather-caution-message').className = 'font-body-sm text-on-error-container/90';
+    } else if (summary.level === 'warning') {
+      section.classList.add('bg-yellow-50', 'border-yellow-300');
+      wrap.classList.add('bg-yellow-600');
+      icon.textContent = 'umbrella';
+      byId('weather-caution-title').className = 'font-label-md text-label-md font-bold text-yellow-900 uppercase';
+      byId('weather-caution-message').className = 'font-body-sm text-yellow-900/90';
+    } else {
+      section.classList.add('bg-secondary-container/40', 'border-secondary/20');
+      wrap.classList.add('bg-secondary');
+      icon.textContent = 'info';
+      byId('weather-caution-title').className = 'font-label-md text-label-md font-bold text-on-secondary-container uppercase';
+      byId('weather-caution-message').className = 'font-body-sm text-on-secondary-container/90';
+    }
+
+    setText('weather-caution-title', summary.title);
+    setText('weather-caution-message', summary.message);
+  }
+
+  function renderForecastList(data) {
+    const days = weather.dailySummaries(data);
+    if (!days.length) {
+      byId('forecast-list').innerHTML = '<div class="p-5 text-center text-on-surface-variant">No daily forecast data is available.</div>';
+      return;
+    }
+
+    const firstDate = days[0].date;
+    byId('forecast-list').innerHTML = days.map(day => {
+      const info = weather.weatherInfo(day.code);
+      const high = Number.isFinite(day.high) ? `${Math.round(day.high)}°` : '--';
+      const low = Number.isFinite(day.low) ? `${Math.round(day.low)}°` : '--';
+      const rain = Number.isFinite(day.rain) ? `${Math.round(day.rain)}% rain` : 'Rain N/A';
+      const wind = Number.isFinite(day.wind) ? `Wind up to ${Math.round(day.wind)} km/h` : 'Wind N/A';
+      return `
+        <div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors gap-2">
+          <div class="w-16 shrink-0">
+            <span class="font-label-md text-label-md text-on-surface-variant block">${weather.escapeHtml(weather.dayLabel(day.date, firstDate))}</span>
+            <span class="font-body-sm font-bold text-primary">${weather.escapeHtml(weather.dateLabel(day.date))}</span>
+          </div>
+          <div class="flex items-center gap-3 flex-1 px-2 min-w-0">
+            <span class="material-symbols-outlined text-secondary text-[28px] shrink-0" style="font-variation-settings: 'FILL' 1;">${weather.escapeHtml(info.icon)}</span>
+            <div class="min-w-0">
+              <p class="font-body-sm font-semibold text-primary truncate">${weather.escapeHtml(info.label)}</p>
+              <p class="font-label-md text-label-md text-on-surface-variant truncate">${weather.escapeHtml(rain)} • ${weather.escapeHtml(wind)}</p>
+            </div>
+          </div>
+          <div class="text-right shrink-0">
+            <span class="font-body-md font-bold text-primary">${high}</span>
+            <span class="font-body-sm text-on-surface-variant block">${low}</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderTrend(data) {
+    const hours = weather.nextHours(data, 24);
+    const temperatures = hours.map(row => row.temperature).filter(Number.isFinite);
+    const path = weather.sparklinePath(temperatures);
+    byId('temperature-path').setAttribute('d', path);
+    byId('temperature-area').setAttribute('d', `${path} L392,100 L8,100 Z`);
+
+    if (temperatures.length) {
+      setText('trend-range', `${Math.round(Math.min(...temperatures))}–${Math.round(Math.max(...temperatures))}°C`);
+    }
+
+    const picks = [0, 6, 12, 18].map(index => hours[Math.min(index, hours.length - 1)]).filter(Boolean);
+    byId('trend-time-labels').innerHTML = picks.map(row => `<span>${weather.escapeHtml(weather.shortHourLabel(row.time))}</span>`).join('');
+  }
+
+  function render(data, result) {
+    const current = weather.currentConditions(data);
+    if (!current) throw new Error('No current forecast hour was returned.');
+
+    const info = weather.weatherInfo(current.code);
+    const units = data.hourly_units || {};
+    const stale = result.source === 'stale-cache';
+
+    hideError();
+    setText('weather-status', stale ? 'Showing the last saved forecast because the live request failed.' : 'Live forecast loaded from Open-Meteo.');
+    setText('weather-local-time', weather.localTimeLabel(current.time));
+    setText('current-temperature', `${Math.round(current.temperature)}${units.temperature_2m || '°C'}`);
+    setText('current-condition', info.label);
+    setText('current-rain', `${Math.round(current.rain || 0)}${units.precipitation_probability || '%'}`);
+    setText('current-hour-label', `Forecast time: ${weather.localTimeLabel(current.time)}`);
+    setText('current-weather-icon', info.icon);
+    setText('current-weather-bg-icon', info.icon);
+
+    const windSpeed = Number.isFinite(current.windSpeed) ? current.windSpeed : 0;
+    setText('current-wind', `${Math.round(windSpeed)} ${units.wind_speed_10m || 'km/h'}`);
+    setText('current-wind-knots', `${Math.round(windSpeed * 0.539957)} knots`);
+    setText('current-wind-direction', weather.compassDirection(current.windDirection));
+    setText('current-wind-degrees', `${Math.round(current.windDirection || 0)}°`);
+    setText('current-pressure', `${Math.round(current.pressure || 0)} ${units.pressure_msl || 'hPa'}`);
+    setText('current-precipitation', `${Math.round(current.rain || 0)}${units.precipitation_probability || '%'}`);
+
+    const directionIcon = byId('wind-direction-icon');
+    if (directionIcon) directionIcon.style.transform = `rotate(${Math.round(current.windDirection || 0)}deg)`;
+
+    renderTrend(data);
+    renderCaution(weather.cautionSummary(data));
+    renderForecastList(data);
+  }
+
+  async function load(force = false) {
+    const button = byId('refresh-weather');
+    if (button) button.disabled = true;
+    setText('weather-status', force ? 'Refreshing Open-Meteo forecast…' : 'Loading the latest Open-Meteo forecast…');
+
+    try {
+      const result = await weather.fetchForecast({ force });
+      render(result.data, result);
+    } catch (error) {
+      showError(error.message || 'The forecast could not be loaded.');
+    } finally {
+      if (button) button.disabled = false;
+    }
+  }
+
+  byId('refresh-weather')?.addEventListener('click', () => load(true));
+  load(false);
+})();
+</script>
 </body></html>
