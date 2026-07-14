@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head><title>MASOFISH - Tides and Weather</title>
+<html class="light" lang="en"><head><title>MASOFISH - Weather, Tides and Waves</title>
 <meta charset="utf-8"/>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
@@ -167,7 +167,7 @@
         <span class="material-symbols-outlined text-[18px]" data-icon="location_on">location_on</span>
         <span id="weather-location" class="font-label-md text-label-md uppercase tracking-wider">Cebu City, Philippines</span>
       </div>
-      <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Weather &amp; Conditions</h2>
+      <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Weather, Tides &amp; Marine Conditions</h2>
       <p id="weather-status" class="font-body-sm text-on-surface-variant">Loading the latest Open-Meteo forecast…</p>
     </div>
     <div class="text-right shrink-0">
@@ -289,6 +289,119 @@
     </div>
   </section>
 
+
+  <!-- Live Marine Tide and Wave Module -->
+  <section class="space-y-4" aria-labelledby="marine-section-title">
+    <div class="flex justify-between items-end gap-4">
+      <div>
+        <span class="font-label-md text-label-md text-on-surface-variant uppercase">Open-Meteo Marine API</span>
+        <h3 id="marine-section-title" class="font-headline-sm text-headline-sm text-primary">Tides &amp; Wave Conditions</h3>
+        <p id="marine-status" class="font-body-sm text-on-surface-variant">Loading Cebu marine conditions…</p>
+      </div>
+      <span id="marine-updated" class="font-label-md text-label-md text-secondary text-right">Loading…</span>
+    </div>
+
+    <div id="marine-error" class="hidden bg-error-container p-4 rounded-xl border border-error/20 text-on-error-container">
+      <div class="flex gap-3 items-start">
+        <span class="material-symbols-outlined">waves</span>
+        <div>
+          <h4 class="font-label-md font-bold uppercase">Unable to load marine data</h4>
+          <p id="marine-error-message" class="font-body-sm mt-1">Please check your connection and try again.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <article class="bg-primary-container text-white p-4 rounded-xl min-h-[132px] flex flex-col justify-between border border-primary/10">
+        <div class="flex justify-between items-start gap-2">
+          <span class="material-symbols-outlined text-secondary-container">water</span>
+          <span class="font-label-md text-label-md text-on-primary-container uppercase text-right">Sea level</span>
+        </div>
+        <div>
+          <p id="marine-current-level" class="font-headline-md text-headline-md">-- m</p>
+          <p id="marine-current-level-feet" class="font-label-md text-label-md text-white/70">-- ft</p>
+          <p id="marine-trend" class="font-body-sm text-secondary-container font-semibold mt-1">Checking trend…</p>
+        </div>
+      </article>
+
+      <article class="bg-surface-container-lowest p-4 rounded-xl min-h-[132px] flex flex-col justify-between border border-outline-variant">
+        <div class="flex justify-between items-start gap-2">
+          <span class="material-symbols-outlined text-secondary">waves</span>
+          <span class="font-label-md text-label-md text-on-surface-variant uppercase text-right">Wave height</span>
+        </div>
+        <div>
+          <p id="marine-current-wave" class="font-headline-md text-headline-md text-primary">-- m</p>
+          <p id="marine-current-wave-feet" class="font-label-md text-label-md text-on-surface-variant">-- ft</p>
+          <p id="marine-wave-condition" class="font-body-sm text-secondary font-semibold mt-1">Checking waves…</p>
+        </div>
+      </article>
+
+      <article class="bg-surface-container-lowest p-4 rounded-xl min-h-[132px] flex flex-col justify-between border border-outline-variant">
+        <div class="flex justify-between items-start gap-2">
+          <span class="material-symbols-outlined text-secondary">north</span>
+          <span class="font-label-md text-label-md text-on-surface-variant uppercase text-right">Next high</span>
+        </div>
+        <div>
+          <p id="marine-next-high-time" class="font-headline-sm text-headline-sm text-primary">--</p>
+          <p id="marine-next-high-date" class="font-label-md text-label-md text-on-surface-variant">--</p>
+          <p id="marine-next-high-height" class="font-body-sm text-secondary font-semibold mt-1">-- m</p>
+        </div>
+      </article>
+
+      <article class="bg-surface-container-lowest p-4 rounded-xl min-h-[132px] flex flex-col justify-between border border-outline-variant">
+        <div class="flex justify-between items-start gap-2">
+          <span class="material-symbols-outlined text-primary">south</span>
+          <span class="font-label-md text-label-md text-on-surface-variant uppercase text-right">Next low</span>
+        </div>
+        <div>
+          <p id="marine-next-low-time" class="font-headline-sm text-headline-sm text-primary">--</p>
+          <p id="marine-next-low-date" class="font-label-md text-label-md text-on-surface-variant">--</p>
+          <p id="marine-next-low-height" class="font-body-sm text-primary font-semibold mt-1">-- m</p>
+        </div>
+      </article>
+    </div>
+
+    <article class="bg-surface-container-lowest rounded-xl border border-outline-variant p-4 shadow-sm overflow-hidden">
+      <div class="flex justify-between items-start gap-4 mb-4">
+        <div>
+          <span class="font-label-md text-label-md text-on-surface-variant block">NEXT 24 HOURS</span>
+          <h4 class="font-headline-sm text-headline-sm text-primary">Estimated tide curve</h4>
+        </div>
+        <span id="marine-chart-range" class="font-label-md text-label-md text-secondary text-right">--</span>
+      </div>
+      <div class="w-full overflow-x-auto">
+        <svg id="marine-tide-chart" class="w-full min-w-[650px] h-[250px]" viewBox="0 0 720 250" role="img" aria-label="Estimated tide-height chart">
+          <g id="marine-chart-grid"></g>
+          <path id="marine-chart-area" fill="#76f3ea" opacity="0.18"></path>
+          <path id="marine-chart-line" class="tide-path" fill="none" stroke="#006a65" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+          <g id="marine-chart-markers"></g>
+          <g id="marine-chart-labels"></g>
+        </svg>
+      </div>
+    </article>
+
+    <article class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+      <div class="p-4 border-b border-outline-variant">
+        <h4 class="font-headline-sm text-headline-sm text-primary">Upcoming Tide Events</h4>
+        <p class="font-body-sm text-on-surface-variant">Estimated from hourly local maximum and minimum sea-level values.</p>
+      </div>
+      <div id="marine-event-list" class="divide-y divide-outline-variant/40">
+        <div class="p-5 text-center text-on-surface-variant">Loading tide events…</div>
+      </div>
+    </article>
+
+    <aside class="bg-tertiary-fixed/40 p-4 rounded-xl border border-on-tertiary-fixed-variant/15 flex gap-4 items-start">
+      <span class="material-symbols-outlined text-on-tertiary-fixed-variant">info</span>
+      <div>
+        <h4 class="font-label-md text-label-md font-bold text-on-tertiary-fixed-variant uppercase">Planning estimate only</h4>
+        <p class="font-body-sm text-on-tertiary-fixed-variant/90 mt-1">
+          Tide height is shown relative to global mean sea level, not a local nautical chart datum. Coastal accuracy is limited.
+          Do not use this information for navigation or as a replacement for an official nautical almanac.
+        </p>
+      </div>
+    </aside>
+  </section>
+
   <section class="space-y-4 pb-2">
     <div class="flex justify-between items-end">
       <div>
@@ -301,17 +414,9 @@
     </div>
   </section>
 
-  <section class="bg-tertiary-fixed/40 p-4 rounded-xl border border-on-tertiary-fixed-variant/15 flex gap-4 items-start">
-    <span class="material-symbols-outlined text-on-tertiary-fixed-variant">water</span>
-    <div>
-      <h4 class="font-label-md text-label-md font-bold text-on-tertiary-fixed-variant uppercase">Tide data status</h4>
-      <p class="font-body-sm text-on-tertiary-fixed-variant/90 mt-1">The supplied Open-Meteo Forecast API provides atmospheric weather data but does not include ocean tide height or tide times. MASOFISH will display verified tide information after a separate tide-data source is connected.</p>
-    </div>
-  </section>
-
   <section class="pb-8 text-center">
-    <p class="font-label-md text-label-md text-on-surface-variant">Weather data: Open-Meteo Forecast API • Coordinates: 10.3167, 123.891</p>
-    <p class="font-body-sm text-on-surface-variant mt-1">This forecast is informational and is not an official marine advisory.</p>
+    <p class="font-label-md text-label-md text-on-surface-variant">Weather: Open-Meteo Forecast API • Marine: Open-Meteo Marine API • Cebu City coordinates</p>
+    <p class="font-body-sm text-on-surface-variant mt-1">Weather and marine values are informational estimates and are not official navigation or marine advisories.</p>
   </section>
 </main>
 
@@ -339,9 +444,11 @@
 </a>
 </nav>
 <script src="weather-api.js"></script>
+<script src="marine-api.js"></script>
 <script>
 (function () {
   const weather = window.MASOFISH_WEATHER;
+  const marine = window.MASOFISH_MARINE;
   const byId = id => document.getElementById(id);
 
   function setText(id, value) {
@@ -349,14 +456,44 @@
     if (element) element.textContent = value;
   }
 
-  function showError(message) {
+  function signedMetres(value) {
+    if (!Number.isFinite(value)) return '-- m';
+    return `${value >= 0 ? '+' : ''}${value.toFixed(2)} m`;
+  }
+
+  function signedFeet(value) {
+    if (!Number.isFinite(value)) return '-- ft';
+    const converted = value * 3.28084;
+    return `${converted >= 0 ? '+' : ''}${converted.toFixed(2)} ft`;
+  }
+
+  function normalMetres(value) {
+    return Number.isFinite(value) ? `${value.toFixed(2)} m` : '-- m';
+  }
+
+  function normalFeet(value) {
+    return Number.isFinite(value) ? `${(value * 3.28084).toFixed(2)} ft` : '-- ft';
+  }
+
+  function showWeatherError(message) {
     byId('weather-error')?.classList.remove('hidden');
     setText('weather-error-message', message);
     setText('weather-status', 'Forecast unavailable');
   }
 
-  function hideError() {
+  function hideWeatherError() {
     byId('weather-error')?.classList.add('hidden');
+  }
+
+  function showMarineError(message) {
+    byId('marine-error')?.classList.remove('hidden');
+    setText('marine-error-message', message);
+    setText('marine-status', 'Marine conditions unavailable');
+    setText('marine-updated', 'Tap Refresh');
+  }
+
+  function hideMarineError() {
+    byId('marine-error')?.classList.add('hidden');
   }
 
   function renderCaution(summary) {
@@ -405,6 +542,7 @@
       const low = Number.isFinite(day.low) ? `${Math.round(day.low)}°` : '--';
       const rain = Number.isFinite(day.rain) ? `${Math.round(day.rain)}% rain` : 'Rain N/A';
       const wind = Number.isFinite(day.wind) ? `Wind up to ${Math.round(day.wind)} km/h` : 'Wind N/A';
+
       return `
         <div class="flex items-center justify-between p-4 hover:bg-surface-container-low transition-colors gap-2">
           <div class="w-16 shrink-0">
@@ -426,10 +564,11 @@
     }).join('');
   }
 
-  function renderTrend(data) {
+  function renderWeatherTrend(data) {
     const hours = weather.nextHours(data, 24);
     const temperatures = hours.map(row => row.temperature).filter(Number.isFinite);
     const path = weather.sparklinePath(temperatures);
+
     byId('temperature-path').setAttribute('d', path);
     byId('temperature-area').setAttribute('d', `${path} L392,100 L8,100 Z`);
 
@@ -437,11 +576,15 @@
       setText('trend-range', `${Math.round(Math.min(...temperatures))}–${Math.round(Math.max(...temperatures))}°C`);
     }
 
-    const picks = [0, 6, 12, 18].map(index => hours[Math.min(index, hours.length - 1)]).filter(Boolean);
-    byId('trend-time-labels').innerHTML = picks.map(row => `<span>${weather.escapeHtml(weather.shortHourLabel(row.time))}</span>`).join('');
+    const picks = [0, 6, 12, 18]
+      .map(index => hours[Math.min(index, hours.length - 1)])
+      .filter(Boolean);
+    byId('trend-time-labels').innerHTML = picks
+      .map(row => `<span>${weather.escapeHtml(weather.shortHourLabel(row.time))}</span>`)
+      .join('');
   }
 
-  function render(data, result) {
+  function renderWeather(data, result) {
     const current = weather.currentConditions(data);
     if (!current) throw new Error('No current forecast hour was returned.');
 
@@ -449,8 +592,11 @@
     const units = data.hourly_units || {};
     const stale = result.source === 'stale-cache';
 
-    hideError();
-    setText('weather-status', stale ? 'Showing the last saved forecast because the live request failed.' : 'Live forecast loaded from Open-Meteo.');
+    hideWeatherError();
+    setText(
+      'weather-status',
+      stale ? 'Showing the last saved forecast because the live request failed.' : 'Live atmospheric forecast loaded from Open-Meteo.'
+    );
     setText('weather-local-time', weather.localTimeLabel(current.time));
     setText('current-temperature', `${Math.round(current.temperature)}${units.temperature_2m || '°C'}`);
     setText('current-condition', info.label);
@@ -470,28 +616,185 @@
     const directionIcon = byId('wind-direction-icon');
     if (directionIcon) directionIcon.style.transform = `rotate(${Math.round(current.windDirection || 0)}deg)`;
 
-    renderTrend(data);
+    renderWeatherTrend(data);
     renderCaution(weather.cautionSummary(data));
     renderForecastList(data);
   }
 
-  async function load(force = false) {
-    const button = byId('refresh-weather');
-    if (button) button.disabled = true;
-    setText('weather-status', force ? 'Refreshing Open-Meteo forecast…' : 'Loading the latest Open-Meteo forecast…');
-
-    try {
-      const result = await weather.fetchForecast({ force });
-      render(result.data, result);
-    } catch (error) {
-      showError(error.message || 'The forecast could not be loaded.');
-    } finally {
-      if (button) button.disabled = false;
-    }
+  function renderMarineEvent(event) {
+    const high = event.type === 'high';
+    return `
+      <div class="p-4 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined ${high ? 'text-secondary' : 'text-primary'}">${high ? 'north' : 'south'}</span>
+          <div>
+            <p class="font-body-md font-bold text-primary">${high ? 'High tide' : 'Low tide'}</p>
+            <p class="font-body-sm text-on-surface-variant">${marine.dateLabel(event.time)}</p>
+          </div>
+        </div>
+        <div class="text-right">
+          <p class="font-body-md font-bold text-primary">${marine.timeLabel(event.time)}</p>
+          <p class="font-body-sm text-on-surface-variant">${signedMetres(event.height)}</p>
+        </div>
+      </div>`;
   }
 
-  byId('refresh-weather')?.addEventListener('click', () => load(true));
-  load(false);
+  function renderMarineChart(data, events) {
+    const rows = marine.nextHours(data, 24).filter(row => Number.isFinite(row.seaLevel));
+    if (rows.length < 2) {
+      setText('marine-chart-range', 'Chart unavailable');
+      return;
+    }
+
+    const width = 720;
+    const height = 250;
+    const left = 50;
+    const right = 18;
+    const top = 24;
+    const bottom = 42;
+    const plotWidth = width - left - right;
+    const plotHeight = height - top - bottom;
+    const values = rows.map(row => row.seaLevel);
+    const minimum = Math.min(...values);
+    const maximum = Math.max(...values);
+    const range = Math.max(maximum - minimum, 0.1);
+
+    const xFor = index => left + (index / Math.max(rows.length - 1, 1)) * plotWidth;
+    const yFor = value => top + ((maximum - value) / range) * plotHeight;
+
+    const points = rows.map((row, index) => [xFor(index), yFor(row.seaLevel)]);
+    const path = points.map(([x, y], index) => `${index === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+    const firstPoint = points[0];
+    const lastPoint = points[points.length - 1];
+    const area = `${path} L${lastPoint[0].toFixed(1)},${height - bottom} L${firstPoint[0].toFixed(1)},${height - bottom} Z`;
+
+    byId('marine-chart-line').setAttribute('d', path);
+    byId('marine-chart-area').setAttribute('d', area);
+
+    const grid = [];
+    for (let line = 0; line < 4; line += 1) {
+      const y = top + (line / 3) * plotHeight;
+      const value = maximum - (line / 3) * range;
+      grid.push(`<line x1="${left}" y1="${y}" x2="${width - right}" y2="${y}" stroke="#e0e3e5" stroke-dasharray="4"/>`);
+      grid.push(`<text x="${left - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#737780">${value.toFixed(2)}</text>`);
+    }
+    byId('marine-chart-grid').innerHTML = grid.join('');
+
+    const labelIndexes = [0, 6, 12, 18, rows.length - 1]
+      .filter((value, index, list) => value >= 0 && value < rows.length && list.indexOf(value) === index);
+    byId('marine-chart-labels').innerHTML = labelIndexes.map(index => (
+      `<text x="${xFor(index)}" y="${height - 14}" text-anchor="middle" font-size="11" fill="#43474f">${marine.timeLabel(rows[index].time)}</text>`
+    )).join('');
+
+    const rowIndexMap = new Map(rows.map((row, index) => [row.index, index]));
+    byId('marine-chart-markers').innerHTML = events
+      .filter(event => rowIndexMap.has(event.index))
+      .map(event => {
+        const index = rowIndexMap.get(event.index);
+        const x = xFor(index);
+        const y = yFor(event.height);
+        const high = event.type === 'high';
+        return `
+          <circle cx="${x}" cy="${y}" r="5" fill="${high ? '#006a65' : '#001e40'}" stroke="#ffffff" stroke-width="2"></circle>
+          <text x="${x}" y="${high ? Math.max(y - 11, 14) : Math.min(y + 20, height - bottom)}" text-anchor="middle" font-size="10" font-weight="700" fill="${high ? '#006a65' : '#001e40'}">${high ? 'H' : 'L'}</text>`;
+      }).join('');
+
+    setText(
+      'marine-chart-range',
+      `${marine.dateLabel(rows[0].time)} ${marine.timeLabel(rows[0].time)} – ${marine.timeLabel(rows[rows.length - 1].time)}`
+    );
+  }
+
+  function renderMarine(data, result) {
+    const current = marine.currentConditions(data);
+    const events = marine.tideEvents(data, 12);
+    const nextHigh = events.find(event => event.type === 'high');
+    const nextLow = events.find(event => event.type === 'low');
+    const stale = result.source === 'stale-cache';
+
+    hideMarineError();
+    setText(
+      'marine-status',
+      stale ? 'Showing the last saved marine response because the live request failed.' : 'Live tide and wave estimates loaded from Open-Meteo.'
+    );
+    setText('marine-updated', current.time ? marine.timeLabel(current.time) : 'Updated');
+
+    setText('marine-current-level', signedMetres(current.seaLevel));
+    setText('marine-current-level-feet', signedFeet(current.seaLevel));
+    setText(
+      'marine-trend',
+      current.trend === 'rising' ? 'Rising tide' : current.trend === 'falling' ? 'Falling tide' : 'Nearly steady'
+    );
+
+    setText('marine-current-wave', normalMetres(current.waveHeight));
+    setText('marine-current-wave-feet', normalFeet(current.waveHeight));
+    setText('marine-wave-condition', marine.waveDescription(current.waveHeight));
+
+    if (nextHigh) {
+      setText('marine-next-high-time', marine.timeLabel(nextHigh.time));
+      setText('marine-next-high-date', marine.dateLabel(nextHigh.time));
+      setText('marine-next-high-height', `${signedMetres(nextHigh.height)} • ${signedFeet(nextHigh.height)}`);
+    } else {
+      setText('marine-next-high-time', 'Not found');
+      setText('marine-next-high-date', 'Returned range');
+      setText('marine-next-high-height', '--');
+    }
+
+    if (nextLow) {
+      setText('marine-next-low-time', marine.timeLabel(nextLow.time));
+      setText('marine-next-low-date', marine.dateLabel(nextLow.time));
+      setText('marine-next-low-height', `${signedMetres(nextLow.height)} • ${signedFeet(nextLow.height)}`);
+    } else {
+      setText('marine-next-low-time', 'Not found');
+      setText('marine-next-low-date', 'Returned range');
+      setText('marine-next-low-height', '--');
+    }
+
+    byId('marine-event-list').innerHTML = events.length
+      ? events.slice(0, 6).map(renderMarineEvent).join('')
+      : '<div class="p-5 text-center text-on-surface-variant">No high or low tide extrema were found in the returned range.</div>';
+
+    renderMarineChart(data, events);
+  }
+
+  async function loadAll(force = false) {
+    const button = byId('refresh-weather');
+    if (button) button.disabled = true;
+
+    setText('weather-status', force ? 'Refreshing atmospheric forecast…' : 'Loading the latest atmospheric forecast…');
+    setText('marine-status', force ? 'Refreshing marine conditions…' : 'Loading Cebu marine conditions…');
+
+    const [weatherResult, marineResult] = await Promise.allSettled([
+      weather.fetchForecast({ force }),
+      marine.fetchMarine({ force })
+    ]);
+
+    if (weatherResult.status === 'fulfilled') {
+      try {
+        renderWeather(weatherResult.value.data, weatherResult.value);
+      } catch (error) {
+        showWeatherError(error.message || 'The atmospheric forecast could not be displayed.');
+      }
+    } else {
+      showWeatherError(weatherResult.reason?.message || 'The atmospheric forecast could not be loaded.');
+    }
+
+    if (marineResult.status === 'fulfilled') {
+      try {
+        renderMarine(marineResult.value.data, marineResult.value);
+      } catch (error) {
+        showMarineError(error.message || 'The marine response could not be displayed.');
+      }
+    } else {
+      showMarineError(marineResult.reason?.message || 'The marine response could not be loaded.');
+    }
+
+    if (button) button.disabled = false;
+  }
+
+  byId('refresh-weather')?.addEventListener('click', () => loadAll(true));
+  loadAll(false);
 })();
 </script>
+
 </body></html>

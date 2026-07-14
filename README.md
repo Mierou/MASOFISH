@@ -1,4 +1,4 @@
-# MASOFISH — Vercel-Ready Web App with Live Weather
+# MASOFISH — Vercel-Ready Web App with Live Weather, Tides and Waves
 
 This folder is ready to deploy as a static site on Vercel. It includes the Stitch-based interface, the local TensorFlow.js / Teachable Machine fish-identification model, and live weather data from Open-Meteo.
 
@@ -7,10 +7,11 @@ This folder is ready to deploy as a static site on Vercel. It includes the Stitc
 - `index.html` — dashboard with live Cebu City weather summary
 - `fish-identification.html` — image upload and AI identification
 - `identification-result.html` — prediction results
-- `tides-weather.html` — detailed hourly and seven-day weather page
+- `tides-weather.html` — combined weather, estimated tide-height, tide-event and wave-conditions page
 - `announcements.html`
 - `recipes.html`
-- `weather-api.js` — Open-Meteo integration and shared weather utilities
+- `weather-api.js` — Open-Meteo atmospheric forecast integration and shared weather utilities
+- `marine-api.js` — Open-Meteo Marine API integration for sea-level and wave estimates
 - `model/` — `model.json`, `metadata.json`, and `weights.bin`
 
 ## Weather API
@@ -35,9 +36,16 @@ The app displays:
 
 Forecast responses are stored in the browser for 15 minutes. If the live request temporarily fails, the most recent saved forecast may be shown.
 
-### Tide-data limitation
+### Marine tide and wave module
 
-The supplied Open-Meteo Forecast API is a weather endpoint. It does not return ocean tide heights or high/low tide times. The Tides & Weather page clearly marks tide information as unavailable until a separate verified tide-data service is added.
+The combined Tides & Weather page also calls:
+
+```text
+https://marine-api.open-meteo.com/v1/marine?latitude=10.3157&longitude=123.8854&hourly=sea_level_height_msl,wave_height&current=wave_height,sea_level_height_msl&timezone=auto
+```
+
+It displays the current estimated sea-level height, current wave height, a rising/falling trend, estimated high and low tide events, and a 24-hour tide curve. High and low tide times are calculated from hourly local maxima and minima. These values are planning estimates relative to global mean sea level and must not be used for navigation.
+
 
 ## Deploy using GitHub
 
@@ -68,7 +76,7 @@ vercel --prod
 
 - Fish identification runs in the visitor's browser after the model is downloaded.
 - No external fish-identification API key is required.
-- No Open-Meteo API key is required for this integration.
+- No Open-Meteo API key is required for the weather or marine integrations.
 - The deployed website needs internet access to retrieve current weather data.
 - TensorFlow.js, the Teachable Machine image library, Tailwind CSS, Google Fonts, and Material Symbols are currently loaded from public CDNs.
 - The fish model currently recognizes Milkfish, Indian Mackerel, Eel, Tilapia, Scatfish, Mullet, Rabbitfish, and No Fish.

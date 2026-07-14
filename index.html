@@ -143,7 +143,7 @@
 <div class="flex items-center gap-3">
 <span class="material-symbols-outlined text-primary" style="font-size: 28px;">anchor</span>
 <h1 class="font-headline-md text-headline-md tracking-tight font-black text-primary">MASOFISH</h1>
-<span class="ml-2 px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-wide">STITCH + AI + LIVE WEATHER</span>
+<span class="ml-2 px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-wide">STITCH + AI + LIVE WEATHER + TIDES</span>
 </div>
 <button class="relative p-2 rounded-full hover:bg-surface-container-high transition-colors active:scale-95 transition-transform">
 <span class="material-symbols-outlined text-primary">notifications</span>
@@ -192,6 +192,18 @@
 <div id="dashboard-time-labels" class="flex justify-between mt-2 font-label-md text-label-md opacity-60">
 <span>--</span><span>--</span><span>--</span><span>--</span>
 </div>
+</div>
+<div class="relative mt-5 pt-4 border-t border-white/20 grid grid-cols-2 gap-4">
+  <div>
+    <p class="font-label-md text-label-md opacity-75 uppercase">Sea level estimate</p>
+    <p id="dashboard-tide-level" class="font-headline-sm text-headline-sm text-secondary-container mt-1">-- m</p>
+    <p id="dashboard-tide-trend" class="font-body-sm text-white/80">Loading tide…</p>
+  </div>
+  <div class="text-right">
+    <p class="font-label-md text-label-md opacity-75 uppercase">Wave height</p>
+    <p id="dashboard-wave-height" class="font-headline-sm text-headline-sm text-secondary-container mt-1">-- m</p>
+    <p id="dashboard-next-tide" class="font-body-sm text-white/80">Next tide: --</p>
+  </div>
 </div>
 </a>
 
@@ -314,9 +326,11 @@
 <span class="material-symbols-outlined" style="font-size: 32px;">add_a_photo</span>
 </button>
 <script src="weather-api.js"></script>
+<script src="marine-api.js"></script>
 <script>
 (function () {
   const weather = window.MASOFISH_WEATHER;
+  const marine = window.MASOFISH_MARINE;
   const byId = id => document.getElementById(id);
 
   function setText(id, text) {
@@ -378,6 +392,38 @@
         title: 'Weather service unavailable',
         message: error.message || 'The forecast could not be loaded. Check your connection and try again.'
       });
+    });
+
+  marine.fetchMarine()
+    .then(result => {
+      const current = marine.currentConditions(result.data);
+      const events = marine.tideEvents(result.data, 4);
+      const nextEvent = events[0];
+
+      if (Number.isFinite(current.seaLevel)) {
+        setText('dashboard-tide-level', `${current.seaLevel >= 0 ? '+' : ''}${current.seaLevel.toFixed(2)} m`);
+      }
+      setText(
+        'dashboard-tide-trend',
+        current.trend === 'rising' ? 'Rising tide' : current.trend === 'falling' ? 'Falling tide' : 'Nearly steady'
+      );
+
+      if (Number.isFinite(current.waveHeight)) {
+        setText('dashboard-wave-height', `${current.waveHeight.toFixed(2)} m`);
+      }
+
+      if (nextEvent) {
+        setText(
+          'dashboard-next-tide',
+          `Next ${nextEvent.type}: ${marine.timeLabel(nextEvent.time)}`
+        );
+      } else {
+        setText('dashboard-next-tide', 'Next tide: unavailable');
+      }
+    })
+    .catch(() => {
+      setText('dashboard-tide-trend', 'Tide unavailable');
+      setText('dashboard-next-tide', 'Tap for details');
     });
 
   document.querySelectorAll('.active\\:scale-95').forEach(button => {
