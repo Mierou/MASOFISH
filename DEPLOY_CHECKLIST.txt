@@ -1,0 +1,14 @@
+MASOFISH VERCEL DEPLOYMENT CHECKLIST
+
+[ ] Extract MASOFISH_Vercel_Ready.zip
+[ ] Upload the extracted files to the ROOT of a GitHub repository
+[ ] Confirm index.html is at the repository root
+[ ] Confirm model/model.json exists
+[ ] Confirm model/metadata.json exists
+[ ] Confirm model/weights.bin exists
+[ ] Import the repository into Vercel
+[ ] Framework Preset: Other
+[ ] Build Command: leave empty
+[ ] Output Directory: leave empty
+[ ] Deploy
+[ ] Open /fish-identification.html and test a new photo
