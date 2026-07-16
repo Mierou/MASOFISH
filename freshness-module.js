@@ -48,10 +48,15 @@
     else if (type === 'success') box.classList.add('bg-secondary-container', 'text-on-secondary-container');
     else box.classList.add('bg-surface-container-high', 'text-on-surface');
     box.textContent = text;
+    box.classList.remove('hidden');
+  }
+
+  function hideMessage() {
+    byId('freshnessMessage')?.classList.add('hidden');
   }
 
   function hasImage(preview) {
-    return Boolean(preview.src) && !preview.classList.contains('hidden');
+    return Boolean(preview?.src) && !preview.classList.contains('hidden');
   }
 
   function updateAnalyzeState() {
@@ -90,7 +95,7 @@
       preview.classList.remove('hidden');
       emptyElement.classList.add('hidden');
       byId('freshnessResults').classList.add('hidden');
-      byId('freshnessMessage').classList.add('hidden');
+      hideMessage();
     };
     reader.readAsDataURL(file);
   }
@@ -116,11 +121,11 @@
 
     return {
       organ,
+      source,
       support,
       freshScore,
       nonFreshScore,
       valid: support >= (source === 'linked' ? LINKED_ORGAN_SUPPORT_THRESHOLD : ORGAN_SUPPORT_THRESHOLD),
-      source,
       predictions: enriched.sort((a, b) => b.probability - a.probability)
     };
   }
@@ -150,7 +155,7 @@
   function renderOrganResult(result, scoreId, detailId) {
     if (!result) {
       byId(scoreId).textContent = 'Not analyzed';
-      byId(detailId).textContent = 'No photo was provided for this indicator.';
+      byId(detailId).textContent = 'No image was available for this indicator.';
       return;
     }
 
@@ -202,8 +207,67 @@
       </div>`;
   }
 
-  function renderResults(eyeResult, gillResult) {
+  function buildPayload(eyeResult, gillResult) {
     const validResults = [eyeResult, gillResult].filter(result => result && result.valid);
+
+    if (!validResults.length) {
+      return {
+        analyzedAt: new Date().toISOString(),
+        hasValidSample: false,
+        overallScore: null,
+        overallPercent: null,
+        status: 'Unable to Calculate',
+        explanation: 'The uploaded image or images did not strongly match the required eye or gill close-up categories.',
+        basis: 'Upload a clearer close-up and try again.',
+        eye: eyeResult ? {
+          valid: eyeResult.valid,
+          source: eyeResult.source,
+          support: eyeResult.support,
+          freshScore: eyeResult.freshScore
+        } : null,
+        gill: gillResult ? {
+          valid: gillResult.valid,
+          source: gillResult.source,
+          support: gillResult.support,
+          freshScore: gillResult.freshScore
+        } : null
+      };
+    }
+
+    const overallScore = validResults.reduce((sum, result) => sum + result.freshScore, 0) / validResults.length;
+    const description = scoreDescription(overallScore);
+    const linkedCount = validResults.filter(result => result.source === 'linked').length;
+
+    return {
+      analyzedAt: new Date().toISOString(),
+      hasValidSample: true,
+      overallScore,
+      overallPercent: Math.round(overallScore * 100),
+      status: description.title,
+      explanation: description.explanation,
+      basis:
+        validResults.length === 2
+          ? `Overall score = average of the valid eye and gill scores${linkedCount ? ' using the linked Fish ID photo where no close-up was provided' : ''}.`
+          : validResults[0].source === 'linked'
+            ? `Overall score is based on the ${validResults[0].organ} characteristics automatically detected in the Fish ID photo.`
+            : `Overall score is based only on the valid ${validResults[0].organ} close-up.`,
+      cardClass: description.cardClass,
+      eye: eyeResult ? {
+        valid: eyeResult.valid,
+        source: eyeResult.source,
+        support: eyeResult.support,
+        freshScore: eyeResult.freshScore
+      } : null,
+      gill: gillResult ? {
+        valid: gillResult.valid,
+        source: gillResult.source,
+        support: gillResult.support,
+        freshScore: gillResult.freshScore
+      } : null
+    };
+  }
+
+  function renderResults(eyeResult, gillResult, payload) {
     const resultsPanel = byId('freshnessResults');
     resultsPanel.classList.remove('hidden');
 
@@ -214,42 +278,79 @@
       predictionList('Eye Model Output', eyeResult) +
       predictionList('Gill Model Output', gillResult);
 
-    if (!validResults.length) {
+    if (!payload.hasValidSample) {
       byId('overallFreshnessPercent').textContent = '--';
-      byId('overallFreshnessStatus').textContent = 'Unable to Calculate';
-      byId('overallFreshnessExplanation').textContent =
-        'The uploaded image or images did not strongly match the required eye or gill close-up categories.';
-      byId('overallFreshnessBasis').textContent = 'Upload a clearer close-up and try again.';
+      byId('overallFreshnessStatus').textContent = payload.status;
+      byId('overallFreshnessExplanation').textContent = payload.explanation;
+      byId('overallFreshnessBasis').textContent = payload.basis;
       byId('overallFreshnessRing').style.setProperty('--score', 0);
-      byId('overallFreshnessCard').className =
-        'rounded-xl border border-error/30 bg-error-container text-on-error-container p-5';
-      showMessage('No valid freshness sample was detected. Please follow the close-up photo guidelines.', 'error');
-      resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      byId('overallFreshnessCard').className = 'rounded-xl border border-error/30 bg-error-container text-on-error-container p-5';
       return;
     }
 
-    const overall = validResults.reduce((sum, result) => sum + result.freshScore, 0) / validResults.length;
-    const description = scoreDescription(overall);
-    const percentage = Math.round(overall * 100);
+    byId('overallFreshnessPercent').textContent = `${payload.overallPercent}%`;
+    byId('overallFreshnessStatus').textContent = payload.status;
+    byId('overallFreshnessExplanation').textContent = payload.explanation;
+    byId('overallFreshnessBasis').textContent = payload.basis;
+    byId('overallFreshnessRing').style.setProperty('--score', payload.overallPercent);
+    byId('overallFreshnessCard').className = payload.cardClass;
+  }
 
-    byId('overallFreshnessPercent').textContent = `${percentage}%`;
-    byId('overallFreshnessStatus').textContent = description.title;
-    byId('overallFreshnessExplanation').textContent = description.explanation;
-    const linkedCount = validResults.filter(result => result.source === 'linked').length;
-    byId('overallFreshnessBasis').textContent =
-      validResults.length === 2
-        ? `Overall score = average of the valid eye and gill scores${linkedCount ? ' using the linked Fish ID photo where no close-up was provided' : ''}.`
-        : validResults[0].source === 'linked'
-          ? `Overall score is based on the ${validResults[0].organ} characteristics automatically detected in the Fish ID photo.`
-          : `Overall score is based only on the valid ${validResults[0].organ} close-up.`;
-    byId('overallFreshnessRing').style.setProperty('--score', percentage);
-    byId('overallFreshnessCard').className = description.cardClass;
+  async function predictImageFromDataUrl(dataUrl) {
+    const image = new Image();
+    image.src = dataUrl;
+    await image.decode();
+    return model.predict(image, false);
+  }
 
-    showMessage(
-      'Freshness analysis completed. The displayed percentage is a model-derived visual score, not a literal food-safety measurement.',
-      'success'
-    );
-    resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  async function runFreshnessAnalysis(options = {}) {
+    const render = options.render !== false;
+    const scroll = options.scroll === true;
+    const quiet = options.quiet === true;
+
+    if (!model) {
+      throw new Error('The freshness model is still loading.');
+    }
+
+    if (!(linkedFishImageData || hasImage(eyePreview) || hasImage(gillPreview))) {
+      throw new Error('No linked or uploaded image is available for freshness analysis.');
+    }
+
+    let linkedPredictions = null;
+    if (linkedFishImageData) {
+      linkedPredictions = await predictImageFromDataUrl(linkedFishImageData);
+    }
+
+    const eyeResult = hasImage(eyePreview)
+      ? analyzeOrgan(await model.predict(eyePreview, false), 'eye', 'dedicated')
+      : linkedPredictions
+        ? analyzeOrgan(linkedPredictions, 'eye', 'linked')
+        : null;
+
+    const gillResult = hasImage(gillPreview)
+      ? analyzeOrgan(await model.predict(gillPreview, false), 'gill', 'dedicated')
+      : linkedPredictions
+        ? analyzeOrgan(linkedPredictions, 'gill', 'linked')
+        : null;
+
+    const payload = buildPayload(eyeResult, gillResult);
+
+    if (render) {
+      renderResults(eyeResult, gillResult, payload);
+      if (!quiet) {
+        showMessage(
+          payload.hasValidSample
+            ? 'Freshness analysis completed. The percentage is a model-derived visual score.'
+            : 'No valid freshness sample was detected. Please use a clearer close-up of the eye or gills.',
+          payload.hasValidSample ? 'success' : 'error'
+        );
+      }
+      if (scroll) {
+        byId('freshnessResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    return payload;
   }
 
   async function loadModel() {
@@ -273,44 +374,21 @@
 
   byId('chooseEyeFreshnessButton').addEventListener('click', () => eyeInput.click());
   byId('chooseGillFreshnessButton').addEventListener('click', () => gillInput.click());
+  byId('removeLinkedFishPhotoButton').addEventListener('click', removeLinkedFishImage);
 
-  eyeInput.addEventListener('change', () => {
-    handleFile(eyeInput.files?.[0], eyePreview, byId('eyeFreshnessEmpty'));
-  });
-  gillInput.addEventListener('change', () => {
-    handleFile(gillInput.files?.[0], gillPreview, byId('gillFreshnessEmpty'));
-  });
+  eyeInput.addEventListener('change', () => handleFile(eyeInput.files?.[0], eyePreview, byId('eyeFreshnessEmpty')));
+  gillInput.addEventListener('change', () => handleFile(gillInput.files?.[0], gillPreview, byId('gillFreshnessEmpty')));
 
   analyzeButton.addEventListener('click', async () => {
-    if (!model || (!hasImage(eyePreview) && !hasImage(gillPreview))) return;
+    if (!model || !(linkedFishImageData || hasImage(eyePreview) || hasImage(gillPreview))) return;
 
     analyzeButton.disabled = true;
     analyzeButton.innerHTML =
-      '<span class="material-symbols-outlined animate-spin">progress_activity</span> Analyzing Freshness…';
+      '<span class="material-symbols-outlined animate-spin">progress_activity</span> Analyzing Linked Photo / Close-Ups…';
     showMessage('Analyzing the linked Fish ID photo and any dedicated close-ups locally…');
 
     try {
-      let linkedPredictions = null;
-      if (linkedFishImageData) {
-        const linkedImage = new Image();
-        linkedImage.src = linkedFishImageData;
-        await linkedImage.decode();
-        linkedPredictions = await model.predict(linkedImage, false);
-      }
-
-      const eyeResult = hasImage(eyePreview)
-        ? analyzeOrgan(await model.predict(eyePreview, false), 'eye', 'dedicated')
-        : linkedPredictions
-          ? analyzeOrgan(linkedPredictions, 'eye', 'linked')
-          : null;
-
-      const gillResult = hasImage(gillPreview)
-        ? analyzeOrgan(await model.predict(gillPreview, false), 'gill', 'dedicated')
-        : linkedPredictions
-          ? analyzeOrgan(linkedPredictions, 'gill', 'linked')
-          : null;
-
-      renderResults(eyeResult, gillResult);
+      await runFreshnessAnalysis({ render: true, scroll: true, quiet: false });
     } catch (error) {
       console.error(error);
       showMessage('Freshness analysis failed. Try another image or refresh the page.', 'error');
@@ -333,15 +411,13 @@
     byId('eyeFreshnessEmpty').classList.remove('hidden');
     byId('gillFreshnessEmpty').classList.remove('hidden');
     byId('freshnessResults').classList.add('hidden');
-    byId('freshnessMessage').classList.add('hidden');
+    hideMessage();
     if (linkedFishImageData) {
       linkedStatus.textContent = 'Fish ID photo still linked and ready';
     }
     updateAnalyzeState();
     byId('freshness').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
-
-  byId('removeLinkedFishPhotoButton').addEventListener('click', removeLinkedFishImage);
 
   window.addEventListener('masofish:fish-image-selected', event => {
     setLinkedFishImage(event.detail?.dataUrl);
@@ -357,6 +433,12 @@
   } else if (storedFishImage) {
     setLinkedFishImage(storedFishImage);
   }
+
+  window.MASOFISH_FRESHNESS = {
+    isReady: () => Boolean(model),
+    analyzeForIdentification: () => runFreshnessAnalysis({ render: true, scroll: false, quiet: true }),
+    analyzeInteractive: () => runFreshnessAnalysis({ render: true, scroll: true, quiet: false })
+  };
 
   loadModel();
 })();

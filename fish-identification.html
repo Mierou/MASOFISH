@@ -644,8 +644,8 @@ input.addEventListener('change', () => handleFile(input.files?.[0]));
 identifyButton.addEventListener('click', async () => {
   if (!fishModel || !preview.src) return;
   identifyButton.disabled = true;
-  identifyButton.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Analyzing…';
-  showMessage('The local AI model is analyzing the selected image…');
+  identifyButton.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Identifying + Checking Freshness…';
+  showMessage('The AI is identifying the fish and checking freshness at the same time…');
   try {
     const predictions = await fishModel.predict(preview, false);
     predictions.sort((a,b) => b.probability - a.probability);
@@ -662,6 +662,15 @@ identifyButton.addEventListener('click', async () => {
       return;
     }
 
+    let freshnessPayload = null;
+    if (window.MASOFISH_FRESHNESS?.isReady?.()) {
+      try {
+        freshnessPayload = await window.MASOFISH_FRESHNESS.analyzeForIdentification();
+      } catch (freshnessError) {
+        console.warn('Freshness analysis could not be completed:', freshnessError);
+      }
+    }
+
     const payload = {
       className: top.className,
       probability: top.probability,
@@ -670,6 +679,11 @@ identifyButton.addEventListener('click', async () => {
       identifiedAt: new Date().toISOString()
     };
     sessionStorage.setItem('masofishPrediction', JSON.stringify(payload));
+    if (freshnessPayload) {
+      sessionStorage.setItem('masofishFreshness', JSON.stringify(freshnessPayload));
+    } else {
+      sessionStorage.removeItem('masofishFreshness');
+    }
     if (selectedImageData) sessionStorage.setItem('masofishImage', selectedImageData);
     location.href = 'identification-result.html';
   } catch (error) {
@@ -677,7 +691,7 @@ identifyButton.addEventListener('click', async () => {
     showMessage('Identification failed. Please try another image or refresh the page.', 'error');
   } finally {
     identifyButton.disabled = false;
-    identifyButton.innerHTML = '<span class="material-symbols-outlined">visibility</span> Identify Fish';
+    identifyButton.innerHTML = '<span class="material-symbols-outlined">visibility</span> Identify Fish + Freshness';
     updateIdentifyState();
   }
 });

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="vercel-ready-2026-07-14"/>
+<meta name="masofish-build" content="auto-identify-plus-freshness-2026-07-17"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MASOFISH - Identification Result</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -179,7 +179,39 @@
 </div>
 </div>
 </section>
-<section class="hidden rounded-xl p-4 border" id="confidenceNotice"></section>
+<section class="hidden rounded-xl p-4 border" id="confidenceNotice"></section><section class="hidden rounded-xl border border-outline-variant bg-surface-container-lowest p-4 space-y-4" id="freshnessSummary">
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined">fact_check</span>Freshness Summary</h2>
+<div class="grid grid-cols-[110px_1fr] gap-4 items-center">
+  <div class="flex items-center justify-center">
+    <div class="w-24 h-24 rounded-full border-[10px] border-secondary flex flex-col items-center justify-center bg-surface-container-low">
+      <span class="font-headline-sm text-headline-sm text-primary" id="freshnessPercentResult">--</span>
+      <span class="text-[10px] uppercase text-on-surface-variant">Visual Score</span>
+    </div>
+  </div>
+  <div>
+    <p class="font-label-md text-label-md uppercase text-on-surface-variant">Automatic result</p>
+    <h3 class="font-headline-sm text-headline-sm text-primary mt-1" id="freshnessStatusResult">Not analyzed</h3>
+    <p class="font-body-sm text-on-surface-variant mt-2" id="freshnessExplanationResult">Freshness was not analyzed for this result.</p>
+    <p class="font-label-md text-label-md text-secondary mt-2" id="freshnessBasisResult"></p>
+  </div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  <div class="rounded-xl border border-outline-variant p-3 bg-surface">
+    <p class="font-label-md text-label-md uppercase text-on-surface-variant">Eye score</p>
+    <p class="font-headline-sm text-headline-sm text-primary mt-1" id="freshnessEyeResult">—</p>
+    <p class="font-body-sm text-on-surface-variant mt-1" id="freshnessEyeDetailResult"></p>
+  </div>
+  <div class="rounded-xl border border-outline-variant p-3 bg-surface">
+    <p class="font-label-md text-label-md uppercase text-on-surface-variant">Gill score</p>
+    <p class="font-headline-sm text-headline-sm text-primary mt-1" id="freshnessGillResult">—</p>
+    <p class="font-body-sm text-on-surface-variant mt-1" id="freshnessGillDetailResult"></p>
+  </div>
+</div>
+<aside class="rounded-xl bg-tertiary-fixed text-on-tertiary-fixed p-3 border border-tertiary-fixed-dim">
+  <p class="font-label-md text-label-md font-bold uppercase">Important note</p>
+  <p class="font-body-sm mt-1">This is a model-derived visual freshness score, not a direct measurement of safety, shelf life, or edibility.</p>
+</aside>
+</section>
 <section class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant space-y-4">
 <h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined">info</span>Fish Information</h2>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -198,7 +230,7 @@
 <div><p class="font-label-md font-bold uppercase">Identification Reminder</p><p class="font-body-sm mt-1" id="safetyNote">AI identification is only a guide. Verify unknown fish with a knowledgeable person before handling or consuming it.</p></div>
 </section>
 <div class="grid grid-cols-1 gap-3 pb-8">
-<a class="bg-secondary text-on-secondary p-4 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform" href="fish-identification.html#freshness"><span class="material-symbols-outlined">fact_check</span>Check This Fish's Freshness</a>
+<a class="bg-secondary text-on-secondary p-4 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform" href="fish-identification.html#freshness"><span class="material-symbols-outlined">fact_check</span>Freshness Checked Automatically</a>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 <button class="bg-primary text-on-primary p-4 rounded-xl font-bold flex items-center justify-center gap-2" id="identifyAgain"><span class="material-symbols-outlined">add_a_photo</span>Identify Another Fish</button>
 <button class="bg-surface-container-high text-primary p-4 rounded-xl font-bold flex items-center justify-center gap-2" onclick="location.href='index.html'"><span class="material-symbols-outlined">dashboard</span>Back to Dashboard</button>
@@ -228,6 +260,56 @@
 <span class="font-label-md text-label-md">Recipes</span>
 </a></nav>
 <script>
+
+function renderFreshnessSummary(data) {
+  const section = document.getElementById('freshnessSummary');
+  if (!section || !data) return;
+
+  section.classList.remove('hidden');
+  document.getElementById('freshnessStatusResult').textContent = data.status || 'Not analyzed';
+  document.getElementById('freshnessExplanationResult').textContent =
+    data.explanation || 'Freshness information was not available for this identification.';
+  document.getElementById('freshnessBasisResult').textContent = data.basis || '';
+
+  const card = section;
+  if (data.hasValidSample && Number.isFinite(data.overallPercent)) {
+    document.getElementById('freshnessPercentResult').textContent = `${data.overallPercent}%`;
+    if (data.overallPercent >= 75) {
+      card.className = 'rounded-xl border border-secondary bg-secondary-container/25 p-4 space-y-4';
+    } else if (data.overallPercent >= 55) {
+      card.className = 'rounded-xl border border-yellow-300 bg-yellow-50 p-4 space-y-4';
+    } else {
+      card.className = 'rounded-xl border border-error/30 bg-error-container/20 p-4 space-y-4';
+    }
+  } else {
+    document.getElementById('freshnessPercentResult').textContent = '--';
+    card.className = 'rounded-xl border border-outline-variant bg-surface-container-lowest p-4 space-y-4';
+  }
+
+  function setOrgan(prefix, organ) {
+    const scoreEl = document.getElementById(prefix + 'Result');
+    const detailEl = document.getElementById(prefix + 'DetailResult');
+    if (!organ) {
+      scoreEl.textContent = 'Not analyzed';
+      detailEl.textContent = 'No image was available for this indicator.';
+      return;
+    }
+    if (!organ.valid) {
+      scoreEl.textContent = 'Invalid sample';
+      detailEl.textContent = `Support ${(organ.support * 100).toFixed(1)}% — use a clearer close-up.`;
+      return;
+    }
+    scoreEl.textContent = `${Math.round(organ.freshScore * 100)}%`;
+    detailEl.textContent = organ.source === 'linked'
+      ? 'Calculated automatically from the Fish ID photo.'
+      : 'Calculated from a dedicated close-up.';
+  }
+
+  setOrgan('freshnessEye', data.eye);
+  setOrgan('freshnessGill', data.gill);
+}
+
+
 const fishData = {
   'Milkfish': { local:'Bangus', scientific:'Chanos chanos', description:'A silver-bodied fish widely raised and consumed in the Philippines.' },
   'Indian Mackerel': { local:'Alumahan', scientific:'Rastrelliger kanagurta', description:'A common coastal mackerel recognized by its streamlined body and dark markings.' },
@@ -240,6 +322,7 @@ const fishData = {
 };
 
 const raw = sessionStorage.getItem('masofishPrediction');
+const freshnessRaw = sessionStorage.getItem('masofishFreshness');
 const content = document.getElementById('resultContent');
 const missing = document.getElementById('missingResult');
 if (!raw) {
@@ -267,6 +350,12 @@ if (!raw) {
     notice.className = 'rounded-xl p-4 border bg-secondary-container text-on-secondary-container border-secondary';
     notice.innerHTML = '<strong>Identification completed.</strong> The confidence is above the prototype threshold, but manual verification is still recommended.';
   }
+  let freshnessData = null;
+  if (freshnessRaw) {
+    try { freshnessData = JSON.parse(freshnessRaw); } catch (error) { console.warn('Invalid freshness payload', error); }
+  }
+  if (freshnessData) renderFreshnessSummary(freshnessData);
+
   document.getElementById('predictionList').innerHTML = (result.predictions || []).map(p => {
     const pct=(p.probability*100).toFixed(1);
     return `<div><div class="flex justify-between text-body-sm mb-1"><span>${p.className}</span><strong>${pct}%</strong></div><div class="h-2 bg-outline-variant rounded-full overflow-hidden"><div class="h-full bg-secondary rounded-full" style="width:${pct}%"></div></div></div>`;
@@ -274,7 +363,9 @@ if (!raw) {
   document.getElementById('identifyAgain').addEventListener('click', () => {
     sessionStorage.removeItem('masofishPrediction');
     sessionStorage.removeItem('masofishImage');
+    sessionStorage.removeItem('masofishFreshness');
     location.href='fish-identification.html';
   });
 }
+
 </script></body></html>

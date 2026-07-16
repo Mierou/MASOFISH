@@ -107,3 +107,13 @@ The image selected in the Fish Identification panel is automatically linked to t
 The freshness model tests whether the linked image mainly contains eye or gill characteristics. A dedicated eye or gill close-up overrides the linked image for that indicator. Whole-fish photos may be rejected when the eye or gills are too small or unclear.
 
 The visual freshness percentage remains a model-derived score and must not be described as a literal percentage of food freshness or safety.
+
+## One-Click Identify + Freshness
+
+Clicking **Identify Fish + Freshness** now performs both actions in one step:
+
+1. The species-identification model predicts the fish class.
+2. The freshness model evaluates the linked Fish ID photo and any dedicated eye/gill close-ups.
+3. The result page opens with both the species result and the automatic freshness summary.
+
+The freshness analysis is stored in session storage under `masofishFreshness` so it can be shown on `identification-result.html`.
