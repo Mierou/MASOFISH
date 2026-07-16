@@ -235,7 +235,7 @@
           <p class="font-label-md text-label-md uppercase text-on-secondary-container">Freshness Model</p>
           <h2 class="font-headline-md text-headline-md text-primary">Check Fish Freshness</h2>
           <p class="font-body-sm text-on-surface-variant mt-1">
-            Upload a close-up of the fish eye, gills, or both. The model runs locally in your browser.
+            The Fish ID photo is linked automatically. For better accuracy, you may also upload separate close-ups of the eye, gills, or both.
           </p>
         </div>
       </div>
@@ -251,6 +251,32 @@
           </p>
         </div>
       </div>
+
+      <article id="linkedFishPhotoPanel" class="hidden border border-secondary/30 bg-secondary-container/25 rounded-xl overflow-hidden">
+        <div class="p-4 border-b border-secondary/20 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-secondary">link</span>
+            <div>
+              <h3 class="font-headline-sm text-headline-sm text-primary">Fish ID Photo Linked Automatically</h3>
+              <p class="font-body-sm text-on-surface-variant">This is the same image selected for fish identification.</p>
+            </div>
+          </div>
+          <span class="font-label-md text-label-md text-secondary uppercase">Auto source</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-[190px_1fr] gap-4 p-4 items-center">
+          <img id="linkedFishPhotoPreview" class="w-full h-40 object-contain rounded-lg bg-black/5 border border-outline-variant" alt="Automatically linked Fish ID photo"/>
+          <div>
+            <p id="linkedFishPhotoStatus" class="font-body-md font-bold text-primary">Ready for freshness analysis</p>
+            <p class="font-body-sm text-on-surface-variant mt-2">
+              The freshness model will automatically test whether this image mainly shows an eye or gills.
+              A whole-fish photo may be too distant, so dedicated close-ups below can override it.
+            </p>
+            <button id="removeLinkedFishPhotoButton" type="button" class="mt-3 text-error font-body-sm font-bold flex items-center gap-1">
+              <span class="material-symbols-outlined text-[18px]">link_off</span> Do not use linked photo
+            </button>
+          </div>
+        </div>
+      </article>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <article class="border border-outline-variant rounded-xl overflow-hidden bg-surface">
@@ -301,7 +327,7 @@
       </div>
 
       <button id="analyzeFreshnessButton" type="button" disabled class="w-full bg-secondary text-on-secondary p-4 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 transition-transform">
-        <span class="material-symbols-outlined">science</span> Analyze Freshness
+        <span class="material-symbols-outlined">science</span> Analyze Linked Photo / Close-Ups
       </button>
 
       <div id="freshnessMessage" class="hidden rounded-lg p-3 font-body-sm"></div>
@@ -335,7 +361,7 @@
               </div>
               <span class="material-symbols-outlined text-secondary">visibility</span>
             </div>
-            <p id="eyeFreshnessDetail" class="font-body-sm text-on-surface-variant mt-2">Upload an eye photo to include this indicator.</p>
+            <p id="eyeFreshnessDetail" class="font-body-sm text-on-surface-variant mt-2">The linked Fish ID photo will be used unless you upload a separate eye close-up.</p>
           </article>
           <article class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4">
             <div class="flex justify-between gap-4">
@@ -345,7 +371,7 @@
               </div>
               <span class="material-symbols-outlined text-secondary">air</span>
             </div>
-            <p id="gillFreshnessDetail" class="font-body-sm text-on-surface-variant mt-2">Upload a gill photo to include this indicator.</p>
+            <p id="gillFreshnessDetail" class="font-body-sm text-on-surface-variant mt-2">The linked Fish ID photo will be used unless you upload a separate gill close-up.</p>
           </article>
         </div>
 
@@ -593,11 +619,16 @@ function handleFile(file) {
   }
   const reader = new FileReader();
   reader.onload = () => {
+    const originalImageData = reader.result;
     preview.onload = () => {
       selectedImageData = resizeForStorage(preview);
+      sessionStorage.setItem('masofishPendingImage', selectedImageData || originalImageData);
+      window.dispatchEvent(new CustomEvent('masofish:fish-image-selected', {
+        detail: { dataUrl: selectedImageData || originalImageData }
+      }));
       updateIdentifyState();
     };
-    preview.src = reader.result;
+    preview.src = originalImageData;
     preview.classList.remove('hidden');
     emptyPreview.classList.add('hidden');
     quickPredictions.classList.add('hidden');
@@ -662,6 +693,20 @@ searchInput?.addEventListener('input', (e) => {
     card.style.display = (name.includes(term) || text.includes(term)) ? 'block' : 'none';
   });
 });
+
+const storedFishImage = sessionStorage.getItem('masofishPendingImage') || sessionStorage.getItem('masofishImage');
+if (storedFishImage && !preview.src) {
+  preview.onload = () => {
+    selectedImageData = resizeForStorage(preview);
+    window.dispatchEvent(new CustomEvent('masofish:fish-image-selected', {
+      detail: { dataUrl: selectedImageData || storedFishImage }
+    }));
+    updateIdentifyState();
+  };
+  preview.src = storedFishImage;
+  preview.classList.remove('hidden');
+  emptyPreview.classList.add('hidden');
+}
 
 loadModel();
 </script>

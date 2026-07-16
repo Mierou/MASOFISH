@@ -4,8 +4,10 @@
   const MODEL_URL = './freshness-model/model.json';
   const METADATA_URL = './freshness-model/metadata.json';
   const ORGAN_SUPPORT_THRESHOLD = 0.55;
+  const LINKED_ORGAN_SUPPORT_THRESHOLD = 0.58;
 
   let model = null;
+  let linkedFishImageData = null;
 
   const byId = id => document.getElementById(id);
   const eyeInput = byId('eyeFreshnessInput');
@@ -13,6 +15,9 @@
   const eyePreview = byId('eyeFreshnessPreview');
   const gillPreview = byId('gillFreshnessPreview');
   const analyzeButton = byId('analyzeFreshnessButton');
+  const linkedPanel = byId('linkedFishPhotoPanel');
+  const linkedPreview = byId('linkedFishPhotoPreview');
+  const linkedStatus = byId('linkedFishPhotoStatus');
 
   function escapeHtml(value) {
     return String(value).replace(/[&<>"']/g, character => ({
@@ -50,7 +55,25 @@
   }
 
   function updateAnalyzeState() {
-    analyzeButton.disabled = !(model && (hasImage(eyePreview) || hasImage(gillPreview)));
+    analyzeButton.disabled = !(model && (linkedFishImageData || hasImage(eyePreview) || hasImage(gillPreview)));
+  }
+
+  function setLinkedFishImage(dataUrl) {
+    if (!dataUrl) return;
+    linkedFishImageData = dataUrl;
+    linkedPreview.src = dataUrl;
+    linkedPanel.classList.remove('hidden');
+    linkedStatus.textContent = 'Ready for automatic freshness analysis';
+    byId('freshnessResults').classList.add('hidden');
+    updateAnalyzeState();
+  }
+
+  function removeLinkedFishImage() {
+    linkedFishImageData = null;
+    linkedPreview.removeAttribute('src');
+    linkedPanel.classList.add('hidden');
+    updateAnalyzeState();
+    showMessage('The linked Fish ID photo will not be used. Upload an eye or gill close-up below.');
   }
 
   function handleFile(file, preview, emptyElement) {
@@ -72,7 +95,7 @@
     reader.readAsDataURL(file);
   }
 
-  function analyzeOrgan(predictions, organ) {
+  function analyzeOrgan(predictions, organ, source = 'dedicated') {
     const enriched = predictions.map(prediction => ({
       className: prediction.className,
       probability: prediction.probability,
@@ -96,7 +119,8 @@
       support,
       freshScore,
       nonFreshScore,
-      valid: support >= ORGAN_SUPPORT_THRESHOLD,
+      valid: support >= (source === 'linked' ? LINKED_ORGAN_SUPPORT_THRESHOLD : ORGAN_SUPPORT_THRESHOLD),
+      source,
       predictions: enriched.sort((a, b) => b.probability - a.probability)
     };
   }
@@ -137,12 +161,15 @@
     }
 
     byId(scoreId).textContent = `${Math.round(result.freshScore * 100)}%`;
+    const sourceText = result.source === 'linked'
+      ? ' Automatically evaluated from the Fish ID photo.'
+      : ' Evaluated from the dedicated close-up.';
     byId(detailId).textContent =
-      result.freshScore >= 0.75
+      (result.freshScore >= 0.75
         ? 'Fresh visual characteristics were dominant.'
         : result.freshScore >= 0.55
           ? 'Fresh characteristics were slightly stronger, but the result is mixed.'
-          : 'Non-fresh visual characteristics were dominant.';
+          : 'Non-fresh visual characteristics were dominant.') + sourceText;
   }
 
   function predictionList(title, result) {
@@ -153,7 +180,10 @@
     return `
       <div>
         <h4 class="font-body-md font-bold text-primary">${escapeHtml(title)}</h4>
-        <p class="font-label-md text-label-md text-on-surface-variant mt-1">Selected-part support: ${(result.support * 100).toFixed(1)}%</p>
+        <p class="font-label-md text-label-md text-on-surface-variant mt-1">
+          Source: ${result.source === 'linked' ? 'Linked Fish ID photo' : 'Dedicated close-up'} •
+          Selected-part support: ${(result.support * 100).toFixed(1)}%
+        </p>
         <div class="space-y-3 mt-3">
           ${result.predictions.map(item => {
             const percentage = (item.probability * 100).toFixed(1);
@@ -205,10 +235,13 @@
     byId('overallFreshnessPercent').textContent = `${percentage}%`;
     byId('overallFreshnessStatus').textContent = description.title;
     byId('overallFreshnessExplanation').textContent = description.explanation;
+    const linkedCount = validResults.filter(result => result.source === 'linked').length;
     byId('overallFreshnessBasis').textContent =
       validResults.length === 2
-        ? 'Overall score = average of the valid eye and gill freshness scores.'
-        : `Overall score is based only on the valid ${validResults[0].organ} sample.`;
+        ? `Overall score = average of the valid eye and gill scores${linkedCount ? ' using the linked Fish ID photo where no close-up was provided' : ''}.`
+        : validResults[0].source === 'linked'
+          ? `Overall score is based on the ${validResults[0].organ} characteristics automatically detected in the Fish ID photo.`
+          : `Overall score is based only on the valid ${validResults[0].organ} close-up.`;
     byId('overallFreshnessRing').style.setProperty('--score', percentage);
     byId('overallFreshnessCard').className = description.cardClass;
 
@@ -254,15 +287,28 @@
     analyzeButton.disabled = true;
     analyzeButton.innerHTML =
       '<span class="material-symbols-outlined animate-spin">progress_activity</span> Analyzing Freshness…';
-    showMessage('Analyzing the selected eye and/or gill image locally…');
+    showMessage('Analyzing the linked Fish ID photo and any dedicated close-ups locally…');
 
     try {
+      let linkedPredictions = null;
+      if (linkedFishImageData) {
+        const linkedImage = new Image();
+        linkedImage.src = linkedFishImageData;
+        await linkedImage.decode();
+        linkedPredictions = await model.predict(linkedImage, false);
+      }
+
       const eyeResult = hasImage(eyePreview)
-        ? analyzeOrgan(await model.predict(eyePreview, false), 'eye')
-        : null;
+        ? analyzeOrgan(await model.predict(eyePreview, false), 'eye', 'dedicated')
+        : linkedPredictions
+          ? analyzeOrgan(linkedPredictions, 'eye', 'linked')
+          : null;
+
       const gillResult = hasImage(gillPreview)
-        ? analyzeOrgan(await model.predict(gillPreview, false), 'gill')
-        : null;
+        ? analyzeOrgan(await model.predict(gillPreview, false), 'gill', 'dedicated')
+        : linkedPredictions
+          ? analyzeOrgan(linkedPredictions, 'gill', 'linked')
+          : null;
 
       renderResults(eyeResult, gillResult);
     } catch (error) {
@@ -270,7 +316,7 @@
       showMessage('Freshness analysis failed. Try another image or refresh the page.', 'error');
     } finally {
       analyzeButton.innerHTML =
-        '<span class="material-symbols-outlined">science</span> Analyze Freshness';
+        '<span class="material-symbols-outlined">science</span> Analyze Linked Photo / Close-Ups';
       updateAnalyzeState();
     }
   });
@@ -288,9 +334,29 @@
     byId('gillFreshnessEmpty').classList.remove('hidden');
     byId('freshnessResults').classList.add('hidden');
     byId('freshnessMessage').classList.add('hidden');
+    if (linkedFishImageData) {
+      linkedStatus.textContent = 'Fish ID photo still linked and ready';
+    }
     updateAnalyzeState();
     byId('freshness').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
+
+  byId('removeLinkedFishPhotoButton').addEventListener('click', removeLinkedFishImage);
+
+  window.addEventListener('masofish:fish-image-selected', event => {
+    setLinkedFishImage(event.detail?.dataUrl);
+  });
+
+  const existingFishPreview = byId('fishPreview');
+  const storedFishImage =
+    sessionStorage.getItem('masofishPendingImage') ||
+    sessionStorage.getItem('masofishImage');
+
+  if (existingFishPreview?.src && !existingFishPreview.classList.contains('hidden')) {
+    setLinkedFishImage(existingFishPreview.src);
+  } else if (storedFishImage) {
+    setLinkedFishImage(storedFishImage);
+  }
 
   loadModel();
 })();

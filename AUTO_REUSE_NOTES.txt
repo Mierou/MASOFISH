@@ -1,0 +1,7 @@
+Fish ID photo automatic reuse
+
+1. Selecting a Fish ID photo automatically links it to the freshness section.
+2. The linked image is restored after returning from the identification result page.
+3. Separate eye or gill close-ups are optional and override the linked image.
+4. Whole-fish images may be rejected if the eye or gills are not clearly visible.
+5. Overall freshness remains a model-derived visual score, not a food-safety measurement.

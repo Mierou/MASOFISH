@@ -99,3 +99,11 @@ For each valid body-part image, the application calculates a conditional visual 
 When both samples are valid, the **overall visual freshness percentage** is the arithmetic average of the eye and gill scores. When only one valid sample is available, the overall score is based on that sample alone.
 
 The percentage is a model-derived visual score. It is not a literal percentage of freshness, shelf life, or food safety.
+
+## Automatic Fish ID Photo Reuse
+
+The image selected in the Fish Identification panel is automatically linked to the freshness module on the same page. Users do not need to upload the same image again.
+
+The freshness model tests whether the linked image mainly contains eye or gill characteristics. A dedicated eye or gill close-up overrides the linked image for that indicator. Whole-fish photos may be rejected when the eye or gills are too small or unclear.
+
+The visual freshness percentage remains a model-derived score and must not be described as a literal percentage of food freshness or safety.
