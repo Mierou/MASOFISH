@@ -1,0 +1,5 @@
+The freshness model is integrated directly into fish-identification.html.
+Eye and gill close-ups may be analyzed separately or together.
+Overall visual freshness percentage = average of valid eye and gill freshness scores.
+If only one valid sample is available, the overall score uses that sample.
+This is not a food-safety guarantee.

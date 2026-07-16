@@ -1,4 +1,4 @@
-# MASOFISH — Vercel-Ready Web App with Live Weather, Tides and Waves
+# MASOFISH — Vercel-Ready Web App with Fish ID, Freshness, Weather, Tides and Waves
 
 This folder is ready to deploy as a static site on Vercel. It includes the Stitch-based interface, the local TensorFlow.js / Teachable Machine fish-identification model, and live weather data from Open-Meteo.
 
@@ -81,3 +81,21 @@ vercel --prod
 - TensorFlow.js, the Teachable Machine image library, Tailwind CSS, Google Fonts, and Material Symbols are currently loaded from public CDNs.
 - The fish model currently recognizes Milkfish, Indian Mackerel, Eel, Tilapia, Scatfish, Mullet, Rabbitfish, and No Fish.
 - Update the model by replacing the three files inside `model/` while preserving their filenames.
+
+## Integrated Fish Freshness Module
+
+The freshness checker is located directly on `fish-identification.html` under the `#freshness` section.
+
+The user may upload:
+- an eye close-up,
+- a gill close-up, or
+- both images.
+
+For each valid body-part image, the application calculates a conditional visual freshness score:
+
+- Eye score = `eye-fresh / (eye-fresh + eye-non-fresh)`
+- Gill score = `gill-fresh / (gill-fresh + gill-non-fresh)`
+
+When both samples are valid, the **overall visual freshness percentage** is the arithmetic average of the eye and gill scores. When only one valid sample is available, the overall score is based on that sample alone.
+
+The percentage is a model-derived visual score. It is not a literal percentage of freshness, shelf life, or food safety.
