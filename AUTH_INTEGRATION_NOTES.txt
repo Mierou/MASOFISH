@@ -1,7 +1,0 @@
-MASOFISH Supabase-ready authentication
-
-Added auth.html with Login and Sign Up forms.
-All main application pages are protected by auth-guard.js.
-auth-ui.js adds the signed-in user and Sign Out menu to page headers.
-Prototype mode is available until Supabase is configured.
-Edit supabase-config.js and follow SUPABASE_SETUP.md.
