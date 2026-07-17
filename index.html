@@ -280,10 +280,18 @@
 <span class="material-symbols-outlined text-primary" style="font-size: 32px;">fact_check</span>
 <span class="font-label-md text-label-md text-primary">CHECK FRESHNESS</span>
 </button>
+<button class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" onclick="location.href='forum.html'">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px;">forum</span>
+<span class="font-label-md text-label-md text-primary">COMMUNITY FORUM</span>
+</button>
+<button class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" onclick="location.href='announcements.html'">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px;">campaign</span>
+<span class="font-label-md text-label-md text-primary">ANNOUNCEMENTS</span>
+</button>
 </div>
 <!-- Community Highlights -->
 <section class="pt-2">
-<h3 class="font-headline-sm text-headline-sm text-primary mb-4">Latest in Community</h3>
+<div class="flex items-center justify-between mb-4"><h3 class="font-headline-sm text-headline-sm text-primary">Latest in Community</h3><a href="forum.html" class="text-secondary font-bold text-sm">Open Forum</a></div>
 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex gap-4 items-center mb-4">
 <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
 <img class="w-full h-full object-cover" data-alt="A delicious, high-quality food photograph of a grilled fish taco garnished with fresh lime and cilantro. The lighting is warm and inviting, set against a rustic wooden table. The visual style is premium and clean, focusing on the vibrant colors of the fresh ingredients to inspire community members for their next seafood meal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEJdaf5HAQBD9KKWe8yfjhJbXKOgCRkiLdIuFmUWJpT15RNJxL7iDLMkVIOSmD3B6fcx81VZugLQWmlIAvyEZoRzCp7WdpNyYIn9YSoBNG1p_97zFYcBzUVFkAipZDeern048wymQeZV1HSNYeqlOb5lheaJppHR-27eyGvKMGk6dBnq9G4Pkuy58lghoxGi3-JN0lDUOlQp4TJq6NXh3kX-XkYW2GwM_MxDuSgyj4h98U_7F_kPBqWxiQaDNoIbannM5Pdkad5Fo"/>
@@ -298,9 +306,9 @@
 </div>
 </main>
 <!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-2 py-3 bg-surface-container-lowest border-t border-outline-variant shadow-lg md:hidden rounded-t-xl">
+<nav class="fixed bottom-0 w-full z-50 grid grid-cols-6 items-center px-1 py-2 bg-surface-container-lowest border-t border-outline-variant shadow-lg md:hidden rounded-t-xl">
 <!-- Dashboard (Active) -->
-<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-100" href="index.html">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-2 py-1 active:scale-90 transition-all duration-100" href="index.html">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
 <span class="font-label-md text-label-md">Dashboard</span>
 </a>
@@ -320,6 +328,11 @@
 <span class="font-label-md text-label-md">News</span>
 </a>
 <!-- Recipes -->
+
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-1 py-1 hover:bg-surface-variant transition-all duration-100 active:scale-90" href="forum.html">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-md text-[10px]">Forum</span>
+</a>
 <a class="flex flex-col items-center justify-center text-on-surface-variant px-2 py-1 hover:bg-surface-variant transition-colors active:scale-90 transition-all duration-100" href="recipes.html">
 <span class="material-symbols-outlined">restaurant</span>
 <span class="font-label-md text-label-md">Recipes</span>
