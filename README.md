@@ -117,3 +117,18 @@ Clicking **Identify Fish + Freshness** now performs both actions in one step:
 3. The result page opens with both the species result and the automatic freshness summary.
 
 The freshness analysis is stored in session storage under `masofishFreshness` so it can be shown on `identification-result.html`.
+
+## Supabase Login and Sign Up
+
+The application now includes a Supabase-ready email/password authentication interface.
+
+Before real authentication will work:
+
+1. Add the Supabase Project URL and Publishable/anon key to `supabase-config.js`.
+2. Configure the Vercel site and `auth.html` as allowed Supabase Auth URLs.
+3. Disable prototype mode for the final production deployment.
+4. Use Supabase Row Level Security for any private database tables.
+
+The browser must only receive the Publishable or anon key. Never use the `service_role` key in this static application.
+
+See `SUPABASE_SETUP.md` for complete instructions.
