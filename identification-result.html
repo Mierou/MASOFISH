@@ -146,6 +146,16 @@
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth-guard.js"></script>
+
+<style>
+  #saveCatchResultModal[hidden] {
+    display: none !important;
+  }
+  #saveCatchResultModal:not([hidden]) {
+    display: grid;
+  }
+</style>
+
 </head>
 <body class="bg-background text-on-background font-body-md min-h-screen pb-24">
 <!-- Top App Bar -->
@@ -256,6 +266,12 @@
       <input id="saveCatchFishName" type="hidden"/>
       <input id="saveCatchLocalName" type="hidden"/>
       <input id="saveCatchScientificName" type="hidden"/>
+
+      <div class="rounded-xl border border-outline-variant bg-surface-container-low p-4">
+        <span class="block text-xs uppercase font-bold text-on-surface-variant">Identified fish</span>
+        <strong id="saveCatchFishNameDisplay" class="block text-lg text-primary mt-1">—</strong>
+        <span id="saveCatchNameDetails" class="block text-sm text-on-surface-variant mt-1"></span>
+      </div>
 
       <div class="rounded-xl bg-surface-container-low p-4 grid grid-cols-2 gap-3">
         <div><span class="block text-xs uppercase font-bold text-on-surface-variant">AI confidence</span><strong id="saveCatchConfidence">—</strong></div>
