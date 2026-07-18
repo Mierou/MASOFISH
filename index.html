@@ -205,64 +205,20 @@
 </div>
 </a>
 
-<!-- Recent Catch (AI ID Section) -->
+<!-- Recent Catch Log -->
 <section class="space-y-4">
-<div class="flex justify-between items-center">
-<h3 class="font-headline-sm text-headline-sm text-primary">Recent Catch</h3>
-<button class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline">
-                        VIEW LOG <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-</button>
-</div>
-<div class="flex gap-4 overflow-x-auto pb-2 scroll-smooth">
-<!-- Catch Card 1 -->
-<div class="min-w-[280px] bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm group active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A professional close-up photograph of a vibrant Red Snapper fish held by a fisherman on a boat. The lighting is bright morning sunlight, highlighting the metallic scales and deep red color of the fish. The background shows the blurred blue ocean and white boat deck. The aesthetic is clean, sharp, and high-contrast to match a modern marine instrument interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5eipgiI-Tyxg0MpPCCg0bqIYSkM58F77ErmeGRIaWI5SV6TEp2RPYLT6auu3EY6VUTToCW-I0TsvyOnTplJINPDNNCvYrqR_B3loBPrOavFMoaOaF5DkfTXHqYnP_3U9f1SL2ERAqqlTOzQpj0ll6ey9-59laKLxlg3g1HfNGhE8aTf0mZNJv7JHyDZoQG2ny5jp_yAran-U4VtAvb49svG4dhTr3rxP3v09t-9QanaphznVdUPmSWNzCGoHQvFU_iHNF202Bu4E"/>
-<div class="absolute top-3 left-3">
-<span class="bg-primary/80 backdrop-blur-md text-white px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 98% AI Match
-                                </span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h4 class="font-headline-sm text-headline-sm">Red Snapper</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">2.4kg • 45cm</p>
-</div>
-<span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded font-label-md text-label-md">HARVEST</span>
-</div>
-<div class="mt-3 flex items-center gap-2 text-on-surface-variant">
-<span class="material-symbols-outlined text-[18px]">location_on</span>
-<span class="font-label-md text-label-md">North Ridge Shelf</span>
-</div>
-</div>
-</div>
-<!-- Catch Card 2 -->
-<div class="min-w-[280px] bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm group active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A detailed macro photograph of a Striped Bass fish being released back into the water. Splashes of seafoam and clear blue water surround the fish. The style is utilitarian yet artistic, with high clarity and a color palette emphasizing deep blues and whites. The lighting is natural and oceanic, evoking a sense of conservation and reliable marine data collection." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCogakUx26Ya_9x1VqmWH5a5oKDQHqAbvL18KqE7QUc1H0_FQ50ynDUGz7hPf5ollOc3FFQQRRMVtgHoxlA-tZQXHAmPsfngTpbOuEEPtzYy4ORVERVxpIj5qcPnMg52hX18ccbd0laGMkS56y_clpOOAstNJIUjNLNQxDC8OAGtMVnBk-MUaZ3Oky9iw7mOp-KZ6xT7MXb0nsGSW7Bypk4KGYEB9GFgZF8kgczAg3NnQtJvRE7YbNLsMIHqGweUdZplX-yJ8HZ00Y"/>
-<div class="absolute top-3 left-3">
-<span class="bg-primary/80 backdrop-blur-md text-white px-3 py-1 rounded-full font-label-md text-label-md flex items-center gap-1">
-<span class="material-symbols-outlined text-[14px]">auto_awesome</span> 94% AI Match
-                                </span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start">
-<div>
-<h4 class="font-headline-sm text-headline-sm">Striped Bass</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant">5.1kg • 72cm</p>
-</div>
-<span class="bg-surface-variant text-on-surface-variant px-2 py-1 rounded font-label-md text-label-md">RELEASED</span>
-</div>
-<div class="mt-3 flex items-center gap-2 text-on-surface-variant">
-<span class="material-symbols-outlined text-[18px]">location_on</span>
-<span class="font-label-md text-label-md">Deep Channel</span>
-</div>
-</div>
-</div>
-</div>
+  <div class="flex justify-between items-center">
+    <h3 class="font-headline-sm text-headline-sm text-primary">Recent Catch Log</h3>
+    <a href="catch-log.html" class="text-secondary font-label-md text-label-md flex items-center gap-1 hover:underline">
+      VIEW LOG <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+    </a>
+  </div>
+  <div id="dashboardRecentCatchList" class="flex gap-4 overflow-x-auto pb-2 scroll-smooth"></div>
+  <a id="dashboardRecentCatchEmpty" hidden href="catch-log.html" class="block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center text-on-surface-variant">
+    <span class="material-symbols-outlined text-4xl text-secondary">add_circle</span>
+    <p class="font-bold text-primary mt-2">No catches recorded yet</p>
+    <p class="text-sm mt-1">Save a Fish ID result or add a catch manually.</p>
+  </a>
 </section>
 <!-- Quick Actions Grid -->
 <div class="grid grid-cols-2 gap-4 mt-2">
@@ -277,6 +233,10 @@
 <button class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" onclick="location.href='forum.html'">
 <span class="material-symbols-outlined text-primary" style="font-size: 32px;">forum</span>
 <span class="font-label-md text-label-md text-primary">COMMUNITY FORUM</span>
+</button>
+<button class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" onclick="location.href='catch-log.html'">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px;">phishing</span>
+<span class="font-label-md text-label-md text-primary">CATCH LOG</span>
 </button>
 <button class="bg-surface-container-low p-4 rounded-xl flex flex-col items-center justify-center gap-2 border border-outline-variant hover:bg-surface-container-high transition-colors active:scale-95 transition-transform" onclick="location.href='announcements.html'">
 <span class="material-symbols-outlined text-primary" style="font-size: 32px;">campaign</span>
@@ -421,6 +381,8 @@
   });
 })();
 </script>
+<script src="catch-log-service.js"></script>
+<script src="catch-log-dashboard.js"></script>
 <script src="safety-alerts.js"></script>
 <script src="auth-ui.js"></script>
 </body></html>

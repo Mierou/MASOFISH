@@ -234,6 +234,8 @@
 <div><p class="font-label-md font-bold uppercase">Identification Reminder</p><p class="font-body-sm mt-1" id="safetyNote">AI identification is only a guide. Verify unknown fish with a knowledgeable person before handling or consuming it.</p></div>
 </section>
 <div class="grid grid-cols-1 gap-3 pb-8">
+<button id="saveToCatchLogButton" class="bg-secondary text-on-secondary p-4 rounded-xl font-bold flex items-center justify-center gap-2 disabled:opacity-70"><span class="material-symbols-outlined">save</span>Save to Catch Log</button>
+<a class="bg-surface-container-high text-primary p-4 rounded-xl font-bold flex items-center justify-center gap-2" id="findRecipesButton" href="recipes.html"><span class="material-symbols-outlined">restaurant</span>Find Recipes for This Fish</a>
 <a class="bg-secondary text-on-secondary p-4 rounded-xl font-bold flex items-center justify-center gap-2 active:scale-95 transition-transform" href="fish-identification.html#freshness"><span class="material-symbols-outlined">fact_check</span>Freshness Checked Automatically</a>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 <button class="bg-primary text-on-primary p-4 rounded-xl font-bold flex items-center justify-center gap-2" id="identifyAgain"><span class="material-symbols-outlined">add_a_photo</span>Identify Another Fish</button>
@@ -242,6 +244,43 @@
 </div>
 </section>
 </main>
+
+<div id="saveCatchResultModal" hidden class="fixed inset-0 z-[9998] bg-primary/60 backdrop-blur-sm p-4 grid place-items-center">
+  <section class="w-full max-w-xl max-h-[calc(100dvh-2rem)] overflow-auto rounded-2xl bg-white border border-outline-variant shadow-2xl">
+    <div class="sticky top-0 bg-white border-b border-outline-variant p-4 flex items-center justify-between z-10">
+      <div><p class="text-xs uppercase tracking-widest font-extrabold text-secondary">Catch Log</p><h2 class="text-xl font-black text-primary">Save Identified Catch</h2></div>
+      <button id="closeSaveCatchModalButton" type="button" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <form id="saveCatchResultForm" class="p-5 space-y-4">
+      <div id="saveCatchResultMessage" hidden class="rounded-xl border p-3 text-sm"></div>
+      <input id="saveCatchFishName" type="hidden"/>
+      <input id="saveCatchLocalName" type="hidden"/>
+      <input id="saveCatchScientificName" type="hidden"/>
+
+      <div class="rounded-xl bg-surface-container-low p-4 grid grid-cols-2 gap-3">
+        <div><span class="block text-xs uppercase font-bold text-on-surface-variant">AI confidence</span><strong id="saveCatchConfidence">—</strong></div>
+        <div><span class="block text-xs uppercase font-bold text-on-surface-variant">Visual freshness</span><strong id="saveCatchFreshness">—</strong></div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <label><span class="block text-sm font-bold mb-1.5">Weight (kg)</span><input id="saveCatchWeight" type="number" min="0" step="0.01" class="w-full rounded-xl border-outline-variant"/></label>
+        <label><span class="block text-sm font-bold mb-1.5">Length (cm)</span><input id="saveCatchLength" type="number" min="0" step="0.1" class="w-full rounded-xl border-outline-variant"/></label>
+        <label><span class="block text-sm font-bold mb-1.5">Catch date</span><input id="saveCatchDate" type="date" class="w-full rounded-xl border-outline-variant" required/></label>
+        <label><span class="block text-sm font-bold mb-1.5">Catch time</span><input id="saveCatchTime" type="time" class="w-full rounded-xl border-outline-variant"/></label>
+        <label><span class="block text-sm font-bold mb-1.5">Disposition</span><select id="saveCatchDisposition" class="w-full rounded-xl border-outline-variant"><option value="harvested">Harvested</option><option value="released">Released</option><option value="sold">Sold</option><option value="kept">Kept</option><option value="other">Other</option></select></label>
+        <label><span class="block text-sm font-bold mb-1.5">Approximate location</span><input id="saveCatchLocation" type="text" maxlength="160" class="w-full rounded-xl border-outline-variant"/></label>
+      </div>
+
+      <label><span class="block text-sm font-bold mb-1.5">Notes</span><textarea id="saveCatchNotes" rows="3" maxlength="2000" class="w-full rounded-xl border-outline-variant"></textarea></label>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button id="cancelSaveCatchButton" type="button" class="rounded-xl bg-surface-container-high text-primary p-4 font-extrabold">Cancel</button>
+        <button id="confirmSaveCatchButton" type="submit" class="rounded-xl bg-secondary text-white p-4 font-extrabold disabled:opacity-60">Save Catch</button>
+      </div>
+    </form>
+  </section>
+</div>
+
 <!-- Bottom Navigation Bar -->
 <nav class="fixed bottom-0 left-0 w-full z-50 grid grid-cols-6 items-center px-1 py-2 bg-surface border-t border-outline-variant rounded-t-xl shadow-lg"><a class="flex flex-col items-center justify-center text-on-surface-variant px-2 py-1 hover:bg-surface-variant transition-all duration-100 active:scale-90" href="index.html">
 <span class="material-symbols-outlined">dashboard</span>
@@ -346,6 +385,7 @@ if (!raw) {
   document.getElementById('confidencePercent').textContent = `${percent}%`;
   document.getElementById('confidenceRing').style.strokeDashoffset = String(100 - percent);
   document.getElementById('resultFishName').textContent = result.className;
+  document.getElementById('findRecipesButton')?.setAttribute('href', `recipes.html?fish=${encodeURIComponent(result.className)}`);
   document.getElementById('localName').textContent = info.local;
   document.getElementById('englishName').textContent = result.className;
   document.getElementById('scientificName').textContent = info.scientific;
@@ -377,5 +417,7 @@ if (!raw) {
   });
 }
 
-</script><script src="auth-ui.js"></script>
+</script><script src="catch-log-service.js"></script>
+<script src="save-result-catch.js"></script>
+<script src="auth-ui.js"></script>
 </body></html>
