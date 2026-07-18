@@ -3,57 +3,57 @@
     "displayName": "Milkfish",
     "localName": "Bangus",
     "scientificName": "Chanos chanos",
-    "imageUrl": "assets/fish/milkfish.svg",
-    "imageAlt": "Stylized illustration of Milkfish",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/milkfish.jpg",
+    "imageAlt": "Milkfish photo",
+    "imagePosition": "center center"
   },
   "Indian Mackarel": {
     "displayName": "Indian Mackerel",
     "localName": "Alumahan",
     "scientificName": "Rastrelliger kanagurta",
-    "imageUrl": "assets/fish/indian-mackerel.svg",
-    "imageAlt": "Stylized illustration of Indian Mackerel",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/indian-mackarel.jpg",
+    "imageAlt": "Indian mackerel photo",
+    "imagePosition": "center center"
   },
   "Eel": {
     "displayName": "Eel",
     "localName": "Palos / Igat",
     "scientificName": "Anguilliformes spp.",
-    "imageUrl": "assets/fish/eel.svg",
-    "imageAlt": "Stylized illustration of Eel",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/eel.webp",
+    "imageAlt": "Eel photo",
+    "imagePosition": "center center"
   },
   "Tilapia": {
     "displayName": "Tilapia",
     "localName": "Tilapia / Pla-pla",
     "scientificName": "Oreochromis spp.",
-    "imageUrl": "assets/fish/tilapia.svg",
-    "imageAlt": "Stylized illustration of Tilapia",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/tilapia.jpg",
+    "imageAlt": "Tilapia photo",
+    "imagePosition": "center center"
   },
   "Scatfish": {
     "displayName": "Scatfish",
     "localName": "Kitang",
     "scientificName": "Scatophagus argus",
-    "imageUrl": "assets/fish/scatfish.svg",
-    "imageAlt": "Stylized illustration of Scatfish",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/scatfish.webp",
+    "imageAlt": "Scatfish photo",
+    "imagePosition": "center center"
   },
   "Mullet": {
     "displayName": "Mullet",
     "localName": "Banak",
     "scientificName": "Mugilidae spp.",
-    "imageUrl": "assets/fish/mullet.svg",
-    "imageAlt": "Stylized illustration of Mullet",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/mullet.jpg",
+    "imageAlt": "Mullet photo",
+    "imagePosition": "center center"
   },
   "Rabbitfish": {
     "displayName": "Rabbitfish",
     "localName": "Danggit / Samaral",
     "scientificName": "Siganus spp.",
-    "imageUrl": "assets/fish/rabbitfish.svg",
-    "imageAlt": "Stylized illustration of Rabbitfish",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/rabbitfish.jpg",
+    "imageAlt": "Rabbitfish photo",
+    "imagePosition": "center center"
   },
   "No Fish": {
     "displayName": "No Fish",
@@ -65,48 +65,48 @@
     "displayName": "Yellowfin Tuna",
     "localName": "Bariles / Tambakol",
     "scientificName": "Thunnus albacares",
-    "imageUrl": "assets/fish/yellowfin-tuna.svg",
-    "imageAlt": "Stylized illustration of Yellowfin Tuna",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/yellowfin-tuna.webp",
+    "imageAlt": "Yellowfin tuna photo",
+    "imagePosition": "center center"
   },
   "Grouper": {
     "displayName": "Grouper",
     "localName": "Lapu-lapu",
     "scientificName": "Epinephelinae spp.",
-    "imageUrl": "assets/fish/grouper.svg",
-    "imageAlt": "Stylized illustration of Grouper",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/grouper.webp",
+    "imageAlt": "Grouper photo",
+    "imagePosition": "center center"
   },
   "Bullet Tuna": {
     "displayName": "Bullet Tuna",
     "localName": "Tulingan",
     "scientificName": "Auxis rochei",
-    "imageUrl": "assets/fish/bullet-tuna.svg",
-    "imageAlt": "Stylized illustration of Bullet Tuna",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/bullet-tuna.jpg",
+    "imageAlt": "Bullet tuna photo",
+    "imagePosition": "center center"
   },
   "Needlefish": {
     "displayName": "Needlefish",
     "localName": "Balo / Bawo",
     "scientificName": "Belonidae spp.",
-    "imageUrl": "assets/fish/needlefish.svg",
-    "imageAlt": "Stylized illustration of Needlefish",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/needlefish.jpg",
+    "imageAlt": "Needlefish photo",
+    "imagePosition": "center center"
   },
   "Snapper": {
     "displayName": "Snapper",
     "localName": "Maya-maya",
     "scientificName": "Lutjanidae spp.",
-    "imageUrl": "assets/fish/snapper.svg",
-    "imageAlt": "Stylized illustration of Snapper",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/snapper.png",
+    "imageAlt": "Snapper photo",
+    "imagePosition": "center center"
   },
   "Trevally": {
     "displayName": "Trevally",
     "localName": "Talakitok",
     "scientificName": "Carangidae spp.",
-    "imageUrl": "assets/fish/trevally.svg",
-    "imageAlt": "Stylized illustration of Trevally",
-    "imagePosition": "center"
+    "imageUrl": "assets/fish/trevally.jpg",
+    "imageAlt": "Trevally photo",
+    "imagePosition": "center center"
   }
 }

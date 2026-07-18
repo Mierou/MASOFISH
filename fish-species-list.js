@@ -161,7 +161,7 @@
               </div>
 
               <span class="bg-black/40 border border-white/25 text-white text-[10px] font-bold px-2 py-1 rounded-lg backdrop-blur-sm">
-                LOCAL IMAGE
+                LOCAL PHOTO
               </span>
             </div>
           </div>
