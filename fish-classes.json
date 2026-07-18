@@ -3,57 +3,57 @@
     "displayName": "Milkfish",
     "localName": "Bangus",
     "scientificName": "Chanos chanos",
-    "imageUrl": "assets/fish/milkfish.jpg",
+    "imageUrl": "assets/fish/cards/milkfish-card.webp",
     "imageAlt": "Milkfish photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Indian Mackarel": {
     "displayName": "Indian Mackerel",
     "localName": "Alumahan",
     "scientificName": "Rastrelliger kanagurta",
-    "imageUrl": "assets/fish/indian-mackarel.jpg",
+    "imageUrl": "assets/fish/cards/indian-mackarel-card.webp",
     "imageAlt": "Indian mackerel photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Eel": {
     "displayName": "Eel",
     "localName": "Palos / Igat",
     "scientificName": "Anguilliformes spp.",
-    "imageUrl": "assets/fish/eel.webp",
+    "imageUrl": "assets/fish/cards/eel-card.webp",
     "imageAlt": "Eel photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Tilapia": {
     "displayName": "Tilapia",
     "localName": "Tilapia / Pla-pla",
     "scientificName": "Oreochromis spp.",
-    "imageUrl": "assets/fish/tilapia.jpg",
+    "imageUrl": "assets/fish/cards/tilapia-card.webp",
     "imageAlt": "Tilapia photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Scatfish": {
     "displayName": "Scatfish",
     "localName": "Kitang",
     "scientificName": "Scatophagus argus",
-    "imageUrl": "assets/fish/scatfish.webp",
+    "imageUrl": "assets/fish/cards/scatfish-card.webp",
     "imageAlt": "Scatfish photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Mullet": {
     "displayName": "Mullet",
     "localName": "Banak",
     "scientificName": "Mugilidae spp.",
-    "imageUrl": "assets/fish/mullet.jpg",
+    "imageUrl": "assets/fish/cards/mullet-card.webp",
     "imageAlt": "Mullet photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Rabbitfish": {
     "displayName": "Rabbitfish",
     "localName": "Danggit / Samaral",
     "scientificName": "Siganus spp.",
-    "imageUrl": "assets/fish/rabbitfish.jpg",
+    "imageUrl": "assets/fish/cards/rabbitfish-card.webp",
     "imageAlt": "Rabbitfish photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "No Fish": {
     "displayName": "No Fish",
@@ -65,48 +65,48 @@
     "displayName": "Yellowfin Tuna",
     "localName": "Bariles / Tambakol",
     "scientificName": "Thunnus albacares",
-    "imageUrl": "assets/fish/yellowfin-tuna.webp",
+    "imageUrl": "assets/fish/cards/yellowfin-tuna-card.webp",
     "imageAlt": "Yellowfin tuna photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Grouper": {
     "displayName": "Grouper",
     "localName": "Lapu-lapu",
     "scientificName": "Epinephelinae spp.",
-    "imageUrl": "assets/fish/grouper.webp",
+    "imageUrl": "assets/fish/cards/grouper-card.webp",
     "imageAlt": "Grouper photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Bullet Tuna": {
     "displayName": "Bullet Tuna",
     "localName": "Tulingan",
     "scientificName": "Auxis rochei",
-    "imageUrl": "assets/fish/bullet-tuna.jpg",
+    "imageUrl": "assets/fish/cards/bullet-tuna-card.webp",
     "imageAlt": "Bullet tuna photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Needlefish": {
     "displayName": "Needlefish",
     "localName": "Balo / Bawo",
     "scientificName": "Belonidae spp.",
-    "imageUrl": "assets/fish/needlefish.jpg",
+    "imageUrl": "assets/fish/cards/needlefish-card.webp",
     "imageAlt": "Needlefish photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Snapper": {
     "displayName": "Snapper",
     "localName": "Maya-maya",
     "scientificName": "Lutjanidae spp.",
-    "imageUrl": "assets/fish/snapper.png",
+    "imageUrl": "assets/fish/cards/snapper-card.webp",
     "imageAlt": "Snapper photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   },
   "Trevally": {
     "displayName": "Trevally",
     "localName": "Talakitok",
     "scientificName": "Carangidae spp.",
-    "imageUrl": "assets/fish/trevally.jpg",
+    "imageUrl": "assets/fish/cards/trevally-card.webp",
     "imageAlt": "Trevally photo",
-    "imagePosition": "center center"
+    "imagePosition": "center"
   }
 }

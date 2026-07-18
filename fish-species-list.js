@@ -112,20 +112,23 @@
     return items;
   }
 
-  function speciesCard(item, visibleIndex) {
+  function speciesCard(item) {
     const background =
       visualBackgrounds[item.modelIndex % visualBackgrounds.length];
 
     const modelLabelLine = item.displayName === item.modelLabel
       ? item.modelLabel
-      : `${item.modelLabel} (model label)`;
+      : `${item.modelLabel} model class`;
 
     return `
       <article
-        class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all"
+        class="species-card group bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(0,30,64,0.08)] hover:shadow-[0_16px_34px_rgba(0,30,64,0.14)] hover:-translate-y-1 active:scale-[0.99] transition-all duration-200"
         data-model-label="${escapeHtml(item.modelLabel)}"
       >
-        <div class="h-40 relative overflow-hidden bg-surface-container-high" style="background:${background}">
+        <div
+          class="h-48 relative overflow-hidden bg-surface-container-high"
+          style="background:${background}"
+        >
           <div class="absolute inset-0 opacity-20" data-fish-image-fallback>
             <span class="material-symbols-outlined absolute -right-4 -bottom-7 text-white" style="font-size:150px;">phishing</span>
           </div>
@@ -133,76 +136,63 @@
           ${item.imageUrl ? `
             <img
               src="${escapeHtml(item.imageUrl)}"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              class="absolute inset-0 z-0 w-full h-full object-cover scale-110 blur-lg opacity-45"
-              style="object-position:${escapeHtml(item.imagePosition)}"
-              data-fish-photo-background
-            />
-
-            <div class="absolute inset-0 z-10 bg-black/10"></div>
-
-            <img
-              src="${escapeHtml(item.imageUrl)}"
               alt="${escapeHtml(item.imageAlt)}"
               loading="lazy"
-              class="absolute inset-0 z-20 w-full h-full object-contain p-2"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               style="object-position:${escapeHtml(item.imagePosition)}"
               data-fish-photo
             />` : ''}
 
-          <div class="absolute inset-0 z-30 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+          <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/55 pointer-events-none"></div>
 
-          <div class="absolute inset-0 z-40 p-4 flex flex-col justify-between">
-            <div class="flex justify-between items-start gap-3">
-              <span class="bg-secondary-container text-on-secondary-container font-label-md text-[10px] px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">
-                AI Identifiable
-              </span>
-              <span class="bg-black/35 border border-white/30 text-white font-label-md text-[10px] px-2 py-1 rounded-lg backdrop-blur-sm">
-                Class ${item.modelIndex + 1}
-              </span>
-            </div>
+          <div class="absolute inset-x-0 top-0 p-3 flex items-start justify-between gap-3">
+            <span class="inline-flex items-center gap-1.5 bg-white/92 text-primary border border-white/70 rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] shadow-sm backdrop-blur">
+              <span class="material-symbols-outlined text-[15px]" style="font-variation-settings:'FILL' 1;">verified</span>
+              AI Identifiable
+            </span>
 
-            <div class="flex items-end justify-between gap-3">
-              <div>
-                <span class="material-symbols-outlined text-white" style="font-size:36px;">set_meal</span>
-                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1 drop-shadow">
-                  MASOFISH Model
-                </p>
-              </div>
+            <span class="bg-primary/78 border border-white/25 text-white rounded-full px-2.5 py-1.5 text-[10px] font-extrabold backdrop-blur">
+              Class ${item.modelIndex + 1}
+            </span>
+          </div>
 
-              <span class="bg-black/40 border border-white/25 text-white text-[10px] font-bold px-2 py-1 rounded-lg backdrop-blur-sm">
-                LOCAL PHOTO
-              </span>
-            </div>
+          <div class="absolute inset-x-0 bottom-0 p-4">
+            <p class="text-white/80 text-[10px] font-bold uppercase tracking-[0.16em]">
+              MASOFISH Model
+            </p>
+            <h3 class="text-white text-xl font-black leading-tight mt-1 drop-shadow">
+              ${escapeHtml(item.displayName)}
+            </h3>
           </div>
         </div>
 
         <div class="p-4">
-          <div class="flex justify-between items-start gap-3 mb-1">
-            <h3 class="font-headline-sm text-headline-sm text-on-surface">
-              ${escapeHtml(item.displayName)}
-            </h3>
-            <span class="material-symbols-outlined text-primary text-sm" title="Available in the current model">verified</span>
-          </div>
-
-          <p class="font-body-sm text-body-sm text-on-surface-variant mb-3 italic">
+          <p class="font-body-sm text-body-sm text-on-surface-variant italic line-clamp-1">
             ${escapeHtml(item.scientificName)}
           </p>
 
-          <div class="grid grid-cols-2 gap-3 border-t border-outline-variant pt-3">
-            <div class="min-w-0">
-              <span class="font-label-md text-[10px] text-outline uppercase">Local Name</span>
-              <span class="block font-body-sm font-bold text-primary mt-1 break-words">
+          <div class="grid grid-cols-1 gap-2.5 mt-4">
+            <div class="rounded-xl bg-secondary-container/30 border border-secondary/10 px-3 py-2.5">
+              <span class="block text-[10px] font-extrabold uppercase tracking-[0.1em] text-on-secondary-container">
+                Local Name
+              </span>
+              <span class="block text-sm font-black text-primary mt-0.5">
                 ${escapeHtml(item.localName)}
               </span>
             </div>
 
-            <div class="min-w-0">
-              <span class="font-label-md text-[10px] text-outline uppercase">Model Label</span>
-              <span class="block font-body-sm font-bold text-primary mt-1 break-words">
-                ${escapeHtml(modelLabelLine)}
+            <div class="flex items-center justify-between gap-3 rounded-xl bg-surface-container-low px-3 py-2.5">
+              <div class="min-w-0">
+                <span class="block text-[10px] font-extrabold uppercase tracking-[0.1em] text-outline">
+                  Model Label
+                </span>
+                <span class="block text-xs font-bold text-on-surface mt-0.5 truncate">
+                  ${escapeHtml(modelLabelLine)}
+                </span>
+              </div>
+
+              <span class="material-symbols-outlined text-secondary shrink-0" aria-hidden="true">
+                neurology
               </span>
             </div>
           </div>
@@ -223,10 +213,6 @@
     grid.querySelectorAll('[data-fish-photo]').forEach(image => {
       image.addEventListener('error', () => {
         image.hidden = true;
-
-        const card = image.closest('.species-card');
-        const backgroundImage = card?.querySelector('[data-fish-photo-background]');
-        if (backgroundImage) backgroundImage.hidden = true;
       }, { once: true });
     });
 
