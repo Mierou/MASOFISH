@@ -380,24 +380,43 @@
       `${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}`;
 
     byId('discussionComments').innerHTML = comments.length
-      ? comments.map(comment => `
+      ? comments.map(comment => {
+          const canDelete =
+            comment.user_id === currentUserId() ||
+            state.role === 'admin';
+
+          return `
           <article class="rounded-xl border border-outline-variant bg-white p-3">
             <div class="flex gap-3">
               <div class="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-black shrink-0">
                 ${escapeHtml(authorInitial(comment.author_name))}
               </div>
               <div class="min-w-0 flex-1">
-                <div class="flex items-center justify-between gap-3">
-                  <p class="font-extrabold text-primary truncate">${escapeHtml(comment.author_name || 'MASOFISH User')}</p>
-                  <p class="text-xs text-on-surface-variant shrink-0">${escapeHtml(formatRelativeTime(comment.created_at))}</p>
+                <div class="flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <p class="font-extrabold text-primary truncate">${escapeHtml(comment.author_name || 'MASOFISH User')}</p>
+                    <p class="text-xs text-on-surface-variant mt-0.5">${escapeHtml(formatRelativeTime(comment.created_at))}</p>
+                  </div>
+                  ${canDelete ? `
+                    <button type="button"
+                            class="delete-comment-button w-9 h-9 rounded-full bg-error-container text-on-error-container flex items-center justify-center shrink-0"
+                            data-comment-id="${escapeHtml(comment.id)}"
+                            aria-label="Delete comment">
+                      <span class="material-symbols-outlined text-[19px]">delete</span>
+                    </button>` : ''}
                 </div>
-                <p class="text-sm text-on-surface-variant mt-1 whitespace-pre-wrap">${escapeHtml(comment.content)}</p>
+                <p class="text-sm text-on-surface-variant mt-2 whitespace-pre-wrap">${escapeHtml(comment.content)}</p>
               </div>
             </div>
-          </article>`).join('')
+          </article>`;
+        }).join('')
       : `<div class="rounded-xl bg-surface-container-low p-5 text-center text-sm text-on-surface-variant">
            No comments yet. Be the first to join the discussion.
          </div>`;
+
+    byId('discussionComments').querySelectorAll('.delete-comment-button').forEach(button => {
+      button.addEventListener('click', () => deleteComment(button.dataset.commentId));
+    });
   }
 
   function openDiscussion(postId) {
@@ -675,6 +694,37 @@
     }
   }
 
+  async function deleteComment(commentId) {
+    const comment = state.comments.find(item => item.id === commentId);
+    if (!comment) return;
+
+    const canDelete =
+      comment.user_id === currentUserId() ||
+      state.role === 'admin';
+
+    if (!canDelete) return;
+    if (!confirm('Delete this comment permanently?')) return;
+
+    try {
+      if (state.mode === 'prototype') {
+        state.comments = state.comments.filter(item => item.id !== commentId);
+        writePrototypeStore();
+      } else {
+        const { error } = await state.client
+          .from('forum_comments')
+          .delete()
+          .eq('id', commentId);
+
+        if (error) throw error;
+      }
+
+      await loadForumData();
+    } catch (error) {
+      console.error('Comment deletion failed:', error);
+      alert(error.message || 'The comment could not be deleted.');
+    }
+  }
+
   async function addComment(event) {
     event.preventDefault();
     const content = byId('commentContent').value.trim();
@@ -751,6 +801,11 @@
     }
 
     await loadForumData();
+
+    const requestedPostId = new URLSearchParams(location.search).get('post');
+    if (requestedPostId && state.posts.some(post => post.id === requestedPostId)) {
+      openDiscussion(requestedPostId);
+    }
   }
 
   // Modal and form events

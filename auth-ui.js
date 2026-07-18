@@ -156,5 +156,18 @@
     });
   }
 
-  initialize().catch(error => console.error('Account menu failed:', error));
+  function loadNotificationCenter() {
+    if (window.MASOFISH_NOTIFICATION_CENTER_LOADED) return;
+    if (document.querySelector('script[data-masofish-notification-loader]')) return;
+
+    const script = document.createElement('script');
+    script.src = 'notification-center.js';
+    script.defer = true;
+    script.dataset.masofishNotificationLoader = 'true';
+    document.body.appendChild(script);
+  }
+
+  initialize()
+    .then(loadNotificationCenter)
+    .catch(error => console.error('Account menu failed:', error));
 })();
