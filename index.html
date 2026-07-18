@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="supabase-auth-ready-2026-07-17"/>
+<meta name="masofish-build" content="recent-community-dashboard-2026-07-19"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MASOFISH - Fisherman Assistance Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -244,18 +244,27 @@
 </button>
 </div>
 <!-- Community Highlights -->
-<section class="pt-2">
-<div class="flex items-center justify-between mb-4"><h3 class="font-headline-sm text-headline-sm text-primary">Latest in Community</h3><a href="forum.html" class="text-secondary font-bold text-sm">Open Forum</a></div>
-<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex gap-4 items-center mb-4">
-<div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-<img class="w-full h-full object-cover" data-alt="A delicious, high-quality food photograph of a grilled fish taco garnished with fresh lime and cilantro. The lighting is warm and inviting, set against a rustic wooden table. The visual style is premium and clean, focusing on the vibrant colors of the fresh ingredients to inspire community members for their next seafood meal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEJdaf5HAQBD9KKWe8yfjhJbXKOgCRkiLdIuFmUWJpT15RNJxL7iDLMkVIOSmD3B6fcx81VZugLQWmlIAvyEZoRzCp7WdpNyYIn9YSoBNG1p_97zFYcBzUVFkAipZDeern048wymQeZV1HSNYeqlOb5lheaJppHR-27eyGvKMGk6dBnq9G4Pkuy58lghoxGi3-JN0lDUOlQp4TJq6NXh3kX-XkYW2GwM_MxDuSgyj4h98U_7F_kPBqWxiQaDNoIbannM5Pdkad5Fo"/>
-</div>
-<div class="flex-1">
-<span class="text-secondary font-label-md text-label-md uppercase">New Recipe</span>
-<h4 class="font-body-md text-body-md font-bold leading-tight">Spiced Red Snapper with Citrus Glaze</h4>
-<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Shared by @DeepSeaDave</p>
-</div>
-</div>
+<section class="pt-2" aria-labelledby="dashboardCommunityHeading">
+  <div class="flex items-center justify-between gap-3 mb-4">
+    <div>
+      <h3 id="dashboardCommunityHeading" class="font-headline-sm text-headline-sm text-primary">Latest in Community</h3>
+      <p id="dashboardCommunityStatus" class="font-body-sm text-body-sm text-on-surface-variant mt-1">Loading recent discussions…</p>
+    </div>
+    <a href="forum.html" class="text-secondary font-bold text-sm shrink-0">Open Forum</a>
+  </div>
+
+  <div id="dashboardCommunityLoading" class="space-y-3">
+    <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+    <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+  </div>
+
+  <div id="dashboardCommunityList" class="space-y-3"></div>
+
+  <a id="dashboardCommunityEmpty" hidden href="forum.html" class="block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
+    <span class="material-symbols-outlined text-secondary text-4xl">forum</span>
+    <p class="font-bold text-primary mt-2">No community discussions yet</p>
+    <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Start the first discussion in the MASOFISH forum.</p>
+  </a>
 </section>
 </div>
 </main>
@@ -377,6 +386,7 @@
 </script>
 <script src="catch-log-service.js"></script>
 <script src="catch-log-dashboard.js"></script>
+<script src="dashboard-community.js"></script>
 <script src="safety-alerts.js"></script>
 <script src="auth-ui.js"></script>
 </body></html>
