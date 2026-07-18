@@ -17,5 +17,5 @@ window.MASOFISH_SUPABASE_CONFIG = {
 
   // Allows the setup page to open the prototype before Supabase is configured.
   // Change this to false before final production deployment.
-  allowPrototypeMode: true
+  allowPrototypeMode: false
 };
