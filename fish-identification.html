@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="supabase-auth-ready-2026-07-17"/>
+<meta name="masofish-build" content="dynamic-teachable-machine-fish-list-2026-07-19"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MASOFISH - Fish Identification and Freshness</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -159,6 +159,14 @@
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth-guard.js"></script>
+
+<style>
+  #modelFishEmpty[hidden],
+  #modelFishLoading[hidden] {
+    display: none !important;
+  }
+</style>
+
 </head>
 <body class="bg-background min-h-screen flex flex-col">
 <!-- TopAppBar Shell -->
@@ -403,129 +411,68 @@
   </div>
 </section>
 
-<!-- Search & Filter Area -->
-<section class="mb-8 flex gap-2">
-<div class="relative flex-grow">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-<input class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-10 pr-4 font-body-sm text-body-sm focus:ring-2 focus:ring-primary-container text-on-surface" placeholder="Search local species..." type="text"/>
-</div>
-<button class="bg-surface-container-high p-3 rounded-xl text-on-surface-variant active:scale-95 transition-transform">
-<span class="material-symbols-outlined">tune</span>
-</button>
+<!-- Available Teachable Machine Fish Classes -->
+<section class="mb-8 max-w-3xl mx-auto" aria-labelledby="modelFishHeading">
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+    <div class="p-5 border-b border-outline-variant bg-primary-container/5">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex items-start gap-3 min-w-0">
+          <div class="w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined">model_training</span>
+          </div>
+          <div class="min-w-0">
+            <p class="font-label-md text-label-md uppercase text-secondary">Teachable Machine Classes</p>
+            <h2 id="modelFishHeading" class="font-headline-md text-headline-md text-primary">Fish the AI Can Identify</h2>
+            <p id="modelFishStatus" class="font-body-sm text-on-surface-variant mt-1">
+              Reading the available fish classes directly from the deployed model…
+            </p>
+          </div>
+        </div>
+        <span id="modelFishCount" class="rounded-full bg-surface-container-high px-3 py-1 text-xs font-extrabold text-primary shrink-0">
+          Loading
+        </span>
+      </div>
+    </div>
+
+    <div class="p-5 space-y-4">
+      <label class="relative block" for="modelFishSearch">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+        <input
+          id="modelFishSearch"
+          type="search"
+          disabled
+          autocomplete="off"
+          class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-10 pr-4 font-body-sm text-body-sm focus:ring-2 focus:ring-primary-container text-on-surface disabled:opacity-60"
+          placeholder="Search identifiable fish…"
+        />
+      </label>
+
+      <div id="modelFishLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-3" aria-live="polite">
+        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
+      </div>
+
+      <div id="modelFishGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+      <div id="modelFishEmpty" hidden class="rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
+        <span class="material-symbols-outlined text-secondary text-4xl">search_off</span>
+        <p class="font-bold text-primary mt-2">No matching fish class</p>
+        <p class="font-body-sm text-on-surface-variant mt-1">Try another fish name.</p>
+      </div>
+
+      <aside class="rounded-xl bg-tertiary-fixed text-on-tertiary-fixed p-4 flex items-start gap-3">
+        <span class="material-symbols-outlined shrink-0">info</span>
+        <p class="font-body-sm">
+          This list is loaded from <strong>model/metadata.json</strong>, so it automatically follows the currently deployed Teachable Machine model.
+          The model's <strong>No Fish</strong> rejection class is not counted as an identifiable fish.
+        </p>
+      </aside>
+    </div>
+  </div>
 </section>
-<!-- Common Local Species Grid -->
-<section>
-<div class="flex justify-between items-center mb-4">
-<h2 class="font-headline-sm text-headline-sm text-primary">Common Local Species</h2>
-<button class="text-secondary font-label-md text-label-md">SEE ALL</button>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="speciesGrid">
-<!-- Fish Card 1 -->
-<div class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A professional studio photograph of a Red Snapper fish against a clean, nautical blue background. The lighting is crisp and bright, highlighting the vibrant scales and textures of the fish. The style is modern corporate, clinical and precise, suitable for a marine data application. Minimalist aesthetic with high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJjFt48yy1YxqNMbVa6b4NlGgc86rXa68cG5x0jKM0SwRKd4Jf5rqnvjkXplfzreeaHUYs7VGFz3UsJl2Ohn31EffW5eaD0XgAR3jROgoGZn1i3xOL-QA7slYQzS40VXCVI-IQZcVMIBI6ZDLkI5bmlvDodx6uU2zjp1B2VRDAePxWX02e7_-cTyPfC6pcQr2KQ458VR3XKBsnf_-vrLId5MdTMVkFmRKHXO_2DlWZDQPvoegkgjkdf2euKYjio0rWL8sNE9RBEX4"/>
-<div class="absolute top-2 right-2">
-<span class="bg-secondary-container text-on-secondary-container font-label-md text-label-md px-2 py-1 rounded-lg uppercase tracking-wider">Open Season</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-1">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Red Snapper</h3>
-<span class="material-symbols-outlined text-primary text-sm">info</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 italic">Lutjanus campechanus</p>
-<div class="flex items-center gap-4 border-t border-outline-variant pt-3">
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Min Size</span>
-<span class="font-headline-sm text-headline-sm text-primary">16"</span>
-</div>
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Bag Limit</span>
-<span class="font-headline-sm text-headline-sm text-primary">2 / day</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Fish Card 2 -->
-<div class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A high-resolution lateral view of a Striped Bass swimming in clear, sun-drenched coastal waters. The water has a slight seafoam green tint, and the fish's silver stripes are prominent. The lighting is natural but high-contrast, providing an instrument-like clarity for identification purposes. Modern minimalist aquatic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIImyP1kpdYdzXZnlpvQ9L-y8aJMtxbF1tl0CHVm9ka5rF862F01FTYiNuOpAc6qk0mmqWiWnNB47e3-EXzDen3fuI8BEvU4QVBC1LBQfa0bVrjc6rrYDInSWS_PUD45TZiNYETqCbPdSj1pLKnr17TAhk74J5V0IeNPZ6cso2puF7TQhDkjpP8tWlcbQJUEY_lC6d7z1V1L8pNlOapj1bLe_m6kOXFLc8gaD2nJ1MOiQHRu5J_L2O_GX12WFUcgZi1BFh7MJ76Fk"/>
-<div class="absolute top-2 right-2">
-<span class="bg-error-container text-on-error-container font-label-md text-label-md px-2 py-1 rounded-lg uppercase tracking-wider">Restricted</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-1">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Striped Bass</h3>
-<span class="material-symbols-outlined text-primary text-sm">info</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 italic">Morone saxatilis</p>
-<div class="flex items-center gap-4 border-t border-outline-variant pt-3">
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Min Size</span>
-<span class="font-headline-sm text-headline-sm text-primary">28-31"</span>
-</div>
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Bag Limit</span>
-<span class="font-headline-sm text-headline-sm text-primary">1 / day</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Fish Card 3 -->
-<div class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A close-up high-definition photograph of a Mahi Mahi showing its vibrant neon yellow and electric blue skin. The composition is artistic yet scientifically clear, set against a deep navy ocean background. The lighting creates a sleek, high-end instrument feel, emphasizing functionality and biological detail. Marine professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXzt-TIxHUlQBIP0f6zevbRmAphSs1MTaCo0EV6YAyMxMg_4-2klf-YO1TymTr-62qfVHrkjtd9KqTJrSmi9XguVI1KEK8Eeik1WZv6g0LdOYUcLV7dU8tR6FbTN0IjN5vg2Mz93E_nVfPK8O2yRtODsA3zd2mXvxd6fxJwMbNpbr5b1CDhNCT7Na3ybefnX8Jw7mIXPt8Y4SopFwWbyc5_X9bw4FTbA9SPUEgU9GxKZzISbSU0mYuMyl4TFTGCXjMUE-KUrztG3k"/>
-<div class="absolute top-2 right-2">
-<span class="bg-secondary-container text-on-secondary-container font-label-md text-label-md px-2 py-1 rounded-lg uppercase tracking-wider">Open Season</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-1">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Mahi Mahi</h3>
-<span class="material-symbols-outlined text-primary text-sm">info</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 italic">Coryphaena hippurus</p>
-<div class="flex items-center gap-4 border-t border-outline-variant pt-3">
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Min Size</span>
-<span class="font-headline-sm text-headline-sm text-primary">20"</span>
-</div>
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Bag Limit</span>
-<span class="font-headline-sm text-headline-sm text-primary">10 / day</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Fish Card 4 -->
-<div class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all">
-<div class="h-40 relative">
-<img class="w-full h-full object-cover" data-alt="A macro shot of a Summer Flounder perfectly camouflaged against a sandy sea floor. The image has a crisp, utilitarian clarity with neutral lighting to ensure all distinguishing markings are visible. Digital instrument feel, using a palette of sand, seafoam, and deep blues. Reliable and authoritative visual style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI75fTihTd9kz0KoecVKFZfTp2s66gKG3lhWp4S8MowSJm2WIvDIZw0CCpyy8Mi64GaRy85D2eOGNTiiFjZhIrgXV1oLg0djFxGP54xfcoZ10CyEb3VhOor8yaK6_dgrOYiHaHwSIxq7cr3gXTeQEwuW8SP-K9ny_1ZO5JSbhbmNOJ5w1p9QTrEiMdcY5rtLs3R9hBvKbeVnCOUCOzsi7j2OJU1oC9KLpKqE082V2KMEWv44XGsTugeeDVX2OjYKH51jASF0RSg6w"/>
-<div class="absolute top-2 right-2">
-<span class="bg-surface-variant text-on-surface-variant font-label-md text-label-md px-2 py-1 rounded-lg uppercase tracking-wider">Season Closed</span>
-</div>
-</div>
-<div class="p-4">
-<div class="flex justify-between items-start mb-1">
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Flounder</h3>
-<span class="material-symbols-outlined text-primary text-sm">info</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant mb-3 italic">Paralichthys dentatus</p>
-<div class="flex items-center gap-4 border-t border-outline-variant pt-3 opacity-50">
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Min Size</span>
-<span class="font-headline-sm text-headline-sm text-primary">18.5"</span>
-</div>
-<div class="flex flex-col">
-<span class="font-label-md text-[10px] text-outline uppercase">Bag Limit</span>
-<span class="font-headline-sm text-headline-sm text-primary">0 / day</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+
 <!-- Help/Tips Banner -->
 <section class="mt-8 bg-primary-container/10 border border-primary-container p-4 rounded-xl flex items-start gap-4">
 <span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
@@ -704,18 +651,6 @@ identifyButton.addEventListener('click', async () => {
   }
 });
 
-// Existing species search
-const searchInput = document.querySelector('input[type="text"]');
-const fishCards = document.querySelectorAll('#speciesGrid > .species-card');
-searchInput?.addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase();
-  fishCards.forEach(card => {
-    const name = card.querySelector('h3')?.textContent.toLowerCase() || '';
-    const text = card.textContent.toLowerCase();
-    card.style.display = (name.includes(term) || text.includes(term)) ? 'block' : 'none';
-  });
-});
-
 const storedFishImage = sessionStorage.getItem('masofishPendingImage') || sessionStorage.getItem('masofishImage');
 if (storedFishImage && !preview.src) {
   preview.onload = () => {
@@ -732,6 +667,7 @@ if (storedFishImage && !preview.src) {
 
 loadModel();
 </script>
+<script src="fish-model-classes.js"></script>
 <script src="freshness-module.js"></script>
 <script src="auth-ui.js"></script>
 </body></html>
