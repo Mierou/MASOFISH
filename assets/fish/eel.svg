@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Eel</title>
+  <desc id="desc">Stylized local illustration of Eel for the MASOFISH identifiable species list.</desc>
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dff5ec"/>
+      <stop offset="1" stop-color="#62a694"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".72"/>
+      <stop offset=".55" stop-color="#ffffff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#001e40" stop-opacity=".18"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#001e40" flood-opacity=".24"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="28" fill="url(#water)"/>
+  <path d="M0 82 C120 48 202 116 320 76 S510 38 640 85 V0 H0Z" fill="#fff" opacity=".18"/>
+  <path d="M0 308 C120 278 215 330 338 298 S532 276 640 312 V360 H0Z" fill="#006a65" opacity=".12"/>
+  <g fill="none" stroke="#fff" stroke-width="5" opacity=".45">
+    <circle cx="92" cy="92" r="12"/><circle cx="120" cy="66" r="7"/>
+    <circle cx="548" cy="112" r="10"/><circle cx="574" cy="82" r="6"/>
+  </g>
+  <g filter="url(#shadow)">
+    
+    <path d="M74 210 C129 109 224 111 288 191 C337 252 420 260 536 148" fill="none" stroke="#193f3b" stroke-width="72" stroke-linecap="round"/>
+    <path d="M75 199 C141 115 215 127 278 198 C337 264 426 254 541 144" fill="none" stroke="#77986a" stroke-width="56" stroke-linecap="round"/>
+    <path d="M76 188 C151 133 220 148 274 207 C334 272 431 245 534 145" fill="none" stroke="url(#shine)" stroke-width="37" stroke-linecap="round" opacity=".8"/>
+    <ellipse cx="529" cy="144" rx="52" ry="35" fill="#77986a" stroke="#001e40" stroke-width="5" transform="rotate(-31 529 144)"/>
+    <circle cx="545" cy="126" r="10" fill="#fff" stroke="#001e40" stroke-width="4"/>
+    <circle cx="548" cy="125" r="4" fill="#001e40"/>
+    <path d="M543 154 Q567 154 580 141" fill="none" stroke="#001e40" stroke-width="4" stroke-linecap="round"/>
+    
+  </g>
+  <g transform="translate(24 320)">
+    <rect width="210" height="24" rx="12" fill="#001e40" opacity=".72"/>
+    <text x="14" y="17" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">EEL</text>
+  </g>
+</svg>

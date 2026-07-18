@@ -79,7 +79,6 @@
           localName: info.localName || 'Local name not yet added',
           scientificName: info.scientificName || 'Scientific name not yet added',
           imageUrl: info.imageUrl || '',
-          imageSource: info.imageSource || '',
           imageAlt: info.imageAlt || `${info.displayName || modelLabel} fish`,
           imagePosition: info.imagePosition || 'center',
           isFish: info.isFish !== false && normalize(modelLabel) !== 'no fish'
@@ -136,7 +135,6 @@
               src="${escapeHtml(item.imageUrl)}"
               alt="${escapeHtml(item.imageAlt)}"
               loading="lazy"
-              referrerpolicy="no-referrer"
               class="absolute inset-0 w-full h-full object-cover"
               style="object-position:${escapeHtml(item.imagePosition)}"
               data-fish-photo
@@ -162,17 +160,9 @@
                 </p>
               </div>
 
-              ${item.imageSource ? `
-                <a
-                  href="${escapeHtml(item.imageSource)}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="relative z-10 bg-black/40 border border-white/25 text-white text-[10px] font-bold px-2 py-1 rounded-lg backdrop-blur-sm hover:bg-black/55"
-                  aria-label="Open photo source for ${escapeHtml(item.displayName)}"
-                  title="View photo source and license"
-                >
-                  PHOTO SOURCE
-                </a>` : ''}
+              <span class="bg-black/40 border border-white/25 text-white text-[10px] font-bold px-2 py-1 rounded-lg backdrop-blur-sm">
+                LOCAL IMAGE
+              </span>
             </div>
           </div>
         </div>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-labelledby="title desc">
+  <title id="title">Scatfish</title>
+  <desc id="desc">Stylized local illustration of Scatfish for the MASOFISH identifiable species list.</desc>
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6c9"/>
+      <stop offset="1" stop-color="#c9b649"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".72"/>
+      <stop offset=".55" stop-color="#ffffff" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#001e40" stop-opacity=".18"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#001e40" flood-opacity=".24"/>
+    </filter>
+  </defs>
+  <rect width="640" height="360" rx="28" fill="url(#water)"/>
+  <path d="M0 82 C120 48 202 116 320 76 S510 38 640 85 V0 H0Z" fill="#fff" opacity=".18"/>
+  <path d="M0 308 C120 278 215 330 338 298 S532 276 640 312 V360 H0Z" fill="#006a65" opacity=".12"/>
+  <g fill="none" stroke="#fff" stroke-width="5" opacity=".45">
+    <circle cx="92" cy="92" r="12"/><circle cx="120" cy="66" r="7"/>
+    <circle cx="548" cy="112" r="10"/><circle cx="574" cy="82" r="6"/>
+  </g>
+  <g filter="url(#shadow)">
+    
+    <path d="M163 184 L76 119 L92 184 L73 252 L165 205Z" fill="#776926"/>
+    <path d="M155 188 C185 108 310 86 438 144 C472 160 492 180 505 194 C478 225 446 250 395 268 C274 304 179 267 155 188Z" fill="#d9c55e" stroke="#001e40" stroke-width="5"/>
+    <path d="M155 188 C185 108 310 86 438 144 C472 160 492 180 505 194 C478 225 446 250 395 268 C274 304 179 267 155 188Z" fill="url(#shine)"/>
+    <path d="M226 139 C274 102 359 99 426 128 C359 121 296 129 245 158Z" fill="#776926" opacity=".9"/>
+    <path d="M245 250 C294 276 361 279 420 250 C365 261 311 258 265 236Z" fill="#776926" opacity=".78"/>
+    <path d="M290 126 L330 74 L362 130Z" fill="#776926" stroke="#001e40" stroke-width="4"/>
+    <path d="M288 251 L342 310 L373 251Z" fill="#776926" stroke="#001e40" stroke-width="4"/>
+    <path d="M530 191 Q555 187 572 193 Q554 204 529 202Z" fill="#e7f5f7" opacity=".7"/>
+    <circle cx="426" cy="166" r="13" fill="#fff" stroke="#001e40" stroke-width="4"/>
+    <circle cx="429" cy="166" r="5" fill="#001e40"/>
+    <path d="M484 207 Q517 215 538 201" fill="none" stroke="#001e40" stroke-width="4" stroke-linecap="round"/>
+    
+    <circle cx="220" cy="160" r="10" fill="#26352f" opacity=".82"/><circle cx="252" cy="205" r="12" fill="#26352f" opacity=".82"/><circle cx="284" cy="151" r="9" fill="#26352f" opacity=".82"/><circle cx="315" cy="228" r="10" fill="#26352f" opacity=".82"/><circle cx="346" cy="174" r="13" fill="#26352f" opacity=".82"/><circle cx="382" cy="216" r="8" fill="#26352f" opacity=".82"/><circle cx="414" cy="151" r="11" fill="#26352f" opacity=".82"/><circle cx="444" cy="205" r="9" fill="#26352f" opacity=".82"/>
+    
+  </g>
+  <g transform="translate(24 320)">
+    <rect width="210" height="24" rx="12" fill="#001e40" opacity=".72"/>
+    <text x="14" y="17" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="12" font-weight="800" letter-spacing="1.4">SCATFISH</text>
+  </g>
+</svg>
