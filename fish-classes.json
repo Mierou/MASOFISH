@@ -1,34 +1,73 @@
 {
   "Milkfish": {
+    "displayName": "Milkfish",
     "localName": "Bangus",
     "scientificName": "Chanos chanos"
   },
-  "Indian Mackerel": {
+  "Indian Mackarel": {
+    "displayName": "Indian Mackerel",
     "localName": "Alumahan",
     "scientificName": "Rastrelliger kanagurta"
   },
   "Eel": {
+    "displayName": "Eel",
     "localName": "Palos / Igat",
     "scientificName": "Anguilliformes spp."
   },
   "Tilapia": {
+    "displayName": "Tilapia",
     "localName": "Tilapia / Pla-pla",
     "scientificName": "Oreochromis spp."
   },
   "Scatfish": {
+    "displayName": "Scatfish",
     "localName": "Kitang",
     "scientificName": "Scatophagus argus"
   },
   "Mullet": {
+    "displayName": "Mullet",
     "localName": "Banak",
     "scientificName": "Mugilidae spp."
   },
   "Rabbitfish": {
+    "displayName": "Rabbitfish",
     "localName": "Danggit / Samaral",
     "scientificName": "Siganus spp."
   },
   "No Fish": {
+    "displayName": "No Fish",
     "localName": "No fish detected",
-    "scientificName": "Not applicable"
+    "scientificName": "Not applicable",
+    "isFish": false
+  },
+  "Yellowfin Tuna": {
+    "displayName": "Yellowfin Tuna",
+    "localName": "Bariles / Tambakol",
+    "scientificName": "Thunnus albacares"
+  },
+  "Grouper": {
+    "displayName": "Grouper",
+    "localName": "Lapu-lapu",
+    "scientificName": "Epinephelinae spp."
+  },
+  "Bullet Tuna": {
+    "displayName": "Bullet Tuna",
+    "localName": "Tulingan",
+    "scientificName": "Auxis rochei"
+  },
+  "Needlefish": {
+    "displayName": "Needlefish",
+    "localName": "Balo / Bawo",
+    "scientificName": "Belonidae spp."
+  },
+  "Snapper": {
+    "displayName": "Snapper",
+    "localName": "Maya-maya",
+    "scientificName": "Lutjanidae spp."
+  },
+  "Trevally": {
+    "displayName": "Trevally",
+    "localName": "Talakitok",
+    "scientificName": "Carangidae spp."
   }
 }

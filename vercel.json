@@ -296,7 +296,16 @@
       ]
     },
     {
-      "source": "/fish-model-classes.js",
+      "source": "/fish-species-list.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/model/metadata.json",
       "headers": [
         {
           "key": "Cache-Control",

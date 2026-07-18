@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="dynamic-teachable-machine-fish-list-2026-07-19"/>
+<meta name="masofish-build" content="model-species-list-2026-07-19"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MASOFISH - Fish Identification and Freshness</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -159,14 +159,6 @@
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth-guard.js"></script>
-
-<style>
-  #modelFishEmpty[hidden],
-  #modelFishLoading[hidden] {
-    display: none !important;
-  }
-</style>
-
 </head>
 <body class="bg-background min-h-screen flex flex-col">
 <!-- TopAppBar Shell -->
@@ -411,66 +403,70 @@
   </div>
 </section>
 
-<!-- Available Teachable Machine Fish Classes -->
-<section class="mb-8 max-w-3xl mx-auto" aria-labelledby="modelFishHeading">
-  <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
-    <div class="p-5 border-b border-outline-variant bg-primary-container/5">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex items-start gap-3 min-w-0">
-          <div class="w-11 h-11 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined">model_training</span>
-          </div>
-          <div class="min-w-0">
-            <p class="font-label-md text-label-md uppercase text-secondary">Teachable Machine Classes</p>
-            <h2 id="modelFishHeading" class="font-headline-md text-headline-md text-primary">Fish the AI Can Identify</h2>
-            <p id="modelFishStatus" class="font-body-sm text-on-surface-variant mt-1">
-              Reading the available fish classes directly from the deployed model…
-            </p>
-          </div>
-        </div>
-        <span id="modelFishCount" class="rounded-full bg-surface-container-high px-3 py-1 text-xs font-extrabold text-primary shrink-0">
-          Loading
-        </span>
-      </div>
-    </div>
-
-    <div class="p-5 space-y-4">
-      <label class="relative block" for="modelFishSearch">
-        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-        <input
-          id="modelFishSearch"
-          type="search"
-          disabled
-          autocomplete="off"
-          class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-10 pr-4 font-body-sm text-body-sm focus:ring-2 focus:ring-primary-container text-on-surface disabled:opacity-60"
-          placeholder="Search identifiable fish…"
-        />
-      </label>
-
-      <div id="modelFishLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-3" aria-live="polite">
-        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
-        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
-        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
-        <div class="h-28 rounded-xl bg-surface-container-high animate-pulse"></div>
-      </div>
-
-      <div id="modelFishGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
-
-      <div id="modelFishEmpty" hidden class="rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
-        <span class="material-symbols-outlined text-secondary text-4xl">search_off</span>
-        <p class="font-bold text-primary mt-2">No matching fish class</p>
-        <p class="font-body-sm text-on-surface-variant mt-1">Try another fish name.</p>
-      </div>
-
-      <aside class="rounded-xl bg-tertiary-fixed text-on-tertiary-fixed p-4 flex items-start gap-3">
-        <span class="material-symbols-outlined shrink-0">info</span>
-        <p class="font-body-sm">
-          This list is loaded from <strong>model/metadata.json</strong>, so it automatically follows the currently deployed Teachable Machine model.
-          The model's <strong>No Fish</strong> rejection class is not counted as an identifiable fish.
-        </p>
-      </aside>
-    </div>
+<!-- Search & Filter Area -->
+<section class="mb-8 flex gap-2" aria-label="Search identifiable fish species">
+  <div class="relative flex-grow">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+    <input
+      id="speciesSearchInput"
+      class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-10 pr-4 font-body-sm text-body-sm focus:ring-2 focus:ring-primary-container text-on-surface"
+      placeholder="Search identifiable fish..."
+      type="search"
+      autocomplete="off"
+    />
   </div>
+  <button
+    id="speciesSortButton"
+    class="bg-surface-container-high p-3 rounded-xl text-on-surface-variant active:scale-95 transition-transform"
+    type="button"
+    aria-label="Sort fish alphabetically"
+    title="Sort fish alphabetically"
+  >
+    <span class="material-symbols-outlined">sort_by_alpha</span>
+  </button>
+</section>
+
+<!-- Teachable Machine Species Grid -->
+<section aria-labelledby="speciesListHeading">
+  <div class="flex justify-between items-start gap-4 mb-4">
+    <div>
+      <h2 id="speciesListHeading" class="font-headline-sm text-headline-sm text-primary">Identifiable Fish Species</h2>
+      <p id="speciesStatus" class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+        Reading the available classes from the fish identification model…
+      </p>
+    </div>
+    <button
+      id="speciesSeeAllButton"
+      hidden
+      class="hidden text-secondary font-label-md text-label-md shrink-0"
+      type="button"
+    >
+      SEE ALL
+    </button>
+  </div>
+
+  <div id="speciesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4" aria-live="polite">
+    <div class="h-72 rounded-xl bg-surface-container-high animate-pulse"></div>
+    <div class="h-72 rounded-xl bg-surface-container-high animate-pulse"></div>
+    <div class="h-72 rounded-xl bg-surface-container-high animate-pulse"></div>
+    <div class="h-72 rounded-xl bg-surface-container-high animate-pulse"></div>
+  </div>
+
+  <div
+    id="speciesListMessage"
+    hidden
+    class="hidden mt-4 bg-surface-container-low border border-outline-variant rounded-xl p-5 text-center"
+  >
+    <span class="material-symbols-outlined text-secondary text-4xl">search_off</span>
+    <p id="speciesListMessageTitle" class="font-bold text-primary mt-2">No matching fish found</p>
+    <p id="speciesListMessageText" class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+      Try another fish name, local name, or scientific name.
+    </p>
+  </div>
+
+  <p id="speciesModelNote" class="font-body-sm text-body-sm text-on-surface-variant mt-4">
+    This list is loaded directly from the current Teachable Machine metadata. The model's “No Fish” safeguard is not displayed as a fish species.
+  </p>
 </section>
 
 <!-- Help/Tips Banner -->
@@ -667,7 +663,7 @@ if (storedFishImage && !preview.src) {
 
 loadModel();
 </script>
-<script src="fish-model-classes.js"></script>
+<script src="fish-species-list.js"></script>
 <script src="freshness-module.js"></script>
 <script src="auth-ui.js"></script>
 </body></html>
