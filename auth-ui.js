@@ -48,6 +48,10 @@
     <div class="masofish-account-menu" hidden>
       <strong data-auth-menu-name>MASOFISH User</strong>
       <p class="masofish-account-email" data-auth-email></p>
+      <a class="masofish-account-action" href="admin.html" data-auth-admin hidden style="text-decoration:none; margin-bottom:8px;">
+        <span aria-hidden="true">⚙</span>
+        <span>Administrator Panel</span>
+      </a>
       <button class="masofish-account-action" type="button" data-auth-signout>
         <span aria-hidden="true">↪</span>
         <span>Sign out</span>
@@ -64,6 +68,7 @@
   const button = wrap.querySelector('.masofish-account-button');
   const menu = wrap.querySelector('.masofish-account-menu');
   const signOut = wrap.querySelector('[data-auth-signout]');
+  const adminLink = wrap.querySelector('[data-auth-admin]');
 
   button.addEventListener('click', (event) => {
     event.stopPropagation();
@@ -97,7 +102,8 @@
     if (!ready) return;
 
     if (ready.mode === 'prototype') {
-      displayUser('Prototype User', '', 'prototype');
+      displayUser('Prototype Administrator', '', 'prototype');
+      adminLink.hidden = false;
       signOut.querySelector('span:last-child').textContent = 'Exit prototype mode';
       signOut.addEventListener('click', () => {
         localStorage.removeItem('masofishPrototypeMode');
@@ -120,6 +126,23 @@
       'MASOFISH User';
 
     displayUser(fullName, user?.email, 'supabase');
+
+    try {
+      const { data: profile, error: profileError } = await auth.client
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        console.warn('Could not read account role:', profileError);
+      } else if (profile?.role === 'admin') {
+        adminLink.hidden = false;
+        wrap.querySelector('[data-auth-name]').textContent = 'Admin';
+      }
+    } catch (roleError) {
+      console.warn('Administrator menu check failed:', roleError);
+    }
 
     signOut.addEventListener('click', async () => {
       signOut.disabled = true;

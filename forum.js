@@ -18,6 +18,7 @@
     client: null,
     user: null,
     userName: 'MASOFISH User',
+    role: 'user',
     posts: [],
     comments: [],
     likes: [],
@@ -257,6 +258,7 @@
     const metrics = postMetrics(post.id);
     const imageUrl = postImageUrl(post);
     const isOwner = post.user_id === currentUserId();
+    const canDelete = isOwner || state.role === 'admin';
     const expanded = options.expanded === true;
 
     return `
@@ -274,7 +276,7 @@
             </div>
             <div class="flex items-center gap-2">
               <span class="${categoryClass(post.category)} rounded-full px-3 py-1 text-xs font-extrabold">${escapeHtml(categoryLabels[post.category] || 'General')}</span>
-              ${isOwner ? `
+              ${canDelete ? `
                 <button type="button" class="delete-post-button w-9 h-9 rounded-full hover:bg-error-container text-error flex items-center justify-center" data-post-id="${escapeHtml(post.id)}" aria-label="Delete post">
                   <span class="material-symbols-outlined text-[20px]">delete</span>
                 </button>` : ''}
@@ -638,7 +640,7 @@
 
   async function deletePost(postId) {
     const post = state.posts.find(item => item.id === postId);
-    if (!post || post.user_id !== currentUserId()) return;
+    if (!post || (post.user_id !== currentUserId() && state.role !== 'admin')) return;
 
     const confirmed = confirm('Delete this discussion and all of its comments?');
     if (!confirmed) return;
@@ -728,6 +730,15 @@
         state.user.user_metadata?.name ||
         state.user.email?.split('@')[0] ||
         'MASOFISH User';
+
+      const { data: profile, error: profileError } = await state.client
+        .from('profiles')
+        .select('role')
+        .eq('id', state.user.id)
+        .maybeSingle();
+
+      if (profileError) console.warn('Could not load forum role:', profileError);
+      state.role = profile?.role || 'user';
     } else {
       state.mode = 'prototype';
       state.user = {
@@ -735,7 +746,8 @@
         email: 'prototype@masofish.local',
         user_metadata: { full_name: 'Prototype User' }
       };
-      state.userName = 'Prototype User';
+      state.userName = 'Prototype Administrator';
+      state.role = 'admin';
     }
 
     await loadForumData();
