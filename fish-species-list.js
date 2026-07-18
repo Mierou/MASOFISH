@@ -133,16 +133,28 @@
           ${item.imageUrl ? `
             <img
               src="${escapeHtml(item.imageUrl)}"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              class="absolute inset-0 z-0 w-full h-full object-cover scale-110 blur-lg opacity-45"
+              style="object-position:${escapeHtml(item.imagePosition)}"
+              data-fish-photo-background
+            />
+
+            <div class="absolute inset-0 z-10 bg-black/10"></div>
+
+            <img
+              src="${escapeHtml(item.imageUrl)}"
               alt="${escapeHtml(item.imageAlt)}"
               loading="lazy"
-              class="absolute inset-0 w-full h-full object-cover"
+              class="absolute inset-0 z-20 w-full h-full object-contain p-2"
               style="object-position:${escapeHtml(item.imagePosition)}"
               data-fish-photo
             />` : ''}
 
-          <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-black/20 pointer-events-none"></div>
+          <div class="absolute inset-0 z-30 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
 
-          <div class="absolute inset-0 p-4 flex flex-col justify-between">
+          <div class="absolute inset-0 z-40 p-4 flex flex-col justify-between">
             <div class="flex justify-between items-start gap-3">
               <span class="bg-secondary-container text-on-secondary-container font-label-md text-[10px] px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">
                 AI Identifiable
@@ -211,6 +223,10 @@
     grid.querySelectorAll('[data-fish-photo]').forEach(image => {
       image.addEventListener('error', () => {
         image.hidden = true;
+
+        const card = image.closest('.species-card');
+        const backgroundImage = card?.querySelector('[data-fish-photo-background]');
+        if (backgroundImage) backgroundImage.hidden = true;
       }, { once: true });
     });
 
