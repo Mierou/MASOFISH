@@ -2,37 +2,65 @@
   "Milkfish": {
     "displayName": "Milkfish",
     "localName": "Bangus",
-    "scientificName": "Chanos chanos"
+    "scientificName": "Chanos chanos",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Chanidae_-_Chanos_chanos.JPG/640px-Chanidae_-_Chanos_chanos.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Chanidae_-_Chanos_chanos.JPG",
+    "imageAlt": "Milkfish swimming underwater",
+    "imagePosition": "center"
   },
   "Indian Mackarel": {
     "displayName": "Indian Mackerel",
     "localName": "Alumahan",
-    "scientificName": "Rastrelliger kanagurta"
+    "scientificName": "Rastrelliger kanagurta",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Rastrelliger_kanagurta_JNC2855.JPG/640px-Rastrelliger_kanagurta_JNC2855.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Rastrelliger_kanagurta_JNC2855.JPG",
+    "imageAlt": "Indian mackerel",
+    "imagePosition": "center"
   },
   "Eel": {
     "displayName": "Eel",
     "localName": "Palos / Igat",
-    "scientificName": "Anguilliformes spp."
+    "scientificName": "Anguilliformes spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/New_Zealand_longfin_eel_%28Anguilla_dieffenbachii%29_Piha.jpg/640px-New_Zealand_longfin_eel_%28Anguilla_dieffenbachii%29_Piha.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:New_Zealand_longfin_eel_(Anguilla_dieffenbachii)_Piha.jpg",
+    "imageAlt": "Longfin eel in the water",
+    "imagePosition": "center 42%"
   },
   "Tilapia": {
     "displayName": "Tilapia",
     "localName": "Tilapia / Pla-pla",
-    "scientificName": "Oreochromis spp."
+    "scientificName": "Oreochromis spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Oreochromis-niloticus-Nairobi.JPG/640px-Oreochromis-niloticus-Nairobi.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Oreochromis-niloticus-Nairobi.JPG",
+    "imageAlt": "Nile tilapia",
+    "imagePosition": "center"
   },
   "Scatfish": {
     "displayName": "Scatfish",
     "localName": "Kitang",
-    "scientificName": "Scatophagus argus"
+    "scientificName": "Scatophagus argus",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Scatophagus_argus_%28Wroclaw_zoo%29-2.JPG/640px-Scatophagus_argus_%28Wroclaw_zoo%29-2.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Scatophagus_argus_(Wroclaw_zoo)-2.JPG",
+    "imageAlt": "Spotted scatfish",
+    "imagePosition": "center"
   },
   "Mullet": {
     "displayName": "Mullet",
     "localName": "Banak",
-    "scientificName": "Mugilidae spp."
+    "scientificName": "Mugilidae spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Mugil_cephalus_Minorca.jpg/640px-Mugil_cephalus_Minorca.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Mugil_cephalus_Minorca.jpg",
+    "imageAlt": "Grey mullet underwater",
+    "imagePosition": "center"
   },
   "Rabbitfish": {
     "displayName": "Rabbitfish",
     "localName": "Danggit / Samaral",
-    "scientificName": "Siganus spp."
+    "scientificName": "Siganus spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/2_Siganus_rivulatus_Creta2011_7597c.JPG/640px-2_Siganus_rivulatus_Creta2011_7597c.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:2_Siganus_rivulatus_Creta2011_7597c.JPG",
+    "imageAlt": "Rabbitfish underwater",
+    "imagePosition": "center"
   },
   "No Fish": {
     "displayName": "No Fish",
@@ -43,31 +71,55 @@
   "Yellowfin Tuna": {
     "displayName": "Yellowfin Tuna",
     "localName": "Bariles / Tambakol",
-    "scientificName": "Thunnus albacares"
+    "scientificName": "Thunnus albacares",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Thunnus_albacares.png",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Thunnus_albacares.png",
+    "imageAlt": "Yellowfin tuna illustration",
+    "imagePosition": "center"
   },
   "Grouper": {
     "displayName": "Grouper",
     "localName": "Lapu-lapu",
-    "scientificName": "Epinephelinae spp."
+    "scientificName": "Epinephelinae spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Baltimore_Aquarium_-_Mycteroperca_microlepis_-_05.jpg/640px-Baltimore_Aquarium_-_Mycteroperca_microlepis_-_05.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Baltimore_Aquarium_-_Mycteroperca_microlepis_-_05.jpg",
+    "imageAlt": "Grouper swimming in an aquarium",
+    "imagePosition": "center"
   },
   "Bullet Tuna": {
     "displayName": "Bullet Tuna",
     "localName": "Tulingan",
-    "scientificName": "Auxis rochei"
+    "scientificName": "Auxis rochei",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Aux_roch_130511-2031_plrtu.JPG/640px-Aux_roch_130511-2031_plrtu.JPG",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Aux_roch_130511-2031_plrtu.JPG",
+    "imageAlt": "Bullet tuna",
+    "imagePosition": "center"
   },
   "Needlefish": {
     "displayName": "Needlefish",
     "localName": "Balo / Bawo",
-    "scientificName": "Belonidae spp."
+    "scientificName": "Belonidae spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Tylosurus_crocodilus_crocodilus_R%C3%A9union.jpg/640px-Tylosurus_crocodilus_crocodilus_R%C3%A9union.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Tylosurus_crocodilus_crocodilus_R%C3%A9union.jpg",
+    "imageAlt": "Needlefish underwater",
+    "imagePosition": "center"
   },
   "Snapper": {
     "displayName": "Snapper",
     "localName": "Maya-maya",
-    "scientificName": "Lutjanidae spp."
+    "scientificName": "Lutjanidae spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Lutjanus_lutjanus_333911225.jpg/640px-Lutjanus_lutjanus_333911225.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Lutjanus_lutjanus_333911225.jpg",
+    "imageAlt": "Snapper underwater",
+    "imagePosition": "center"
   },
   "Trevally": {
     "displayName": "Trevally",
     "localName": "Talakitok",
-    "scientificName": "Carangidae spp."
+    "scientificName": "Carangidae spp.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Gfp-crevalle-jack.jpg/640px-Gfp-crevalle-jack.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Gfp-crevalle-jack.jpg",
+    "imageAlt": "Trevally or jack fish underwater",
+    "imagePosition": "center"
   }
 }

@@ -78,6 +78,10 @@
           displayName: info.displayName || modelLabel,
           localName: info.localName || 'Local name not yet added',
           scientificName: info.scientificName || 'Scientific name not yet added',
+          imageUrl: info.imageUrl || '',
+          imageSource: info.imageSource || '',
+          imageAlt: info.imageAlt || `${info.displayName || modelLabel} fish`,
+          imagePosition: info.imagePosition || 'center',
           isFish: info.isFish !== false && normalize(modelLabel) !== 'no fish'
         };
       })
@@ -122,26 +126,53 @@
         class="species-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm active:scale-[0.98] transition-all"
         data-model-label="${escapeHtml(item.modelLabel)}"
       >
-        <div class="h-40 relative overflow-hidden" style="background:${background}">
-          <div class="absolute inset-0 opacity-20">
+        <div class="h-40 relative overflow-hidden bg-surface-container-high" style="background:${background}">
+          <div class="absolute inset-0 opacity-20" data-fish-image-fallback>
             <span class="material-symbols-outlined absolute -right-4 -bottom-7 text-white" style="font-size:150px;">phishing</span>
           </div>
 
+          ${item.imageUrl ? `
+            <img
+              src="${escapeHtml(item.imageUrl)}"
+              alt="${escapeHtml(item.imageAlt)}"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              class="absolute inset-0 w-full h-full object-cover"
+              style="object-position:${escapeHtml(item.imagePosition)}"
+              data-fish-photo
+            />` : ''}
+
+          <div class="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-black/20 pointer-events-none"></div>
+
           <div class="absolute inset-0 p-4 flex flex-col justify-between">
             <div class="flex justify-between items-start gap-3">
-              <span class="bg-secondary-container text-on-secondary-container font-label-md text-[10px] px-2 py-1 rounded-lg uppercase tracking-wider">
+              <span class="bg-secondary-container text-on-secondary-container font-label-md text-[10px] px-2 py-1 rounded-lg uppercase tracking-wider shadow-sm">
                 AI Identifiable
               </span>
-              <span class="bg-white/15 border border-white/20 text-white font-label-md text-[10px] px-2 py-1 rounded-lg">
+              <span class="bg-black/35 border border-white/30 text-white font-label-md text-[10px] px-2 py-1 rounded-lg backdrop-blur-sm">
                 Class ${item.modelIndex + 1}
               </span>
             </div>
 
-            <div>
-              <span class="material-symbols-outlined text-white/90" style="font-size:40px;">set_meal</span>
-              <p class="text-white/75 text-xs font-bold uppercase tracking-widest mt-1">
-                MASOFISH Model
-              </p>
+            <div class="flex items-end justify-between gap-3">
+              <div>
+                <span class="material-symbols-outlined text-white" style="font-size:36px;">set_meal</span>
+                <p class="text-white text-xs font-bold uppercase tracking-widest mt-1 drop-shadow">
+                  MASOFISH Model
+                </p>
+              </div>
+
+              ${item.imageSource ? `
+                <a
+                  href="${escapeHtml(item.imageSource)}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="relative z-10 bg-black/40 border border-white/25 text-white text-[10px] font-bold px-2 py-1 rounded-lg backdrop-blur-sm hover:bg-black/55"
+                  aria-label="Open photo source for ${escapeHtml(item.displayName)}"
+                  title="View photo source and license"
+                >
+                  PHOTO SOURCE
+                </a>` : ''}
             </div>
           </div>
         </div>
@@ -186,6 +217,12 @@
         : matches.slice(0, INITIAL_VISIBLE_COUNT);
 
     grid.innerHTML = visibleItems.map(speciesCard).join('');
+
+    grid.querySelectorAll('[data-fish-photo]').forEach(image => {
+      image.addEventListener('error', () => {
+        image.hidden = true;
+      }, { once: true });
+    });
 
     const hasMatches = matches.length > 0;
     setVisible(grid, hasMatches);
