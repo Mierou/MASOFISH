@@ -591,6 +591,7 @@
   }
 
   function openPanel() {
+    window.MASOFISH_ACCOUNT_PANEL?.close?.();
     state.panelOpen = true;
     ui.panel.hidden = false;
     ui.backdrop.hidden = false;
