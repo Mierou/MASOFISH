@@ -57,12 +57,16 @@
   window.MASOFISH_CATCH_LOG.list({ limit: 5 })
     .then(items => {
       container.innerHTML = items.map(card).join('');
-      empty.hidden = items.length > 0;
+
+      const hasCatches = items.length > 0;
+      empty.hidden = hasCatches;
+      empty.classList.toggle('hidden', hasCatches);
     })
     .catch(error => {
       console.error('Recent catch dashboard failed:', error);
       container.innerHTML = '';
       empty.hidden = false;
+      empty.classList.remove('hidden');
       empty.textContent = 'Catch log unavailable.';
     });
 })();

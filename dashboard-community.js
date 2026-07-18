@@ -153,8 +153,15 @@
   }
 
   function render(posts) {
-    byId('dashboardCommunityLoading').hidden = true;
-    byId('dashboardCommunityEmpty').hidden = posts.length > 0;
+    const loading = byId('dashboardCommunityLoading');
+    const emptyState = byId('dashboardCommunityEmpty');
+
+    loading.hidden = true;
+    loading.classList.add('hidden');
+
+    const hasPosts = posts.length > 0;
+    emptyState.hidden = hasPosts;
+    emptyState.classList.toggle('hidden', hasPosts);
 
     byId('dashboardCommunityStatus').textContent = posts.length
       ? `${posts.length} recent ${posts.length === 1 ? 'discussion' : 'discussions'}`
@@ -221,9 +228,14 @@
 
   function showUnavailable(error) {
     console.error('Recent community posts could not be loaded:', error);
-    byId('dashboardCommunityLoading').hidden = true;
+    const loading = byId('dashboardCommunityLoading');
+    const emptyState = byId('dashboardCommunityEmpty');
+
+    loading.hidden = true;
+    loading.classList.add('hidden');
     byId('dashboardCommunityStatus').textContent = 'Community feed unavailable.';
-    byId('dashboardCommunityEmpty').hidden = false;
+    emptyState.hidden = false;
+    emptyState.classList.remove('hidden');
     byId('dashboardCommunityEmpty').querySelector('p.font-bold').textContent =
       'Community feed unavailable';
     byId('dashboardCommunityEmpty').querySelector('p.font-body-sm').textContent =

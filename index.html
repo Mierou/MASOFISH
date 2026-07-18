@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<meta name="masofish-build" content="recent-community-dashboard-2026-07-19"/>
+<meta name="masofish-build" content="dashboard-empty-state-fix-2026-07-19"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>MASOFISH - Fisherman Assistance Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -140,6 +140,14 @@
 <script src="supabase-config.js"></script>
 <script src="supabase-client.js"></script>
 <script src="auth-guard.js"></script>
+
+<style>
+  #dashboardCommunityEmpty[hidden],
+  #dashboardRecentCatchEmpty[hidden] {
+    display: none !important;
+  }
+</style>
+
 </head>
 <body class="bg-background text-on-background font-body-md selection:bg-secondary-container">
 <!-- Top App Bar -->
@@ -214,7 +222,7 @@
     </a>
   </div>
   <div id="dashboardRecentCatchList" class="flex gap-4 overflow-x-auto pb-2 scroll-smooth"></div>
-  <a id="dashboardRecentCatchEmpty" hidden href="catch-log.html" class="block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center text-on-surface-variant">
+  <a id="dashboardRecentCatchEmpty" hidden href="catch-log.html" class="hidden block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center text-on-surface-variant">
     <span class="material-symbols-outlined text-4xl text-secondary">add_circle</span>
     <p class="font-bold text-primary mt-2">No catches recorded yet</p>
     <p class="text-sm mt-1">Save a Fish ID result or add a catch manually.</p>
@@ -260,7 +268,7 @@
 
   <div id="dashboardCommunityList" class="space-y-3"></div>
 
-  <a id="dashboardCommunityEmpty" hidden href="forum.html" class="block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
+  <a id="dashboardCommunityEmpty" hidden href="forum.html" class="hidden block rounded-xl border border-dashed border-outline-variant bg-surface-container-low p-6 text-center">
     <span class="material-symbols-outlined text-secondary text-4xl">forum</span>
     <p class="font-bold text-primary mt-2">No community discussions yet</p>
     <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Start the first discussion in the MASOFISH forum.</p>
