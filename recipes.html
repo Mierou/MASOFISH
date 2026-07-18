@@ -5,7 +5,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="0"/>
-  <meta name="masofish-build" content="catch-log-recipes-2026-07-18"/>
+  <meta name="masofish-build" content="recipes-standard-header-2026-07-19"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MASOFISH - Fish Recipes</title>
   <meta name="description" content="Search, save, view and administer practical fish recipes in MASOFISH."/>
@@ -65,17 +65,17 @@
   <script src="auth-guard.js"></script>
 </head>
 <body class="bg-background text-on-surface font-sans pb-24">
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-outline-variant">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-      <a href="index.html" class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary text-3xl">anchor</span>
-        <div><p class="font-black text-primary leading-none">MASOFISH</p><p class="text-xs text-on-surface-variant">Fish Recipes</p></div>
-      </a>
-      <button id="addRecipeButton" hidden type="button" class="bg-secondary text-white rounded-xl px-4 py-3 font-extrabold flex items-center gap-2">
-        <span class="material-symbols-outlined">add</span><span class="hidden sm:inline">Add Recipe</span>
-      </button>
-    </div>
-  </header>
+  <header class="sticky top-0 z-50 bg-surface border-b border-outline-variant flex justify-between items-center w-full px-4 h-16">
+  <a href="index.html" class="flex items-center gap-2 min-w-0" aria-label="Go to MASOFISH dashboard">
+    <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">anchor</span>
+    <h1 class="text-2xl tracking-tight font-black text-primary">MASOFISH</h1>
+  </a>
+  <div class="flex items-center gap-2">
+    <button type="button" class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 transition-transform" aria-label="Open notifications">
+      <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+    </button>
+  </div>
+</header>
 
   <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
     <section class="rounded-2xl bg-primary-container text-white p-6 sm:p-8 relative overflow-hidden">
@@ -115,8 +115,15 @@
       </div>
     </section>
 
-    <div class="flex items-center justify-between gap-3">
-      <div><h2 class="text-2xl font-black text-primary">Recipe Library</h2><p id="recipeStatus" class="text-sm text-on-surface-variant">Loading recipes…</p></div>
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h2 class="text-2xl font-black text-primary">Recipe Library</h2>
+        <p id="recipeStatus" class="text-sm text-on-surface-variant">Loading recipes…</p>
+      </div>
+      <button id="addRecipeButton" hidden type="button" class="bg-secondary text-white rounded-xl px-3 sm:px-4 h-10 font-extrabold flex items-center gap-2 shrink-0 active:scale-95 transition">
+        <span class="material-symbols-outlined text-[20px]">add</span>
+        <span class="hidden sm:inline">Add Recipe</span>
+      </button>
     </div>
 
     <div id="recipeLoading" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

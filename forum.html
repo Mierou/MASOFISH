@@ -5,7 +5,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="0"/>
-  <meta name="masofish-build" content="community-forum-2026-07-18"/>
+  <meta name="masofish-build" content="forum-standard-header-2026-07-19"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MASOFISH - Community Forum</title>
   <meta name="description" content="MASOFISH community forum for catch posts, fishing discussions, questions, tips and safety information."/>
@@ -98,26 +98,17 @@
   <script src="auth-guard.js"></script>
 </head>
 <body class="bg-background text-on-surface font-sans pb-24">
-  <header class="sticky top-0 z-50 bg-surface-container-lowest/95 backdrop-blur border-b border-outline-variant">
-    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
-      <a href="index.html" class="flex items-center gap-3 min-w-0">
-        <span class="material-symbols-outlined text-primary text-3xl">anchor</span>
-        <div class="min-w-0">
-          <p class="font-black text-primary leading-none">MASOFISH</p>
-          <p class="text-xs text-on-surface-variant truncate">Community Forum</p>
-        </div>
-      </a>
-      <div class="flex items-center gap-2">
-        <button id="refreshForumButton" type="button" class="w-10 h-10 rounded-full border border-outline-variant bg-white text-primary flex items-center justify-center" aria-label="Refresh forum">
-          <span class="material-symbols-outlined">refresh</span>
-        </button>
-        <button id="openPostComposerButton" type="button" class="bg-secondary text-on-secondary rounded-xl px-4 py-3 font-extrabold flex items-center gap-2">
-          <span class="material-symbols-outlined">edit_square</span>
-          <span class="hidden sm:inline">New Post</span>
-        </button>
-      </div>
-    </div>
-  </header>
+  <header class="sticky top-0 z-50 bg-surface border-b border-outline-variant flex justify-between items-center w-full px-4 h-16">
+  <a href="index.html" class="flex items-center gap-2 min-w-0" aria-label="Go to MASOFISH dashboard">
+    <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">anchor</span>
+    <h1 class="text-2xl tracking-tight font-black text-primary">MASOFISH</h1>
+  </a>
+  <div class="flex items-center gap-2">
+    <button type="button" class="hover:bg-surface-container-high transition-colors p-2 rounded-full active:scale-95 transition-transform" aria-label="Open notifications">
+      <span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+    </button>
+  </div>
+</header>
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
 <section>
@@ -192,16 +183,29 @@
 
     <div class="grid lg:grid-cols-[minmax(0,1fr)_280px] gap-6 items-start">
       <section>
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <h2 class="text-xl font-black text-primary">Latest Discussions</h2>
-            <p id="feedStatus" class="text-sm text-on-surface-variant">Loading community posts…</p>
+        <div class="mb-3 space-y-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h2 class="text-xl font-black text-primary">Latest Discussions</h2>
+              <p id="feedStatus" class="text-sm text-on-surface-variant">Loading community posts…</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button id="refreshForumButton" type="button" class="w-10 h-10 rounded-full border border-outline-variant bg-white text-primary flex items-center justify-center hover:bg-surface-container-low active:scale-95 transition" aria-label="Refresh forum">
+                <span class="material-symbols-outlined">refresh</span>
+              </button>
+              <button id="openPostComposerButton" type="button" class="bg-secondary text-on-secondary rounded-xl px-3 sm:px-4 h-10 font-extrabold flex items-center gap-2 active:scale-95 transition">
+                <span class="material-symbols-outlined text-[20px]">edit_square</span>
+                <span class="hidden sm:inline">New Post</span>
+              </button>
+            </div>
           </div>
-          <select id="forumSortSelect" class="rounded-xl border-outline-variant text-sm">
-            <option value="newest">Newest</option>
-            <option value="popular">Most appreciated</option>
-            <option value="discussed">Most discussed</option>
-          </select>
+          <div class="flex justify-end">
+            <select id="forumSortSelect" class="rounded-xl border-outline-variant text-sm">
+              <option value="newest">Newest</option>
+              <option value="popular">Most appreciated</option>
+              <option value="discussed">Most discussed</option>
+            </select>
+          </div>
         </div>
 
         <div id="forumLoading" class="space-y-4">
