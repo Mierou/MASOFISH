@@ -120,6 +120,12 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-6 space-y-6">
+<section>
+  <div data-masofish-safety-banner class="rounded-xl border p-4 bg-surface-container-high text-on-surface-variant">
+    Loading sea-safety conditions…
+  </div>
+</section>
+
     <section class="relative overflow-hidden rounded-2xl bg-primary-container text-white p-6 sm:p-8">
       <div class="absolute -right-16 -top-20 w-64 h-64 rounded-full border-[46px] border-secondary-container/10"></div>
       <div class="absolute -left-20 -bottom-24 w-64 h-64 rounded-full bg-secondary/25 blur-3xl"></div>
@@ -386,7 +392,10 @@
     </a>
   </nav>
 
-  <script src="forum.js"></script>
+  <script src="weather-api.js"></script>
+<script src="marine-api.js"></script>
+<script src="safety-alerts.js"></script>
+<script src="forum.js"></script>
   <script src="auth-ui.js"></script>
 </body>
 </html>

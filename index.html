@@ -156,13 +156,7 @@
 </header>
 <main class="pb-24 px-margin-mobile pt-6 space-y-6 max-w-md mx-auto">
 <!-- Safety Bulletin (Live Weather Caution) -->
-<div id="dashboard-weather-alert" class="bg-secondary-container/40 text-on-secondary-container p-4 rounded-xl flex items-start gap-4 shadow-sm border border-secondary/20">
-<span id="dashboard-alert-icon" class="material-symbols-outlined mt-1" style="font-variation-settings: 'FILL' 1;">info</span>
-<div>
-<span id="dashboard-alert-title" class="font-label-md text-label-md uppercase tracking-wider mb-1 block">Weather conditions update</span>
-<p id="dashboard-alert-message" class="font-body-sm text-body-sm font-semibold">Loading the latest forecast for Cebu City…</p>
-</div>
-</div>
+<div id="dashboard-weather-alert" data-masofish-safety-banner class="rounded-xl border p-4 bg-surface-container-high text-on-surface-variant">Loading sea-safety conditions…</div>
 <!-- Bento Grid: Main Dashboard Data -->
 <div class="grid grid-cols-1 gap-4">
 <!-- Live Weather Instrument Card -->
@@ -355,25 +349,7 @@
     if (element) element.textContent = text;
   }
 
-  function renderAlert(summary) {
-    const alert = byId('dashboard-weather-alert');
-    const icon = byId('dashboard-alert-icon');
-    alert.className = 'p-4 rounded-xl flex items-start gap-4 shadow-sm border';
-
-    if (summary.level === 'danger') {
-      alert.classList.add('bg-error-container', 'text-on-error-container', 'border-error/20');
-      icon.textContent = 'warning';
-    } else if (summary.level === 'warning') {
-      alert.classList.add('bg-yellow-50', 'text-yellow-900', 'border-yellow-300');
-      icon.textContent = 'umbrella';
-    } else {
-      alert.classList.add('bg-secondary-container/40', 'text-on-secondary-container', 'border-secondary/20');
-      icon.textContent = 'info';
-    }
-
-    setText('dashboard-alert-title', summary.title);
-    setText('dashboard-alert-message', summary.message);
-  }
+  function renderAlert(summary) { /* Replaced by shared sea-safety engine. */ }
 
   function renderWeather(data, result) {
     const current = weather.currentConditions(data);
@@ -396,7 +372,7 @@
 
     const picks = [0, 6, 12, 18].map(index => hours[Math.min(index, hours.length - 1)]).filter(Boolean);
     byId('dashboard-time-labels').innerHTML = picks.map(row => `<span>${weather.escapeHtml(weather.shortHourLabel(row.time))}</span>`).join('');
-    renderAlert(weather.cautionSummary(data));
+    // Combined weather and wave safety is rendered by safety-alerts.js.
   }
 
   weather.fetchForecast()
@@ -404,11 +380,7 @@
     .catch(error => {
       setText('dashboard-condition', 'Weather unavailable');
       setText('dashboard-weather-updated', 'Tap for details');
-      renderAlert({
-        level: 'unavailable',
-        title: 'Weather service unavailable',
-        message: error.message || 'The forecast could not be loaded. Check your connection and try again.'
-      });
+      console.warn('Dashboard weather unavailable:', error);
     });
 
   marine.fetchMarine()
@@ -449,5 +421,6 @@
   });
 })();
 </script>
+<script src="safety-alerts.js"></script>
 <script src="auth-ui.js"></script>
 </body></html>
