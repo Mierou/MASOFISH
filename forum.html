@@ -5,7 +5,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="0"/>
-  <meta name="masofish-build" content="comment-reporting-2026-07-19"/>
+  <meta name="masofish-build" content="post-and-comment-reporting-2026-07-19"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MASOFISH - Community Forum</title>
   <meta name="description" content="MASOFISH community forum for catch posts, fishing discussions, questions, tips and safety information."/>
@@ -374,6 +374,64 @@
   </div>
 
 
+
+  <!-- Report Post Modal -->
+  <div id="postReportModal" class="forum-modal" hidden role="dialog" aria-modal="true" aria-labelledby="postReportTitle">
+    <section class="forum-modal-card max-w-lg">
+      <div class="sticky top-0 bg-white border-b border-outline-variant p-4 flex items-center justify-between z-10">
+        <div>
+          <p class="text-xs uppercase tracking-widest font-extrabold text-error">Community Safety</p>
+          <h2 id="postReportTitle" class="text-lg font-black text-primary">Report Discussion</h2>
+        </div>
+        <button id="closePostReportButton" type="button" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center" aria-label="Close post report form">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form id="postReportForm" class="p-5 space-y-4">
+        <input id="reportedPostId" type="hidden"/>
+
+        <div class="rounded-xl border border-outline-variant bg-surface-container-low p-4">
+          <p class="text-xs uppercase tracking-wider font-extrabold text-on-surface-variant">Discussion being reported</p>
+          <p id="reportedPostAuthor" class="text-xs font-bold text-on-surface-variant mt-2"></p>
+          <p id="reportedPostTitlePreview" class="font-black text-primary mt-1"></p>
+          <p id="reportedPostContentPreview" class="text-sm text-on-surface-variant mt-1 whitespace-pre-wrap"></p>
+        </div>
+
+        <label class="block">
+          <span class="block text-sm font-bold text-primary mb-1.5">Reason</span>
+          <select id="postReportReason" class="w-full rounded-xl border-outline-variant bg-white" required>
+            <option value="">Select a reason</option>
+            <option value="spam">Spam or advertising</option>
+            <option value="harassment">Harassment or bullying</option>
+            <option value="misinformation">Dangerous misinformation</option>
+            <option value="inappropriate">Inappropriate content</option>
+            <option value="privacy">Private or sensitive information</option>
+            <option value="other">Other concern</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="block text-sm font-bold text-primary mb-1.5">Additional details <span class="font-normal text-on-surface-variant">(optional)</span></span>
+          <textarea id="postReportDetails" maxlength="1000" rows="4" class="w-full rounded-xl border-outline-variant bg-white" placeholder="Briefly explain why this discussion should be reviewed…"></textarea>
+        </label>
+
+        <div id="postReportMessage" hidden class="rounded-xl border p-3 text-sm"></div>
+
+        <p class="text-xs text-on-surface-variant">
+          Reports are sent to MASOFISH administrators for review. Reporting does not automatically remove a discussion.
+        </p>
+
+        <div class="flex justify-end gap-3">
+          <button id="cancelPostReportButton" type="button" class="rounded-xl bg-surface-container-high text-primary px-5 py-3 font-extrabold">Cancel</button>
+          <button id="submitPostReportButton" type="submit" class="rounded-xl bg-error text-white px-5 py-3 font-extrabold disabled:opacity-60">
+            Submit Report
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+
   <!-- Report Comment Modal -->
   <div id="commentReportModal" class="forum-modal" hidden role="dialog" aria-modal="true" aria-labelledby="commentReportTitle">
     <section class="forum-modal-card max-w-lg">
@@ -436,9 +494,9 @@
       <div class="sticky top-0 bg-white border-b border-outline-variant p-4 flex items-center justify-between z-10">
         <div>
           <p class="text-xs uppercase tracking-widest font-extrabold text-amber-700">Administrator Moderation</p>
-          <h2 id="commentReportsTitle" class="text-lg font-black text-primary">Reported Comments</h2>
+          <h2 id="commentReportsTitle" class="text-lg font-black text-primary">Forum Reports</h2>
         </div>
-        <button id="closeCommentReportsButton" type="button" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center" aria-label="Close reported comments">
+        <button id="closeCommentReportsButton" type="button" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center" aria-label="Close forum reports">
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>

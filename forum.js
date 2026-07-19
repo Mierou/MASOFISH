@@ -23,8 +23,11 @@
     comments: [],
     likes: [],
     reports: [],
+    postReports: [],
     reportSchemaReady: true,
+    postReportSchemaReady: true,
     activeReportCommentId: null,
+    activeReportPostId: null,
     selectedCategory: 'all',
     searchTerm: '',
     sort: 'newest',
@@ -35,12 +38,14 @@
   const byId = id => document.getElementById(id);
   const postModal = byId('postComposerModal');
   const discussionModal = byId('discussionModal');
+  const postReportModal = byId('postReportModal');
   const commentReportModal = byId('commentReportModal');
   const commentReportsModal = byId('commentReportsModal');
 
   const allForumModals = [
     postModal,
     discussionModal,
+    postReportModal,
     commentReportModal,
     commentReportsModal
   ].filter(Boolean);
@@ -207,7 +212,8 @@
         { post_id: 'demo-post-2', user_id: 'demo-user-1' },
         { post_id: 'demo-post-3', user_id: 'demo-user-2' }
       ],
-      reports: []
+      reports: [],
+      postReports: []
     };
   }
 
@@ -216,6 +222,7 @@
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       if (stored && Array.isArray(stored.posts) && Array.isArray(stored.comments) && Array.isArray(stored.likes)) {
         if (!Array.isArray(stored.reports)) stored.reports = [];
+        if (!Array.isArray(stored.postReports)) stored.postReports = [];
         return stored;
       }
     } catch (error) {
@@ -232,7 +239,8 @@
       posts: state.posts,
       comments: state.comments,
       likes: state.likes,
-      reports: state.reports
+      reports: state.reports,
+      postReports: state.postReports
     }));
   }
 
@@ -274,6 +282,12 @@
     const imageUrl = postImageUrl(post);
     const isOwner = post.user_id === currentUserId();
     const canDelete = isOwner || state.role === 'admin';
+    const canReport = !isOwner;
+    const pendingPostReport = state.postReports.some(report =>
+      report.post_id === post.id &&
+      report.reporter_id === currentUserId() &&
+      report.status === 'pending'
+    );
     const expanded = options.expanded === true;
 
     return `
@@ -291,6 +305,17 @@
             </div>
             <div class="flex items-center gap-2">
               <span class="${categoryClass(post.category)} rounded-full px-3 py-1 text-xs font-extrabold">${escapeHtml(categoryLabels[post.category] || 'General')}</span>
+
+              ${canReport ? `
+                <button type="button"
+                        class="report-post-button h-9 rounded-full border ${pendingPostReport ? 'border-secondary/30 bg-secondary-container/25 text-on-secondary-container' : 'border-outline-variant bg-white text-on-surface-variant hover:bg-error-container hover:text-on-error-container'} px-3 flex items-center justify-center gap-1.5 text-xs font-extrabold disabled:cursor-default"
+                        data-post-id="${escapeHtml(post.id)}"
+                        ${pendingPostReport ? 'disabled' : ''}
+                        aria-label="${pendingPostReport ? 'Discussion already reported' : 'Report discussion'}">
+                  <span class="material-symbols-outlined text-[18px]">${pendingPostReport ? 'check_circle' : 'flag'}</span>
+                  <span class="hidden sm:inline">${pendingPostReport ? 'Reported' : 'Report'}</span>
+                </button>` : ''}
+
               ${canDelete ? `
                 <button type="button" class="delete-post-button w-9 h-9 rounded-full hover:bg-error-container text-error flex items-center justify-center" data-post-id="${escapeHtml(post.id)}" aria-label="Delete post">
                   <span class="material-symbols-outlined text-[20px]">delete</span>
@@ -363,6 +388,10 @@
 
     container.querySelectorAll('.delete-post-button').forEach(button => {
       button.addEventListener('click', () => deletePost(button.dataset.postId));
+    });
+
+    container.querySelectorAll('.report-post-button:not(:disabled)').forEach(button => {
+      button.addEventListener('click', () => openPostReport(button.dataset.postId));
     });
   }
 
@@ -462,6 +491,182 @@
     });
   }
 
+  function setPostReportMessage(text, type = 'error') {
+    const box = byId('postReportMessage');
+    box.hidden = false;
+    box.className = 'rounded-xl border p-3 text-sm';
+
+    if (type === 'success') {
+      box.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-900');
+    } else {
+      box.classList.add('bg-red-50', 'border-red-200', 'text-red-900');
+    }
+
+    box.textContent = text;
+  }
+
+  function clearPostReportMessage() {
+    const box = byId('postReportMessage');
+    box.hidden = true;
+    box.textContent = '';
+  }
+
+  function openPostReport(postId) {
+    const post = state.posts.find(item => item.id === postId);
+    if (!post || post.user_id === currentUserId()) return;
+
+    state.activeReportPostId = postId;
+    byId('reportedPostId').value = postId;
+    byId('reportedPostAuthor').textContent =
+      `Shared by ${post.author_name || 'MASOFISH User'}`;
+    byId('reportedPostTitlePreview').textContent = post.title;
+    byId('reportedPostContentPreview').textContent = post.content;
+    byId('postReportReason').value = '';
+    byId('postReportDetails').value = '';
+    clearPostReportMessage();
+    openModal(postReportModal);
+  }
+
+  function closePostReport() {
+    state.activeReportPostId = null;
+    closeModal(postReportModal);
+  }
+
+  function pendingPostReports() {
+    return state.postReports
+      .filter(report => report.status === 'pending')
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
+
+  async function submitPostReport(event) {
+    event.preventDefault();
+
+    const post = state.posts.find(item =>
+      item.id === state.activeReportPostId
+    );
+
+    if (!post || post.user_id === currentUserId()) return;
+
+    const reason = byId('postReportReason').value;
+    const details = byId('postReportDetails').value.trim();
+    const submit = byId('submitPostReportButton');
+
+    if (!reason) {
+      setPostReportMessage('Select a reason for the report.');
+      return;
+    }
+
+    if (reason === 'other' && details.length < 5) {
+      setPostReportMessage('Please add a short explanation for an Other concern.');
+      return;
+    }
+
+    if (!state.postReportSchemaReady && state.mode !== 'prototype') {
+      setPostReportMessage('Post reporting is not configured yet. Run supabase-forum-post-reports.sql first.');
+      return;
+    }
+
+    submit.disabled = true;
+    submit.textContent = 'Submitting…';
+    clearPostReportMessage();
+
+    try {
+      const existing = state.postReports.some(report =>
+        report.post_id === post.id &&
+        report.reporter_id === currentUserId() &&
+        report.status === 'pending'
+      );
+
+      if (existing) {
+        throw new Error('You already have a pending report for this discussion.');
+      }
+
+      const report = {
+        id: state.mode === 'prototype'
+          ? `prototype-post-report-${crypto.randomUUID()}`
+          : undefined,
+        post_id: post.id,
+        reporter_id: currentUserId(),
+        reporter_name: currentUserName(),
+        reason,
+        details: details || null,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+
+      if (state.mode === 'prototype') {
+        state.postReports.unshift(report);
+        writePrototypeStore();
+      } else {
+        const { error } = await state.client
+          .from('forum_post_reports')
+          .insert({
+            post_id: report.post_id,
+            reporter_id: report.reporter_id,
+            reporter_name: report.reporter_name,
+            reason: report.reason,
+            details: report.details
+          });
+
+        if (error) {
+          if (error.code === '23505') {
+            throw new Error('You already have a pending report for this discussion.');
+          }
+          throw error;
+        }
+      }
+
+      setPostReportMessage('Report submitted. An administrator can now review it.', 'success');
+
+      setTimeout(async () => {
+        closePostReport();
+        await loadForumData();
+      }, 650);
+    } catch (error) {
+      console.error('Post report failed:', error);
+      setPostReportMessage(error.message || 'The report could not be submitted.');
+    } finally {
+      submit.disabled = false;
+      submit.textContent = 'Submit Report';
+    }
+  }
+
+  async function resolvePostReport(reportId, resolution) {
+    if (state.role !== 'admin') return;
+
+    try {
+      if (state.mode === 'prototype') {
+        state.postReports = state.postReports.map(report =>
+          report.id === reportId
+            ? {
+                ...report,
+                status: resolution,
+                updated_at: new Date().toISOString()
+              }
+            : report
+        );
+        writePrototypeStore();
+      } else {
+        const { error } = await state.client
+          .from('forum_post_reports')
+          .update({
+            status: resolution,
+            resolved_at: new Date().toISOString()
+          })
+          .eq('id', reportId);
+
+        if (error) throw error;
+      }
+
+      await loadForumData();
+      renderCommentReports();
+    } catch (error) {
+      console.error('Post report resolution failed:', error);
+      alert(error.message || 'The post report could not be updated.');
+    }
+  }
+
   const reportReasonLabels = {
     spam: 'Spam or advertising',
     harassment: 'Harassment or bullying',
@@ -528,7 +733,7 @@
 
     if (!isAdmin) return;
 
-    const count = pendingReports().length;
+    const count = pendingReports().length + pendingPostReports().length;
     badge.textContent = count > 99 ? '99+' : String(count);
     badge.hidden = count === 0;
     badge.classList.toggle('hidden', count === 0);
@@ -541,42 +746,128 @@
     const list = byId('commentReportsList');
     const status = byId('commentReportsStatus');
 
+    const commentReports = pendingReports().map(report => ({
+      ...report,
+      reportType: 'comment'
+    }));
+
+    const postReports = pendingPostReports().map(report => ({
+      ...report,
+      reportType: 'post'
+    }));
+
+    const reports = [...commentReports, ...postReports]
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    const missingSchemas = [];
+    if (!state.reportSchemaReady) missingSchemas.push('comment');
+    if (!state.postReportSchemaReady) missingSchemas.push('post');
+
+    status.textContent =
+      `${reports.length} pending ${reports.length === 1 ? 'report' : 'reports'}` +
+      (missingSchemas.length
+        ? ` • ${missingSchemas.join(' and ')} reporting setup required`
+        : '');
+
+    const setupNotices = [];
+
     if (!state.reportSchemaReady) {
-      status.textContent = 'Comment reporting database setup is required.';
-      list.innerHTML = `
-        <div class="rounded-xl border border-amber-300 bg-amber-50 p-5 text-amber-950">
-          <p class="font-black">Run the comment-report migration</p>
-          <p class="text-sm mt-1">Open <code class="bg-white/70 px-1 rounded">supabase-forum-comment-reports.sql</code> in the Supabase SQL Editor and run it once.</p>
-        </div>`;
-      return;
+      setupNotices.push(`
+        <div class="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-950">
+          <p class="font-black">Comment reporting setup required</p>
+          <p class="text-sm mt-1">Run <code class="bg-white/70 px-1 rounded">supabase-forum-comment-reports.sql</code>.</p>
+        </div>`);
     }
 
-    const reports = pendingReports();
-    status.textContent =
-      `${reports.length} pending ${reports.length === 1 ? 'report' : 'reports'}`;
+    if (!state.postReportSchemaReady) {
+      setupNotices.push(`
+        <div class="rounded-xl border border-amber-300 bg-amber-50 p-4 text-amber-950">
+          <p class="font-black">Post reporting setup required</p>
+          <p class="text-sm mt-1">Run <code class="bg-white/70 px-1 rounded">supabase-forum-post-reports.sql</code>.</p>
+        </div>`);
+    }
 
     if (!reports.length) {
       list.innerHTML = `
+        ${setupNotices.join('')}
         <div class="rounded-xl bg-surface-container-low p-8 text-center">
           <span class="material-symbols-outlined text-secondary text-4xl">verified_user</span>
           <p class="font-black text-primary mt-2">No pending reports</p>
-          <p class="text-sm text-on-surface-variant mt-1">New comment reports will appear here.</p>
+          <p class="text-sm text-on-surface-variant mt-1">New post and comment reports will appear here.</p>
         </div>`;
       return;
     }
 
-    list.innerHTML = reports.map(report => {
+    list.innerHTML = setupNotices.join('') + reports.map(report => {
+      const reason = reportReasonLabels[report.reason] || 'Other concern';
+
+      if (report.reportType === 'post') {
+        const post = state.posts.find(item => item.id === report.post_id);
+
+        return `
+          <article class="rounded-xl border border-outline-variant bg-white p-4" data-post-report-id="${escapeHtml(report.id)}">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <div class="flex flex-wrap gap-2">
+                  <span class="inline-flex rounded-full bg-primary-container text-white px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide">
+                    Reported Post
+                  </span>
+                  <span class="inline-flex rounded-full bg-error-container text-on-error-container px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide">
+                    ${escapeHtml(reason)}
+                  </span>
+                </div>
+                <p class="font-black text-primary mt-2">${escapeHtml(post?.author_name || 'Deleted user')}</p>
+                <p class="text-xs text-on-surface-variant mt-0.5">
+                  Reported by ${escapeHtml(report.reporter_name || 'MASOFISH User')} • ${escapeHtml(formatRelativeTime(report.created_at))}
+                </p>
+              </div>
+              <span class="material-symbols-outlined text-error shrink-0">flag</span>
+            </div>
+
+            <div class="rounded-xl bg-surface-container-low p-3 mt-3">
+              <p class="font-black text-primary">${escapeHtml(post?.title || 'The reported discussion is no longer available.')}</p>
+              ${post ? `<p class="text-sm text-on-surface-variant mt-1 whitespace-pre-wrap forum-line-clamp">${escapeHtml(post.content)}</p>` : ''}
+            </div>
+
+            ${report.details ? `
+              <div class="mt-3">
+                <p class="text-xs font-extrabold uppercase tracking-wider text-on-surface-variant">Reporter details</p>
+                <p class="text-sm text-on-surface-variant mt-1 whitespace-pre-wrap">${escapeHtml(report.details)}</p>
+              </div>` : ''}
+
+            <div class="flex flex-wrap justify-end gap-2 mt-4">
+              ${post ? `
+                <button type="button" class="open-reported-discussion-button rounded-xl bg-surface-container-high text-primary px-4 py-2.5 text-sm font-extrabold" data-post-id="${escapeHtml(post.id)}">
+                  Open Discussion
+                </button>` : ''}
+
+              <button type="button" class="dismiss-post-report-button rounded-xl border border-outline-variant bg-white text-primary px-4 py-2.5 text-sm font-extrabold" data-report-id="${escapeHtml(report.id)}">
+                Dismiss
+              </button>
+
+              ${post ? `
+                <button type="button" class="delete-reported-post-button rounded-xl bg-error text-white px-4 py-2.5 text-sm font-extrabold" data-post-id="${escapeHtml(post.id)}">
+                  Delete Post
+                </button>` : ''}
+            </div>
+          </article>`;
+      }
+
       const comment = state.comments.find(item => item.id === report.comment_id);
       const post = state.posts.find(item => item.id === report.post_id);
-      const reason = reportReasonLabels[report.reason] || 'Other concern';
 
       return `
         <article class="rounded-xl border border-outline-variant bg-white p-4" data-report-id="${escapeHtml(report.id)}">
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
-              <span class="inline-flex rounded-full bg-error-container text-on-error-container px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide">
-                ${escapeHtml(reason)}
-              </span>
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex rounded-full bg-secondary-container/35 text-on-secondary-container px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide">
+                  Reported Comment
+                </span>
+                <span class="inline-flex rounded-full bg-error-container text-on-error-container px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide">
+                  ${escapeHtml(reason)}
+                </span>
+              </div>
               <p class="font-black text-primary mt-2">${escapeHtml(comment?.author_name || 'Deleted user')}</p>
               <p class="text-xs text-on-surface-variant mt-0.5">
                 Reported by ${escapeHtml(report.reporter_name || 'MASOFISH User')} • ${escapeHtml(formatRelativeTime(report.created_at))}
@@ -622,9 +913,21 @@
       );
     });
 
+    list.querySelectorAll('.dismiss-post-report-button').forEach(button => {
+      button.addEventListener('click', () =>
+        resolvePostReport(button.dataset.reportId, 'dismissed')
+      );
+    });
+
     list.querySelectorAll('.delete-reported-comment-button').forEach(button => {
       button.addEventListener('click', () =>
         deleteComment(button.dataset.commentId)
+      );
+    });
+
+    list.querySelectorAll('.delete-reported-post-button').forEach(button => {
+      button.addEventListener('click', () =>
+        deletePost(button.dataset.postId)
       );
     });
 
@@ -798,6 +1101,13 @@
       text.includes('relation');
   }
 
+  function isMissingPostReportTable(error) {
+    const text = `${error?.message || ''} ${error?.details || ''}`.toLowerCase();
+    return text.includes('forum_post_reports') ||
+      text.includes('does not exist') ||
+      text.includes('relation');
+  }
+
   async function loadRealForumData() {
     const [postsResult, commentsResult, likesResult] = await Promise.all([
       state.client.from('forum_posts').select('*').order('created_at', { ascending: false }).limit(100),
@@ -832,6 +1142,26 @@
       state.reportSchemaReady = true;
       state.reports = reportsResult.data || [];
     }
+
+    const postReportsResult = await state.client
+      .from('forum_post_reports')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(1000);
+
+    if (postReportsResult.error) {
+      if (isMissingPostReportTable(postReportsResult.error)) {
+        state.postReportSchemaReady = false;
+        state.postReports = [];
+      } else {
+        console.warn('Post reports could not be loaded:', postReportsResult.error);
+        state.postReportSchemaReady = true;
+        state.postReports = [];
+      }
+    } else {
+      state.postReportSchemaReady = true;
+      state.postReports = postReportsResult.data || [];
+    }
   }
 
   async function loadForumData() {
@@ -846,7 +1176,9 @@
         state.comments = store.comments;
         state.likes = store.likes;
         state.reports = store.reports || [];
+        state.postReports = store.postReports || [];
         state.reportSchemaReady = true;
+        state.postReportSchemaReady = true;
         state.schemaReady = false;
         byId('forumSetupNotice').hidden = false;
       } else {
@@ -1052,6 +1384,7 @@
         state.comments = state.comments.filter(comment => comment.post_id !== postId);
         state.likes = state.likes.filter(like => like.post_id !== postId);
         state.reports = state.reports.filter(report => report.post_id !== postId);
+        state.postReports = state.postReports.filter(report => report.post_id !== postId);
         writePrototypeStore();
       } else {
         const { error } = await state.client.from('forum_posts').delete().eq('id', postId);
@@ -1210,6 +1543,12 @@
     closeModal(discussionModal);
   });
 
+  [byId('closePostReportButton'), byId('cancelPostReportButton')].forEach(button => {
+    button.addEventListener('click', closePostReport);
+  });
+
+  byId('postReportForm').addEventListener('submit', submitPostReport);
+
   [byId('closeCommentReportButton'), byId('cancelCommentReportButton')].forEach(button => {
     button.addEventListener('click', closeCommentReport);
   });
@@ -1240,6 +1579,7 @@
     modal.addEventListener('click', event => {
       if (event.target === modal) {
         if (modal === discussionModal) state.activePostId = null;
+        if (modal === postReportModal) state.activeReportPostId = null;
         if (modal === commentReportModal) state.activeReportCommentId = null;
         closeModal(modal);
       }
@@ -1248,6 +1588,7 @@
 
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
+      if (!postReportModal.hidden) closePostReport();
       if (!commentReportModal.hidden) closeCommentReport();
       if (!commentReportsModal.hidden) closeModal(commentReportsModal);
       if (!postModal.hidden) closeModal(postModal);
