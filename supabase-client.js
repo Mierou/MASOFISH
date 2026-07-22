@@ -21,7 +21,7 @@
     configured,
     config,
     client: null,
-    prototypeMode: localStorage.getItem('masofishPrototypeMode') === '1'
+    prototypeMode: localStorage.getItem('masofishMode') === '1'
   };
 
   if (!configured) return;

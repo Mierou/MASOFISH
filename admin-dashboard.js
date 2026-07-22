@@ -53,7 +53,7 @@
 
     if (ready.mode === 'prototype') {
       byId('adminFeatureStatus').innerHTML = [
-        featureCard('Prototype Administrator', true, 'Administrator interface is enabled in local prototype mode.'),
+        featureCard('Administrator', true, 'Administrator interface is enabled in local prototype mode.'),
         featureCard('Supabase Connection', false, 'Connect Supabase and create a real administrator account for production use.')
       ].join('');
       return;

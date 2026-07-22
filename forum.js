@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'masofishPrototypeForumV1';
+  const STORAGE_KEY = 'masofishForumV1';
   const FORUM_BUCKET = 'forum-images';
   const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
   const categoryLabels = {
@@ -138,7 +138,7 @@
     byId('postFormMessage').textContent = '';
   }
 
-  function seedPrototypeData() {
+  function seedData() {
     const now = Date.now();
     return {
       posts: [
@@ -217,7 +217,7 @@
     };
   }
 
-  function readPrototypeStore() {
+  function readStore() {
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       if (stored && Array.isArray(stored.posts) && Array.isArray(stored.comments) && Array.isArray(stored.likes)) {
@@ -229,12 +229,12 @@
       console.warn('Unable to read prototype forum data:', error);
     }
 
-    const seeded = seedPrototypeData();
+    const seeded = seedData();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(seeded));
     return seeded;
   }
 
-  function writePrototypeStore() {
+  function writeStore() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       posts: state.posts,
       comments: state.comments,
@@ -597,7 +597,7 @@
 
       if (state.mode === 'prototype') {
         state.postReports.unshift(report);
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client
           .from('forum_post_reports')
@@ -646,7 +646,7 @@
               }
             : report
         );
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client
           .from('forum_post_reports')
@@ -999,7 +999,7 @@
 
       if (state.mode === 'prototype') {
         state.reports.unshift(report);
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client
           .from('forum_comment_reports')
@@ -1049,7 +1049,7 @@
               }
             : report
         );
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client
           .from('forum_comment_reports')
@@ -1171,7 +1171,7 @@
 
     try {
       if (state.mode === 'prototype') {
-        const store = readPrototypeStore();
+        const store = readStore();
         state.posts = store.posts;
         state.comments = store.comments;
         state.likes = store.likes;
@@ -1207,7 +1207,7 @@
     }
   }
 
-  async function resizeImageForPrototype(file) {
+  async function resizeImageFor(file) {
     const dataUrl = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -1240,7 +1240,7 @@
     if (state.mode === 'prototype') {
       return {
         image_path: null,
-        image_url: await resizeImageForPrototype(file)
+        image_url: await resizeImageFor(file)
       };
     }
 
@@ -1310,7 +1310,7 @@
       if (state.mode === 'prototype') {
         post.id = `prototype-post-${crypto.randomUUID()}`;
         state.posts.unshift(post);
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client.from('forum_posts').insert({
           user_id: post.user_id,
@@ -1349,7 +1349,7 @@
         state.likes = existing
           ? state.likes.filter(like => !(like.post_id === postId && like.user_id === currentUserId()))
           : [...state.likes, { post_id: postId, user_id: currentUserId() }];
-        writePrototypeStore();
+        writeStore();
       } else if (existing) {
         const { error } = await state.client
           .from('forum_likes')
@@ -1385,7 +1385,7 @@
         state.likes = state.likes.filter(like => like.post_id !== postId);
         state.reports = state.reports.filter(report => report.post_id !== postId);
         state.postReports = state.postReports.filter(report => report.post_id !== postId);
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client.from('forum_posts').delete().eq('id', postId);
         if (error) throw error;
@@ -1425,7 +1425,7 @@
       if (state.mode === 'prototype') {
         state.comments = state.comments.filter(item => item.id !== commentId);
         state.reports = state.reports.filter(report => report.comment_id !== commentId);
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client
           .from('forum_comments')
@@ -1462,7 +1462,7 @@
           content,
           created_at: new Date().toISOString()
         });
-        writePrototypeStore();
+        writeStore();
       } else {
         const { error } = await state.client.from('forum_comments').insert({
           post_id: state.activePostId,
@@ -1511,9 +1511,9 @@
       state.user = {
         id: 'prototype-user',
         email: 'prototype@masofish.local',
-        user_metadata: { full_name: 'Prototype User' }
+        user_metadata: { full_name: 'User' }
       };
-      state.userName = 'Prototype Administrator';
+      state.userName = 'Administrator';
       state.role = 'admin';
     }
 

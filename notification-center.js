@@ -4,8 +4,8 @@
   if (window.MASOFISH_NOTIFICATION_CENTER_LOADED) return;
   window.MASOFISH_NOTIFICATION_CENTER_LOADED = true;
 
-  const FORUM_STORAGE_KEY = 'masofishPrototypeForumV1';
-  const SAFETY_STORAGE_KEY = 'masofishPrototypeSafetyAnnouncements';
+  const FORUM_STORAGE_KEY = 'masofishForumV1';
+  const SAFETY_STORAGE_KEY = 'masofishSafetyAnnouncements';
   const MAX_READ_IDS = 500;
 
   const state = {
@@ -173,7 +173,7 @@
     notifications.push({
       id: 'admin:prototype-ready',
       kind: 'admin',
-      title: 'Prototype administrator mode is active',
+      title: ' administrator mode is active',
       message: 'Connect Supabase to use account-based notifications in production.',
       createdAt: new Date().toISOString(),
       href: 'admin.html'

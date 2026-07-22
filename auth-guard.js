@@ -48,7 +48,7 @@
     }
 
     if (!auth.configured) {
-      if (auth.config?.allowPrototypeMode !== false && auth.prototypeMode) {
+      if (auth.config?.allowMode !== false && auth.prototypeMode) {
         allowPage();
         return { mode: 'prototype', session: null };
       }

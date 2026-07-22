@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  const PROTOTYPE_RECIPES_KEY = 'masofishPrototypeRecipesV1';
-  const PROTOTYPE_FAVORITES_KEY = 'masofishPrototypeRecipeFavoritesV1';
+  const PROTOTYPE_RECIPES_KEY = 'masofishRecipesV1';
+  const PROTOTYPE_FAVORITES_KEY = 'masofishRecipeFavoritesV1';
   const RECIPE_BUCKET = 'recipe-images';
   const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
 
@@ -149,7 +149,7 @@
     ];
   }
 
-  function readPrototypeRecipes() {
+  function readRecipes() {
     try {
       const data = JSON.parse(localStorage.getItem(PROTOTYPE_RECIPES_KEY) || 'null');
       if (Array.isArray(data)) return data;
@@ -159,11 +159,11 @@
     return seeded;
   }
 
-  function writePrototypeRecipes(items) {
+  function writeRecipes(items) {
     localStorage.setItem(PROTOTYPE_RECIPES_KEY, JSON.stringify(items));
   }
 
-  function readPrototypeFavorites() {
+  function readFavorites() {
     try {
       const data = JSON.parse(localStorage.getItem(PROTOTYPE_FAVORITES_KEY) || '[]');
       return Array.isArray(data) ? data : [];
@@ -172,7 +172,7 @@
     }
   }
 
-  function writePrototypeFavorites(items) {
+  function writeFavorites(items) {
     localStorage.setItem(PROTOTYPE_FAVORITES_KEY, JSON.stringify(items));
   }
 
@@ -219,8 +219,8 @@
   async function loadData() {
     try {
       if (state.mode === 'prototype') {
-        state.recipes = readPrototypeRecipes();
-        state.favorites = readPrototypeFavorites();
+        state.recipes = readRecipes();
+        state.favorites = readFavorites();
         state.schemaReady = false;
         byId('recipeDatabaseNotice').hidden = false;
       } else {
@@ -231,8 +231,8 @@
     } catch (error) {
       if (isMissingSchema(error)) {
         state.mode = 'prototype';
-        state.recipes = readPrototypeRecipes();
-        state.favorites = readPrototypeFavorites();
+        state.recipes = readRecipes();
+        state.favorites = readFavorites();
         state.schemaReady = false;
         byId('recipeDatabaseNotice').hidden = false;
       } else {
@@ -401,7 +401,7 @@
       state.favorites = favorite
         ? state.favorites.filter(recipeId => recipeId !== id)
         : [...state.favorites, id];
-      writePrototypeFavorites(state.favorites);
+      writeFavorites(state.favorites);
       render();
       return;
     }
@@ -532,7 +532,7 @@
             updated_at: new Date().toISOString()
           });
         }
-        writePrototypeRecipes(state.recipes);
+        writeRecipes(state.recipes);
       } else if (state.editing) {
         const { error } = await state.client.from('recipes').update(payload).eq('id', state.editing.id);
         if (error) throw error;
@@ -573,8 +573,8 @@
     if (state.mode === 'prototype') {
       state.recipes = state.recipes.filter(item => item.id !== id);
       state.favorites = state.favorites.filter(recipeId => recipeId !== id);
-      writePrototypeRecipes(state.recipes);
-      writePrototypeFavorites(state.favorites);
+      writeRecipes(state.recipes);
+      writeFavorites(state.favorites);
       render();
       return;
     }
@@ -599,7 +599,7 @@
       state.user = {
         id: 'prototype-user',
         email: 'prototype@masofish.local',
-        user_metadata: { full_name: 'Prototype Administrator' }
+        user_metadata: { full_name: 'Administrator' }
       };
     }
 

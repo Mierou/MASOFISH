@@ -371,9 +371,9 @@
   });
 
   function displayUser(name, email, mode, role = 'user') {
-    const cleanName = name || (mode === 'prototype' ? 'Prototype User' : 'MASOFISH User');
+    const cleanName = name || (mode === 'prototype' ? 'User' : 'MASOFISH User');
     const initial = cleanName.trim().charAt(0).toUpperCase() || 'U';
-    const shortName = mode === 'prototype' ? 'Prototype' : cleanName.split(' ')[0];
+    const shortName = mode === 'prototype' ? '' : cleanName.split(' ')[0];
 
     wrap.querySelector('[data-auth-avatar]').textContent = initial;
     wrap.querySelector('[data-auth-name]').textContent = shortName;
@@ -392,18 +392,18 @@
     if (!ready) return;
 
     if (ready.mode === 'prototype') {
-      displayUser('Prototype Administrator', '', 'prototype', 'admin');
+      displayUser('Administrator', '', 'prototype', 'admin');
       adminLink.hidden = false;
       signOut.querySelector('span:last-child').textContent = 'Exit prototype mode';
       signOut.addEventListener('click', () => {
-        localStorage.removeItem('masofishPrototypeMode');
+        localStorage.removeItem('masofishMode');
         location.href = 'auth.html';
       });
       return;
     }
 
     if (ready.mode === 'disabled') {
-      displayUser('Authentication Disabled', '', 'prototype', 'user');
+      displayUser('Welcome', '', 'prototype', 'user');
       signOut.hidden = true;
       return;
     }
