@@ -126,7 +126,7 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-<meta content="MASOFISH Fisherman Assistance System prototype with offline TensorFlow.js fish identification." name="description"/>
+<meta content="MASOFISH Fisherman Assistance System with offline fish identification." name="description"/>
 <script>
 (function () {
   // Remove service workers and cached files left by earlier localhost prototypes.
@@ -414,7 +414,7 @@ if (!raw) {
     notice.innerHTML = '<strong>Low-confidence result.</strong> Try another clearer photo with the whole fish visible and a simple background.';
   } else {
     notice.className = 'rounded-xl p-4 border bg-secondary-container text-on-secondary-container border-secondary';
-    notice.innerHTML = '<strong>Identification completed.</strong> The confidence is above the prototype threshold, but manual verification is still recommended.';
+    notice.innerHTML = '<strong>Identification completed.</strong> The confidence is above the required threshold, but manual verification is still recommended.';
   }
   let freshnessData = null;
   if (freshnessRaw) {

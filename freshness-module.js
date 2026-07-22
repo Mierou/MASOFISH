@@ -356,7 +356,7 @@
   async function loadModel() {
     try {
       if (!window.tmImage) {
-        throw new Error('The Teachable Machine library did not load. Check your connection and refresh.');
+        throw new Error('The freshness analysis library did not load. Check your connection and refresh.');
       }
       model = await tmImage.load(MODEL_URL, METADATA_URL);
       byId('freshnessModelStatus').textContent = `Freshness model ready — ${model.getTotalClasses()} visual classes`;

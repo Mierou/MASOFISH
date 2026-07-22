@@ -66,7 +66,7 @@
 
   function buildSpecies(metadata, classInfo) {
     if (!Array.isArray(metadata?.labels)) {
-      throw new Error('The Teachable Machine metadata does not contain a labels list.');
+      throw new Error('The fish species data could not be loaded.');
     }
 
     return metadata.labels
@@ -234,16 +234,15 @@
 
     if (searching) {
       status.textContent =
-        `${matches.length} matching ${matches.length === 1 ? 'fish class' : 'fish classes'} from the current model`;
+        `${matches.length} matching ${matches.length === 1 ? 'fish species' : 'fish species'}`;
     } else {
-      status.textContent =
-        `${state.species.length} identifiable fish classes loaded from the current Teachable Machine model`;
+      status.textContent = 'Identifiable fish species';
     }
 
     sortButton.setAttribute(
       'aria-label',
       state.alphabetical
-        ? 'Use model class order'
+        ? 'Use default order'
         : 'Sort fish alphabetically'
     );
 

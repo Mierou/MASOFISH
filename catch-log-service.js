@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const PROTOTYPE_KEY = 'masofishCatchLogV1';
+  const PROTOTYPE_KEY = 'masofishPrototypeCatchLogV1';
   const CATCH_BUCKET = 'catch-images';
   const MAX_IMAGE_BYTES = 6 * 1024 * 1024;
 
@@ -47,7 +47,7 @@
     return canvas.toDataURL('image/jpeg', quality);
   }
 
-  function seed() {
+  function seedPrototype() {
     const now = Date.now();
     return [
       {
@@ -97,7 +97,7 @@
     ];
   }
 
-  function read() {
+  function readPrototype() {
     try {
       const parsed = JSON.parse(localStorage.getItem(PROTOTYPE_KEY) || 'null');
       if (Array.isArray(parsed)) return parsed;
@@ -105,12 +105,12 @@
       console.warn('Could not read prototype catch log:', error);
     }
 
-    const seeded = seed();
+    const seeded = seedPrototype();
     localStorage.setItem(PROTOTYPE_KEY, JSON.stringify(seeded));
     return seeded;
   }
 
-  function write(items) {
+  function writePrototype(items) {
     localStorage.setItem(PROTOTYPE_KEY, JSON.stringify(items));
   }
 
@@ -128,7 +128,7 @@
       state.user = {
         id: 'prototype-user',
         email: 'prototype@masofish.local',
-        user_metadata: { full_name: 'User' }
+        user_metadata: { full_name: 'Guest User' }
       };
     }
 
@@ -161,7 +161,7 @@
     const limit = Number.isFinite(options.limit) ? options.limit : 100;
 
     if (state.mode === 'prototype') {
-      const items = read()
+      const items = readPrototype()
         .sort((a, b) => {
           const dateA = new Date(`${a.catch_date || '1970-01-01'}T${a.catch_time || '00:00'}`);
           const dateB = new Date(`${b.catch_date || '1970-01-01'}T${b.catch_time || '00:00'}`);
@@ -186,7 +186,7 @@
   async function get(id) {
     await initialize();
     if (state.mode === 'prototype') {
-      const item = read().find(entry => entry.id === id);
+      const item = readPrototype().find(entry => entry.id === id);
       return item ? { ...item, display_image_url: item.image_url || null } : null;
     }
 
@@ -274,9 +274,9 @@
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
-      const items = read();
+      const items = readPrototype();
       items.unshift(item);
-      write(items);
+      writePrototype(items);
       return { ...item, display_image_url: item.image_url };
     }
 
@@ -319,7 +319,7 @@
     }
 
     if (state.mode === 'prototype') {
-      const items = read();
+      const items = readPrototype();
       const index = items.findIndex(item => item.id === id);
       if (index < 0) throw new Error('Catch record not found.');
       items[index] = {
@@ -328,7 +328,7 @@
         ...image,
         updated_at: new Date().toISOString()
       };
-      write(items);
+      writePrototype(items);
       return {
         ...items[index],
         display_image_url: items[index].image_url || null
@@ -365,7 +365,7 @@
     if (!existing) return false;
 
     if (state.mode === 'prototype') {
-      write(read().filter(item => item.id !== id));
+      writePrototype(readPrototype().filter(item => item.id !== id));
       return true;
     }
 

@@ -12,7 +12,7 @@
   const setupPanel = document.getElementById('setupPanel');
   const authPanel = document.getElementById('authPanel');
   const message = document.getElementById('authMessage');
-  const continue = document.getElementById('continue');
+  const continuePrototype = document.getElementById('continuePrototype');
 
   function safeNextPage() {
     const candidate = new URLSearchParams(location.search).get('next') || 'index.html';
@@ -195,16 +195,16 @@
     }
   });
 
-  continue.addEventListener('click', () => {
-    localStorage.setItem('masofishMode', '1');
+  continuePrototype.addEventListener('click', () => {
+    localStorage.setItem('masofishPrototypeMode', '1');
     location.replace(safeNextPage());
   });
 
   if (!configured) {
     authPanel.hidden = true;
     setupPanel.hidden = false;
-    if (auth.config?.allowMode === false) {
-      continue.hidden = true;
+    if (auth.config?.allowPrototypeMode === false) {
+      continuePrototype.hidden = true;
     }
   } else {
     setupPanel.hidden = true;

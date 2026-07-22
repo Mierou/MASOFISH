@@ -371,9 +371,9 @@
   });
 
   function displayUser(name, email, mode, role = 'user') {
-    const cleanName = name || (mode === 'prototype' ? 'User' : 'MASOFISH User');
+    const cleanName = name || (mode === 'prototype' ? 'Guest User' : 'MASOFISH User');
     const initial = cleanName.trim().charAt(0).toUpperCase() || 'U';
-    const shortName = mode === 'prototype' ? '' : cleanName.split(' ')[0];
+    const shortName = mode === 'prototype' ? 'Guest' : cleanName.split(' ')[0];
 
     wrap.querySelector('[data-auth-avatar]').textContent = initial;
     wrap.querySelector('[data-auth-name]').textContent = shortName;
@@ -381,7 +381,7 @@
     panel.querySelector('[data-auth-menu-name]').textContent = cleanName;
     panel.querySelector('[data-auth-email]').textContent =
       mode === 'prototype'
-        ? 'Supabase has not been configured yet.'
+        ? 'Signed in as guest.'
         : (email || 'Signed in with Supabase');
     panel.querySelector('[data-auth-role]').textContent =
       role === 'admin' ? 'System Administrator' : 'User account';
@@ -392,18 +392,18 @@
     if (!ready) return;
 
     if (ready.mode === 'prototype') {
-      displayUser('Administrator', '', 'prototype', 'admin');
+      displayUser('Guest Administrator', '', 'prototype', 'admin');
       adminLink.hidden = false;
-      signOut.querySelector('span:last-child').textContent = 'Exit prototype mode';
+      signOut.querySelector('span:last-child').textContent = 'Exit guest mode';
       signOut.addEventListener('click', () => {
-        localStorage.removeItem('masofishMode');
+        localStorage.removeItem('masofishPrototypeMode');
         location.href = 'auth.html';
       });
       return;
     }
 
     if (ready.mode === 'disabled') {
-      displayUser('Welcome', '', 'prototype', 'user');
+      displayUser('Authentication Disabled', '', 'prototype', 'user');
       signOut.hidden = true;
       return;
     }

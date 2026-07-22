@@ -2,7 +2,7 @@
   'use strict';
 
   const byId = id => document.getElementById(id);
-  const prototypeKey = 'masofishSafetyAnnouncements';
+  const prototypeKey = 'masofishPrototypeSafetyAnnouncements';
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -32,7 +32,7 @@
     }[severity] || 'campaign';
   }
 
-  function readAlerts() {
+  function readPrototypeAlerts() {
     try {
       return JSON.parse(localStorage.getItem(prototypeKey) || '[]');
     } catch (_) {
@@ -40,7 +40,7 @@
     }
   }
 
-  function saveAlerts(items) {
+  function savePrototypeAlerts(items) {
     localStorage.setItem(prototypeKey, JSON.stringify(items));
   }
 
@@ -126,17 +126,17 @@
     const user = ready.session?.user || {
       id: 'prototype-admin',
       email: 'prototype@masofish.local',
-      user_metadata: { full_name: 'Administrator' }
+      user_metadata: { full_name: 'Guest Administrator' }
     };
     const role = prototype ? 'admin' : await getRole(client, user.id);
     const canManage = role === 'admin';
 
     byId('safetyAdminPanel').hidden = !canManage;
     byId('safetyAdminStatus').textContent =
-      prototype ? ' administrator mode' : `Signed in as ${role}`;
+      prototype ? 'Guest administrator mode' : `Signed in as ${role}`;
 
     async function load() {
-      const alerts = prototype ? readAlerts() : await loadRealAlerts(client);
+      const alerts = prototype ? readPrototypeAlerts() : await loadRealAlerts(client);
       renderAlerts(alerts, canManage);
     }
 
@@ -170,13 +170,13 @@
         }
 
         if (prototype) {
-          const alerts = readAlerts();
+          const alerts = readPrototypeAlerts();
           alerts.unshift({
             ...payload,
             id: `prototype-alert-${crypto.randomUUID()}`,
             created_at: new Date().toISOString()
           });
-          saveAlerts(alerts);
+          savePrototypeAlerts(alerts);
         } else {
           const { error } = await client.from('safety_announcements').insert(payload);
           if (error) throw error;
@@ -200,7 +200,7 @@
       const id = button.dataset.deleteSafetyAlert;
       try {
         if (prototype) {
-          saveAlerts(readAlerts().filter(item => item.id !== id));
+          savePrototypeAlerts(readPrototypeAlerts().filter(item => item.id !== id));
         } else {
           const { error } = await client.from('safety_announcements').delete().eq('id', id);
           if (error) throw error;

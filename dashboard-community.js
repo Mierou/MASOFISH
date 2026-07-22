@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const PROTOTYPE_KEY = 'masofishForumV1';
+  const PROTOTYPE_KEY = 'masofishPrototypeForumV1';
   const FORUM_BUCKET = 'forum-images';
   const byId = id => document.getElementById(id);
   const list = byId('dashboardCommunityList');
@@ -36,7 +36,7 @@
     })[character]);
   }
 
-  function readStore() {
+  function readPrototypeStore() {
     try {
       const stored = JSON.parse(localStorage.getItem(PROTOTYPE_KEY) || 'null');
       if (
@@ -143,8 +143,8 @@
     );
   }
 
-  function load() {
-    const store = readStore();
+  function loadPrototype() {
+    const store = readPrototypeStore();
     const posts = [...store.posts]
       .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
       .slice(0, 4);
@@ -258,15 +258,15 @@
           message.includes('does not exist') ||
           message.includes('relation')
         ) {
-          render(load());
+          render(loadPrototype());
           byId('dashboardCommunityStatus').textContent =
-            ' discussions shown — run the forum Supabase schema.';
+            'Sample discussions shown — run the forum Supabase schema.';
         } else {
           throw error;
         }
       }
     } else {
-      render(load());
+      render(loadPrototype());
     }
   }
 

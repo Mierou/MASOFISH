@@ -39,7 +39,7 @@
 
     if (ready.mode === 'prototype') {
       return allowAccess('admin', {
-        full_name: 'Administrator',
+        full_name: 'Guest Administrator',
         role: 'admin'
       });
     }

@@ -426,13 +426,13 @@
   </button>
 </section>
 
-<!-- Teachable Machine Species Grid -->
+<!-- Identifiable Species Grid -->
 <section aria-labelledby="speciesListHeading">
   <div class="flex justify-between items-start gap-4 mb-4">
     <div>
       <h2 id="speciesListHeading" class="font-headline-sm text-headline-sm text-primary">Identifiable Fish Species</h2>
       <p id="speciesStatus" class="font-body-sm text-body-sm text-on-surface-variant mt-1">
-        Reading the available classes from the fish identification model…
+        Loading fish species…
       </p>
     </div>
     <button
@@ -465,7 +465,7 @@
   </div>
 
   <p id="speciesModelNote" class="font-body-sm text-body-sm text-on-surface-variant mt-4">
-    This list is loaded directly from the current Teachable Machine metadata. The model's “No Fish” safeguard is not displayed as a fish species.
+    This list reflects the fish species currently supported for identification.
   </p>
 </section>
 
@@ -533,7 +533,7 @@ function showMessage(text, type='info') {
 
 async function loadModel() {
   try {
-    if (!window.tmImage) throw new Error('The Teachable Machine library did not load. Check your internet connection, then refresh.');
+    if (!window.tmImage) throw new Error('The fish identification library did not load. Check your internet connection, then refresh.');
     fishModel = await tmImage.load(MODEL_URL, METADATA_URL);
     statusText.textContent = `Model ready — ${fishModel.getTotalClasses()} classes available`;
     statusIcon.textContent = 'check_circle';
