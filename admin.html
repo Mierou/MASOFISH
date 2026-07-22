@@ -79,6 +79,41 @@
       </div>
     </section>
 
+    <section class="rounded-2xl border border-outline-variant bg-white p-5 sm:p-6">
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <p class="text-xs uppercase tracking-widest font-extrabold text-secondary">Analytics</p>
+          <h2 class="text-2xl font-black text-primary mt-1">Platform Overview</h2>
+        </div>
+        <button id="refreshAnalyticsButton" type="button" class="w-11 h-11 rounded-full bg-surface-container-low flex items-center justify-center text-primary" aria-label="Refresh analytics">
+          <span class="material-symbols-outlined">refresh</span>
+        </button>
+      </div>
+
+      <p id="analyticsNotice" hidden class="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-300 rounded-lg px-3 py-2 mt-4">
+        Showing sample data. Connect Supabase to see live platform analytics.
+      </p>
+
+      <div id="analyticsStats" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-5">
+        <div class="rounded-xl bg-surface-container-low p-4 col-span-2 sm:col-span-3 lg:col-span-5">Loading analytics…</div>
+      </div>
+
+      <div class="grid lg:grid-cols-[1.3fr_1fr] gap-5 mt-6">
+        <div>
+          <h3 class="text-xs uppercase tracking-widest font-extrabold text-secondary mb-3">Activity, last 7 days</h3>
+          <div id="analyticsChart" class="rounded-xl bg-surface-container-low p-4">
+            <p class="text-sm text-on-surface-variant">Loading trend…</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-xs uppercase tracking-widest font-extrabold text-secondary mb-3">Recent Activity</h3>
+          <ul id="analyticsFeed" class="space-y-2">
+            <li class="text-sm text-on-surface-variant p-3">Loading recent activity…</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <a href="announcements.html#safetyAdminPanel" class="rounded-xl border border-outline-variant bg-white p-5 hover:bg-surface-container-low transition">
         <span class="material-symbols-outlined text-error text-3xl">emergency</span>
@@ -139,6 +174,7 @@
   </main>
 
   <script src="admin-dashboard.js"></script>
+  <script src="admin-analytics.js"></script>
   <script src="auth-ui.js"></script>
 </body>
 </html>
