@@ -522,6 +522,7 @@ const message = document.getElementById('identificationMessage');
 const quickPredictions = document.getElementById('quickPredictions');
 const statusText = document.getElementById('modelStatus');
 const statusIcon = document.getElementById('modelStatusIcon');
+const modelStatusBox = document.getElementById('modelStatusBox');
 
 function showMessage(text, type='info') {
   message.className = 'rounded-lg p-3 font-body-sm';
@@ -535,9 +536,8 @@ async function loadModel() {
   try {
     if (!window.tmImage) throw new Error('The fish identification library did not load. Check your internet connection, then refresh.');
     fishModel = await tmImage.load(MODEL_URL, METADATA_URL);
-    statusText.textContent = `Model ready — ${fishModel.getTotalClasses()} classes available`;
-    statusIcon.textContent = 'check_circle';
-    statusIcon.className = 'material-symbols-outlined text-secondary';
+    modelStatusBox.hidden = true;
+    modelStatusBox.classList.add('hidden');
     updateIdentifyState();
   } catch (error) {
     console.error(error);

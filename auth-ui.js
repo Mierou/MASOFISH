@@ -190,6 +190,7 @@
       text-align: left;
       margin-bottom: 9px;
     }
+    .masofish-account-action[hidden] { display: none; }
     .masofish-account-action:hover { background: #f1f4f6; }
     .masofish-account-action-icon {
       width: 34px;
